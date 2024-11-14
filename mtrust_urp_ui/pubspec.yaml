@@ -1,0 +1,46 @@
+name: mtrust_urp_ui
+version: 7.0.3
+environment: 
+  sdk: ^3.5.0
+  flutter: '>=1.17.0'
+description: UI components for URP
+dependencies: 
+  flutter: 
+    sdk: flutter
+  flutter_localizations: 
+    sdk: flutter
+  mtrust_urp_types: ^4.1.0
+  mtrust_urp_core: 
+    path: ../mtrust_urp_core
+  intl: ^0.19.0
+  liquid_flutter: ^15.3.2
+  shared_preferences: ^2.3.2
+dev_dependencies: 
+  flutter_test: 
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  mtrust_urp_virtual_strategy: 
+    path: ../mtrust_urp_virtual_strategy
+  golden_toolkit: ^0.15.0
+  mocktail: ^1.0.4
+repository: https://github.com/emdgroup/mtrust-urp
+flutter: 
+  uses-material-design: true
+  generate: true
+  assets: 
+    - assets/sec_reader.png
+    - assets/imp_reader.png
+    - assets/sec_led.png
+  fonts: 
+    - family: Lato
+      fonts: 
+        - asset: packages/liquid_flutter/fonts/Lato-Regular.ttf
+          weight: 500
+        - asset: packages/liquid_flutter/fonts/Lato-Bold.ttf
+          weight: 800
+    - family: Merck
+      fonts: 
+        - asset: packages/liquid_flutter/fonts/Merck.ttf
+    - family: LiquidIcons
+      fonts: 
+        - asset: packages/liquid_flutter/fonts/LiquidIcons.ttf

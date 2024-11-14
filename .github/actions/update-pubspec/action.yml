@@ -1,0 +1,24 @@
+name: Update pubspec version
+description: Update pubspec version
+inputs:
+  directory:
+    description: "Directory"
+    default: "."
+  version:
+    description: "Version"
+
+runs:
+  using: "composite"
+  steps:
+    - run: npm install yaml
+      shell: bash
+    - name: Update version in pubspec
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const yaml = require("yaml");
+          const version = '${{ inputs.version }}';
+          const pubspec = yaml.parse(fs.readFileSync('${{ inputs.directory }}/pubspec.yaml', 'utf8'));
+          pubspec.version = version;
+          fs.writeFileSync('${{ inputs.directory }}/pubspec.yaml', yaml.stringify(pubspec));

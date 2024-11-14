@@ -1,0 +1,18 @@
+name: mtrust_urp_wifi_strategy
+version: 7.0.3
+environment: 
+  sdk: '>=2.17.0 <4.0.0'
+  flutter: '>=1.17.0'
+description: WiFi Connection Strategy for URP
+dependencies: 
+  flutter: 
+    sdk: flutter
+  web_socket_channel: ^2.2.0
+  mtrust_urp_core: 
+    path: ../mtrust_urp_core
+dev_dependencies: 
+  flutter_test: 
+    sdk: flutter
+repository: https://github.com/emdgroup/mtrust-urp
+flutter: 
+  uses-material-design: false
