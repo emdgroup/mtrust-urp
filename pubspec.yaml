@@ -1,0 +1,9 @@
+name: urp_core
+description: Software SDK for interface with URP Devices
+version: 7.0.0
+environment:
+  sdk: ^3.0.5
+dependencies:
+  pub_semver: ^2.1.4
+  pubspec: ^2.3.0
+  yaml_modify: ^1.0.1

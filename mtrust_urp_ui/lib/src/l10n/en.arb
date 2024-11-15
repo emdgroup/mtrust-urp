@@ -1,0 +1,120 @@
+{
+    "@@locale": "en",
+    "nReadersFound": "{n, plural, =0{No readers found} =1{1 reader found} other{{n} readers found}}",
+    "@nReadersFound": {
+        "type": "text",
+        "placeholders": {
+            "n": {
+                "type": "int"
+            }
+        }
+    },
+    "connect": "Connect to {name}",
+    "@connect": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "retryConnect": "Retry connection to {name}",
+    "@retryConnect": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "connectionFailed": "Failed to connect to reader",
+    "waitingForReader": "Looking for {name}",
+    "@waitingForReader": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    
+    "connectDifferentReader": "Connect different reader",
+    "ensureTurnedOn": "Please make sure the reader is turned on and in range",
+    "turnOnInstructions": "Press the button on your reader to turn it on and make sure the indicator light is flashing blue",
+    "connecting": "Connecting...",
+    "paired": "Paired",
+    "pair": "Pair",
+    "retry": "Retry",
+    "searchAgain": "Search again",
+    "lastUsed": "Last used",
+    "error": "Error",
+    "strategyDisabled": "{name} is disabled",
+    "@strategyDisabled": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+
+    "strategyDisabledDescription": "Please enable {name} in the settings of your device",
+
+    "@strategyDisabledDescription": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+
+    "strategyMissingPermissions": "Missing {name} permissions",
+    "@strategyMissingPermissions": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+
+    "strategyMissingPermissionsDescription": "Permission for {name} is required to connect to the device",
+    "@strategyMissingPermissionsDescription": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "strategyRequestPermissions": "Request permission",
+    
+    "strategyUnsupported": "{name} is not supported",
+    "@strategyUnsupported": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "strategyUnsupportedDescription": "{name} is not available on this device",
+    "@strategyUnsupportedDescription": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "unableToPrepareStrategy": "Unable to prepare {name}",
+    "@unableToPrepareStrategy": {
+        "type": "text",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    }
+}

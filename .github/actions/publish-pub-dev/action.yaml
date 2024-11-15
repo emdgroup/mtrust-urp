@@ -1,0 +1,27 @@
+name: Publish package to pub.dev
+description: Publish package to pub.dev
+inputs:
+  directory:
+    description: "Directory"
+    default: "."
+  publish_mode:
+    description: "Publish mode: --dry-run or --force"
+    default: "--dry-run" # Default to --dry-run for safety
+
+runs:
+  using: composite
+  steps:
+    # Generate OIDC token for pub.dev
+    - name: Generate OIDC token
+      uses: dart-lang/setup-dart@v1
+
+    - name: Prepare Flutter for mtrust_urp_core
+      uses: emdgroup/mtrust-urp/.github/actions/prepare-flutter@main
+      with:
+        directory: ${{ inputs.directory }}
+
+    - name: Push to pub.dev
+      run: |
+        cd ${{ inputs.directory }}
+        dart pub publish ${{ inputs.publish_mode }}
+      shell: bash

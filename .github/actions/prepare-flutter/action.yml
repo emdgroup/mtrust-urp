@@ -1,0 +1,48 @@
+name: "Prepare flutter runner"
+description: "Prepares a flutter project by installing dependencies and running build_runner"
+inputs:
+  directory:
+    description: "Directory"
+    required: true
+    default: "."
+
+  artifactory_key:
+    description: "Artifactory key"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Install Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "3.24.3"
+
+    - name: 🛠️ Install dependencies
+      run: |
+        npm install yaml
+      shell: bash
+
+    - name: 🔀 Setup project
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const YAML = require('yaml');
+          const {execSync} = require('child_process');
+          const pubspec = fs.readFileSync('${{ inputs.directory }}/pubspec.yaml', 'utf8');
+          const doc = YAML.parse(pubspec);
+
+          if(fs.existsSync('${{ inputs.directory }}/example')){
+            console.log('Running pub get in example directory');
+            execSync('cd ${{ inputs.directory }}/example && dart pub get', {stdio: 'inherit'});
+          }
+
+          if( doc.dev_dependencies && doc.dev_dependencies.build_runner){
+            console.log('Running build_runner');
+            execSync('cd ${{ inputs.directory }} && dart pub run build_runner build --delete-conflicting-outputs', {stdio: 'inherit'});
+          }
+
+          if(doc.flutter && doc.flutter.generate){
+            console.log('Running flutter gen-l10n');
+            execSync('cd ${{ inputs.directory }} && flutter gen-l10n', {stdio: 'inherit'});
+          }

@@ -1,0 +1,21 @@
+name: Main - 🧐 Check PR Source Branch
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize]
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display Source Branch
+        run: |
+          echo "Pull request is coming from branch: ${{ github.head_ref }}"
+
+      - name: Fail if source branch is not allowed
+        if: ${{ github.head_ref != 'dev' }}
+        run: |
+          echo "Error: Pull requests are only allowed from the 'dev' branch."
+          exit 1
