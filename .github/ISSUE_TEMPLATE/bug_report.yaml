@@ -1,0 +1,91 @@
+name: "Bug report: mtrust-urp"
+description: "Report a bug in mtrust-urp"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # ⚠️  PLEASE KEEP IN MIND THAT GITHUB IS PUBLIC! DON'T SHARE ANY SENSITIVE OR INTERNAL INFORMATION! ⚠️
+        ## IF YOU POST YOUR CONFIGURATION REMOVE **AT LEAST** `serial-numbers`,`client_ids`,`client_secrets` and `urls`
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Issue checklist"
+      description: "To open an issue, all conditions below **need** to be met."
+      options:
+        - label: "This is a **bug** in mtrust-urp and not a bug in another repository. It is also not an enhancement/feature request"
+          required: true
+        - label: "I searched through the GitHub issues and this issue has not been opened before."
+          required: true
+        - label: "I use the latest version of mtrust-urp and don't use an unsupported flutter, dart or pub version."
+          required: true
+        - label: "`flutter doctor` reports no issues."
+          required: true
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Description of the bug
+      description: |
+        Concise description of the bug.
+        Please provide as much info as possible, so we can help you better. Unfortunately we can't read minds (yet).
+      placeholder: |
+        For example:
+        When i use [...], the function [...] fails with this error [...]. It works when I use [...].
+        I provided a code snippet below, for you to reproduce it.
+    validations:
+      required: true
+  - type: textarea
+    id: bug-reproduce
+    attributes:
+      label: Steps to reproduce this bug.
+      description: |
+        To debug your issue, we need to know how we can reproduce this error on our machines.
+        This way we can try to solve the issue faster.
+    validations:
+      required: true
+  - type: textarea
+    id: bug-logs
+    attributes:
+      label: Log output
+      description: |
+        If there were warnings or errors during your build
+        or any other logs file that may help us, then please
+        paste them here.
+        > Please note that this textarea will automatically get formatted as `shell` for better readability.
+  - type: textarea
+    id: bug-context
+    attributes:
+      label: Additional context
+      description: |
+        Additional context that may help us, e.g. specific config options you set. pub_dev version, dart version, device serial number, device firmware version... Or anything else that doesn't fit any other category above.
+        > NOTE: Config options like `jwt`,`client_id`,`client_secret`,... which contain sensitive information, should **never** be posted!
+      placeholder: |
+        For example:
+          mtrust-sec-kit version, mtrust-imp-kit version, SEC-000123 v1.0.0...
+  - type: dropdown
+    id: bug-os
+    attributes:
+      label: Operating System
+      multiple: false
+      options:
+        - Windows
+        - WSL
+        - Linux
+        - MacOS
+        - iOS
+        - Android
+        - Web
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: bug-flutter-version
+    attributes:
+      label: Your flutter version
+      description: |
+        The flutter version you use to build mtrust-urp.
+        You can use the command `flutter --version` to find out your version.
+      placeholder: "e.g. Flutter 3.24.3"
+    validations:
+      required: true

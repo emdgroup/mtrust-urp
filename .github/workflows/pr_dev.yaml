@@ -1,0 +1,97 @@
+on:
+  pull_request:
+    branches:
+      - dev
+jobs:
+  validate_pr:
+    permissions:
+      pull-requests: write
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
+  build_and_version_osx:
+    name: Validate ${{ matrix.package }}
+    runs-on: macos-latest
+    needs: validate_pr
+    strategy:
+      matrix:
+        package: ["mtrust_urp_ui"]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      # Prepare all packages
+      - name: 🎯 Prepare Flutter
+        uses: ./.github/actions/prepare-flutter
+        with:
+          directory: ./${{ matrix.package }}
+
+      - name: 📍 Set Local Deps
+        run: |
+          dart pub get
+          dart packages.dart local
+
+      - name: 🔗 Get dependencies
+        run: |
+          cd ./${{ matrix.package }}
+          dart pub get
+
+      # check licenses
+      - uses: ./.github/actions/check-dart-licenses
+        with:
+          directory: ./${{ matrix.package }}
+
+      # Validate dart
+      - uses: ./.github/actions/validate-flutter
+        with:
+          directory: ./${{ matrix.package }}
+          analyze_flags: "--no-fatal-warnings"
+
+  build_and_version_ubuntu:
+    name: Validate ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: validate_pr
+    strategy:
+      matrix:
+        package: [
+            "mtrust_urp_core",
+            #"mtrust_urp_usb_strategy",
+            #"mtrust_urp_wifi_strategy",
+            "mtrust_urp_ble_strategy",
+            "mtrust_urp_virtual_strategy",
+          ]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      # Prepare all packages
+      - name: 🎯 Prepare Flutter
+        uses: ./.github/actions/prepare-flutter
+        with:
+          directory: ./${{ matrix.package }}
+
+      - name: 📍 Set Local Deps
+        run: |
+          dart pub get
+          dart packages.dart local
+
+      - name: 🔗 Get dependencies
+        run: |
+          cd ./${{ matrix.package }}
+          dart pub get
+
+      # check licenses
+      - uses: ./.github/actions/check-dart-licenses
+        with:
+          directory: ./${{ matrix.package }}
+
+      # Validate dart
+      - uses: ./.github/actions/validate-flutter
+        with:
+          directory: ./${{ matrix.package }}
+          analyze_flags: "--no-fatal-warnings"

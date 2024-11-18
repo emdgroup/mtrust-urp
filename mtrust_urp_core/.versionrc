@@ -1,0 +1,5 @@
+{
+    "releaseCommitMessageFormat": "chore(release): {{currentTag}} [skip ci]",
+    "compareUrlFormat": "{{host}}/M-Trust/VerifyNow/_git/MobileApp/branchCompare?baseVersion=GT{{previousTag}}&targetVersion=GT{{currentTag}}",
+    "commitUrlFormat": "{{host}}/M-Trust/VerifyNow/_git/MobileApp/commit/{{hash}}"
+}

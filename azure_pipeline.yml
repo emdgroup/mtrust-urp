@@ -1,0 +1,81 @@
+resources:
+  repositories:
+  - repository: pipeline-templates
+    type: git
+    name: 'M-Trust core\pipeline-templates'
+    ref: 'refs/heads/main'
+
+trigger:
+  - main
+  - dev
+
+variables:
+  - group: FlutterPackages
+
+stages:
+  - template: versioning_generate.yaml@pipeline-templates
+    parameters:
+      stageName: 'versioningStage'  #default genVersionStage
+      stepName: 'versioningStep'    #default genVersionStep
+      jobName: 'genVersionJob'      #default genVersionJob
+
+  - stage: buildStage
+    displayName: 'Build Stage'
+    dependsOn: 
+      - versioningStage
+    condition: succeeded('versioningStage')
+    variables:  # keep in mind to add the stage to the dependencies if using version
+      version: $[ stageDependencies.versioningStage.genVersionJob.outputs['versioningStep.version'] ]
+      branch_name: $[replace(variables['Build.SourceBranch'], 'refs/', '')]
+    
+    jobs:
+      - job: BuildLibraries
+        steps:
+          - checkout: self
+            persistCredentials: true
+
+          # Install NPM
+          - task: Npm@1
+            inputs:
+              command: "install"
+            displayName: Install NPM
+
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Changelog Artifacts'
+            inputs:
+              artifactName: changelog
+              downloadPath: $(System.DefaultWorkingDirectory)
+
+          - script: |
+              node version.js $(version)
+            displayName: "Set Version"
+
+          # Configure git
+          # Set git config
+          - script: |
+              git config --global user.email "pipeline@mtrust.com"
+              git config --global user.name "Azure Pipeline M-Trust"
+
+              rm CHANGELOG.md
+              cp changelog/CHANGELOG.md ./CHANGELOG.md
+              rm -rf changelog
+
+              git add .
+              git commit -m 'chore: set version via pipeline [skip ci]'
+              git push origin HEAD:$(branch_name) --force
+            condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+            displayName: Update Repository
+
+  - stage: Update_Version_Tag
+    displayName: 'Update Version Tag'
+    dependsOn: 
+      - buildStage
+      - versioningStage
+    condition: and(succeeded('buildStage'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      version: $[ stageDependencies.versioningStage.genVersionJob.outputs['versioningStep.version'] ]
+
+    jobs:
+      - template: versioning_publish_tag.yaml@pipeline-templates
+        parameters:
+          version: $(version)

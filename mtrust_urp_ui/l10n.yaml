@@ -1,0 +1,11 @@
+arb-dir: lib/src/l10n
+template-arb-file: en.arb
+output-localization-file: ui_ui_localizations.dart
+output-class: UrpUiLocalizations
+preferred-supported-locales: [en]
+nullable-getter: false
+format: false
+use-escaping: true
+output-dir: lib/src/l10n/generated
+synthetic-package: false
+untranslated-messages-file: lib/src/l10n/generated/needTranslation.txt

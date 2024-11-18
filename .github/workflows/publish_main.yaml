@@ -1,0 +1,198 @@
+name: Main - 🚀 publish packages
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  # Step 1: Publish mtrust-urp-core
+  release_urp_core:
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    environment: "pub.dev"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish mtrust_urp_core
+        uses: ./.github/actions/publish-pub-dev
+        with:
+          directory: "./mtrust_urp_core"
+          publish_mode: --force
+
+  # Step 2: Validate dependent packages after mtrust-urp-core is published
+  validate_dependents:
+    name: Validate ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    needs: release_urp_core # Only start after core is published
+    strategy:
+      matrix:
+        package: [
+            #"mtrust_urp_usb_strategy",
+            #"mtrust_urp_wifi_strategy",
+            "mtrust_urp_ble_strategy",
+            "mtrust_urp_virtual_strategy",
+          ]
+      fail-fast: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch latest version and reset
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - run: |
+          cat ./${{ matrix.package }}/pubspec.yaml
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Prepare Flutter for ${{ matrix.package }}
+        uses: ./.github/actions/prepare-flutter
+        with:
+          directory: "./${{ matrix.package }}"
+
+      - name: Validate Flutter for ${{ matrix.package }}
+        uses: ./.github/actions/validate-flutter
+        with:
+          directory: "./${{ matrix.package }}"
+          is_package: true
+
+      - name: Define output packages
+        id: define-packages
+        run: |
+          # Create the package array and set it as output
+          echo "packages=[\"${{ matrix.package }}\"]" >> $GITHUB_ENV  # Optional, to set environment variable
+          echo "::set-output name=packages::[\"${{ matrix.package }}\"]"  # Set output for matrix
+
+  # Step 3: Publish Dependent Packages after Validation
+  publish_dependents:
+    name: Publish ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    environment: pub.dev
+    permissions:
+      contents: write
+      id-token: write
+    needs: validate_dependents # Only start after dependent packages pass validation
+    strategy:
+      matrix:
+        package: [
+            #"mtrust_urp_usb_strategy",
+            #"mtrust_urp_wifi_strategy",
+            "mtrust_urp_ble_strategy",
+            "mtrust_urp_virtual_strategy",
+          ]
+      fail-fast: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch latest version and reset
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Publish mtrust_urp_core
+        uses: ./.github/actions/publish-pub-dev
+        with:
+          directory: ./${{ matrix.package }}
+          publish_mode: --force
+
+  # Step 4: Publish mtrust_urp_ui
+  publish_urp_ui:
+    name: Publish mtrust_urp_ui
+    needs: publish_dependents
+    # mac runner is needed because otherwise the golden ui tests fail
+    runs-on: macos-latest
+    environment: pub.dev
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch latest version and reset
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Prepare Flutter for mtrust_urp_ui
+        uses: ./.github/actions/prepare-flutter
+        with:
+          directory: "./mtrust_urp_ui"
+
+      - name: Validate Flutter for mtrust_urp_ui
+        id: validate
+        uses: ./.github/actions/validate-flutter
+        with:
+          directory: "./mtrust_urp_ui"
+          is_package: true
+
+      - name: Report
+        if: always() && steps.validate.conclusion == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Golden-Report
+          path: ./mtrust_urp_ui/test/failures
+
+      - name: Check licenses for mtrust_urp_ui
+        uses: ./.github/actions/check-dart-licenses
+        with:
+          directory: "./mtrust_urp_ui"
+
+      - name: Publish mtrust_urp_ui
+        uses: ./.github/actions/publish-pub-dev
+        with:
+          directory: ./mtrust_urp_ui
+          publish_mode: --force
+
+  failure_cleanup:
+    name: Cleanup after failure
+    runs-on: ubuntu-latest
+    needs:
+      [
+        publish_dependents,
+        validate_dependents,
+        release_urp_core,
+        publish_urp_ui,
+      ]
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: setup git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "gh-actions@merckgroup.com"
+
+      - name: Failure cleanup
+        run: |
+          TAG_NAME=$(git describe --tags --abbrev=0)
+          git tag -d $TAG_NAME
+          git push origin --delete $TAG_NAME
+          git revert HEAD~1..HEAD
+          git push origin main

@@ -1,0 +1,62 @@
+trigger:
+  - main
+variables:
+  - group: FlutterPackages
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  # Install cert for packages
+  - task: DownloadSecureFile@1
+    name: private
+    inputs:
+      secureFile: "pipeline_rsa"
+  # Donwload public key
+  - task: DownloadSecureFile@1
+    name: public
+    inputs:
+      secureFile: "pipeline_rsa.pub"
+  # Install SSH keys
+  - script: |
+      mkdir ~/.ssh/
+      cp $(private.secureFilePath) ~/.ssh/id_rsa
+      chmod 400 ~/.ssh/id_rsa
+      cp $(public.secureFilePath) ~/.ssh/id_rsa.pub
+  # Configure git
+  - script: |
+      git config --global user.email "pipeline@mtrust.com"
+      git config --global user.name "Azure Pipeline M-Trust"
+  # Install Flutter
+  - task: FlutterInstall@0
+    inputs:
+      mode: "auto"
+      channel: "stable"
+      version: "latest"
+  # Install NPM
+  - task: Npm@1
+    inputs:
+      command: "install"
+  # Run release cmd
+  - task: Npm@1
+    inputs:
+      command: "custom"
+      customCommand: "run git-dependencies"
+  # Get packages
+  - task: FlutterCommand@0
+    inputs:
+      arguments: "pub get"
+  # Build runner
+  - task: FlutterCommand@0
+    inputs:
+      arguments: "pub run build_runner build --delete-conflicting-outputs"
+  # Run tests
+  - task: FlutterTest@0
+
+  # Run release cmd
+  - task: Npm@1
+    inputs:
+      command: "custom"
+      customCommand: "run release"
+  # Push tags
+  - script: 'git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --follow-tags origin HEAD:$(Build.SourceBranchName)'
