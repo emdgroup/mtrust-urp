@@ -28,6 +28,7 @@ runs:
         script: |
           const fs = require('fs');
           const YAML = require('yaml');
+          const path = require('path');
           const {execSync} = require('child_process');
           const pubspec = fs.readFileSync('${{ inputs.directory }}/pubspec.yaml', 'utf8');
           const doc = YAML.parse(pubspec);
