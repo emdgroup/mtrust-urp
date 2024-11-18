@@ -62,7 +62,7 @@ runs:
           if (exampleDirs.length > 0) {
             exampleDirs.forEach(exampleDir => {
               console.log(`Running pub get in ${exampleDir} directory`);
-              execSync(`cd ${exampleDir} && dart pub get`, { stdio: 'inherit' });
+              execSync(`cd ${directory}/${exampleDir} && dart pub get`, { stdio: 'inherit' });
             });
           } else {
             console.log('No example directories with pubspec.yaml found.');
