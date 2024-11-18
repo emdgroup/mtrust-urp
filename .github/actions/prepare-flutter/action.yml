@@ -32,9 +32,16 @@ runs:
           const pubspec = fs.readFileSync('${{ inputs.directory }}/pubspec.yaml', 'utf8');
           const doc = YAML.parse(pubspec);
 
-          if(fs.existsSync('${{ inputs.directory }}/example')){
-            console.log('Running pub get in example directory');
-            execSync('cd ${{ inputs.directory }}/example && dart pub get', {stdio: 'inherit'});
+          const directory = `${{ inputs.directory }}`;
+          const exampleDirs = fs.readdirSync(directory).filter(file => fs.statSync(path.join(directory, file)).isDirectory() && file.startsWith('example'));
+
+          if (exampleDirs.length > 0) {
+            exampleDirs.forEach(exampleDir => {
+              console.log(`Running pub get in ${exampleDir} directory`);
+              execSync(`cd ${path.join(directory, exampleDir)} && dart pub get`, { stdio: 'inherit' });
+            });
+          } else {
+            console.log('No example directories found.');
           }
 
           if( doc.dev_dependencies && doc.dev_dependencies.build_runner){
