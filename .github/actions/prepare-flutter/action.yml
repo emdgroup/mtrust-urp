@@ -33,15 +33,39 @@ runs:
           const doc = YAML.parse(pubspec);
 
           const directory = `${{ inputs.directory }}`;
-          const exampleDirs = fs.readdirSync(directory).filter(file => fs.statSync(path.join(directory, file)).isDirectory() && file.startsWith('example'));
 
+          function findExampleDirsWithPubspec(dir) {
+            let result = [];
+            const files = fs.readdirSync(dir);
+          
+            files.forEach(file => {
+              const fullPath = path.join(dir, file);
+              if (fs.statSync(fullPath).isDirectory()) {
+                if (file.startsWith('example')) {
+                  // Check if the directory contains pubspec.yaml
+                  const pubspecPath = path.join(fullPath, 'pubspec.yaml');
+                  if (fs.existsSync(pubspecPath)) {
+                    result.push(fullPath);
+                  }
+                }
+                // Recursively search in subdirectories
+                result = result.concat(findExampleDirsWithPubspec(fullPath));
+              }
+            });
+          
+            return result;
+          }
+          
+          // Find all "example" directories that contain a pubspec.yaml file
+          const exampleDirs = findExampleDirsWithPubspec(directory);
+          
           if (exampleDirs.length > 0) {
             exampleDirs.forEach(exampleDir => {
               console.log(`Running pub get in ${exampleDir} directory`);
-              execSync(`cd ${path.join(directory, exampleDir)} && dart pub get`, { stdio: 'inherit' });
+              execSync(`cd ${exampleDir} && dart pub get`, { stdio: 'inherit' });
             });
           } else {
-            console.log('No example directories found.');
+            console.log('No example directories with pubspec.yaml found.');
           }
 
           if( doc.dev_dependencies && doc.dev_dependencies.build_runner){
