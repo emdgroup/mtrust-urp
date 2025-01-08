@@ -28,10 +28,10 @@ class CmdWrapper extends ChangeNotifier {
   }
 
   /// Command to set the device name.
-  UrpCoreCommand setName(String name) {
+  UrpCoreCommand setName(String? name) {
     return UrpCoreCommand(
       command: wrapper.UrpCommand.urpSetName,
-      setNameParameters: UrpSetNameParameters(name: name),
+      setNameParameters: name != null ? UrpSetNameParameters(name: name) : null,
     );
   }
 
