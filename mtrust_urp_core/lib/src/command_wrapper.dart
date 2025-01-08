@@ -2,77 +2,163 @@ import 'package:flutter/foundation.dart';
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
 import 'package:mtrust_urp_core/src/api_service.dart';
 
-/// Abstract wrapper for the core commands, these commands need to be wrapped
-/// in a device specific Command Wrapper before they can be send to a device.
-abstract class CmdWrapper extends ChangeNotifier {
+/// Wrapper for the core commands, these commands need to be wrapped in a
+/// device specific Command Wrapper before they can be send to a device.
+class CmdWrapper extends ChangeNotifier {
 
-  /// Ping the device.
-  Future<void> ping();
+  /// Command to ping the device.
+  UrpCoreCommand ping() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpPing,
+    );
+  }
 
-  /// Get the device info.
-  Future<UrpDeviceInfo> info();
+  /// Command to get the device info.
+  UrpCoreCommand info() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpGetInfo,
+    );
+  }
 
-  /// Get the power state of the device.
-  Future<UrpPowerState> getPower();
+  /// Command to get the power state of the device.
+  UrpCoreCommand getPower() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpGetPower,
+    );
+  }
 
-  /// Set the device name.
-  Future<void> setName(String? name);
+  /// Command to set the device name.
+  UrpCoreCommand setName(String name) {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpSetName,
+      setNameParameters: UrpSetNameParameters(name: name),
+    );
+  }
 
-  /// Get the device name.
-  Future<UrpDeviceName> getName();
+  /// Command to get the device name.
+  UrpCoreCommand getName() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpGetName,
+    );
+  }
 
-  /// Pair a device.
-  Future<void> pair();
+  /// Command to pair a device.
+  UrpCoreCommand pair() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpPair,
+    );
+  }
 
-  /// Unpair a device.
-  Future<void> unpair();
+  /// Command to unpair a device.
+  UrpCoreCommand unpair() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpUnpair,
+    );
+  }
 
-  /// Start an access point for the firmware update.
-  Future<UrpWifiState> startAP(String ssid, String apk);
+  @Deprecated(
+    'This method is deprecated and will be removed in a future release',
+  )
+  /// Command to start an access point for the firmware update.
+  UrpCoreCommand startAP(String ssid, String apk) {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpStartAp,
+      apParameters: UrpApParamters(ssid: ssid, password: apk),
+    );
+  }
 
-  /// Stop the access point.
-  Future<void> stopAP();
+  @Deprecated(
+    'This method is deprecated and will be removed in a future release',
+  )
+  /// Command to stop the access point.
+  UrpCoreCommand stopAP() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpStopAp,
+    );
+  }
 
-  /// Connect to an access point.
-  Future<UrpWifiState> connectAP(String ssid, String apk);
+  @Deprecated(
+    'This method is deprecated and will be removed in a future release',
+  )
+  /// Command to connect to an access point.
+  UrpCoreCommand connectAP(String ssid, String apk) {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpConnectAp,
+      apParameters: UrpApParamters(ssid: ssid, password: apk),
+    );
+  }
 
-  /// Disconnect from an access point.
-  Future<void> disconnectAP();
+  @Deprecated(
+    'This method is deprecated and will be removed in a future release',
+  )
+  /// Command to disconnect from an access point.
+  UrpCoreCommand disconnectAP() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpDisconnectAp,
+    );
+  }
 
-  /// Start DFU.
-  Future<void> startDFU();
+  /// Command to start DFU.
+  UrpCoreCommand startDFU() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpStartDfu,
+    );
+  }
 
-  /// Stop DFU.
-  Future<void> stopDFU();
+  /// Command to stop DFU.
+  UrpCoreCommand stopDFU() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpStopDfu,
+    );
+  }
 
-  /// Put the device to sleep mode. 
+  /// Command to put the device to sleep mode. 
   /// It will disconnect from the device.
-  Future<void> sleep();
+  UrpCoreCommand sleep() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpSleep,
+    );
+  }
 
-  /// Turn the device off. It will disconnect from the device.
-  Future<void> off();
+  /// Command to turn the device off. It will disconnect from the device.
+  UrpCoreCommand off() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpOff,
+    );
+  }
 
-  /// Reboot the device. It will disconnect from the device.
-  Future<void> reboot();
+  /// Command to reboot the device. It will disconnect from the device.
+  UrpCoreCommand reboot() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpReboot,
+    );
+  }
 
-  /// Prevent the device from going to sleep mode.
-  Future<void> stayAwake();
+  /// Command to prevent the device from going to sleep mode.
+  UrpCoreCommand stayAwake() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpStayAwake,
+    );
+  }
 
-  /// Get the public key of the device. 
-  Future<UrpPublicKey> getPublicKey();
+  /// Command to get the public key of the device. 
+  UrpCoreCommand getPublicKey() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpGetPublicKey,
+    );
+  }
 
-  /// Get the device id
-  Future<UrpDeviceId> getDeviceId();
+  /// Command to get the device id
+  UrpCoreCommand getDeviceId() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpGetDeviceId,
+    );
+  }
 
-  /// Identify a reader. Triggers the LED to identify the device.
-  Future<void> identify();
-
-  /// Fetch new token
-  Future<UrpSecureToken?> getToken(
-    UrpSecureToken oldToken, 
-    UrpPublicKey publicKey,
-  ) async {
-    final token = await ApiService().requestToken(oldToken, publicKey);
-    return token;
+  /// Command to identify a reader. Triggers the LED to identify the device.
+  UrpCoreCommand identify() {
+    return UrpCoreCommand(
+      command: wrapper.UrpCommand.urpIdentify,
+    );
   }
 }
