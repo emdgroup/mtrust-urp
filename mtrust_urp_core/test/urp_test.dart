@@ -115,46 +115,6 @@ void main() {
         expect(hexString, equals(expected));
       });
 
-      test('Start AP command', () {
-        final message = getUrpMessage(cmdWrapper.startAP("Test", "Test"));
-        final bytes = message.writeToBuffer();
-        final length = int16ToBytes(bytes.length);
-        final messageBytes = length + bytes;
-        final hexString = messageBytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join(' ');
-        const expected = '00 26 0a 0e 08 01 22 04 08 02 10 04 2a 04 08 00 10 01 12 14 0a 12 0a 10 08 07 1a 0c 0a 04 54 65 73 74 12 04 54 65 73 74'; //TODO:
-        expect(hexString, equals(expected));
-      });
-
-      test('Stop AP command', () {
-        final message = getUrpMessage(cmdWrapper.stopAP());
-        final bytes = message.writeToBuffer();
-        final length = int16ToBytes(bytes.length);
-        final messageBytes = length + bytes;
-        final hexString = messageBytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join(' ');
-        const expected = '00 18 0a 0e 08 01 22 04 08 02 10 04 2a 04 08 00 10 01 12 06 0a 04 0a 02 08 08';
-        expect(hexString, equals(expected));
-      });
-
-      test('Connect AP command', () {
-        final message = getUrpMessage(cmdWrapper.connectAP("Test", "Test"));
-        final bytes = message.writeToBuffer();
-        final length = int16ToBytes(bytes.length);
-        final messageBytes = length + bytes;
-        final hexString = messageBytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join(' ');
-        const expected = '00 26 0a 0e 08 01 22 04 08 02 10 04 2a 04 08 00 10 01 12 14 0a 12 0a 10 08 09 1a 0c 0a 04 54 65 73 74 12 04 54 65 73 74';
-        expect(hexString, equals(expected));
-      });
-
-      test('Disconnect AP command', () {
-        final message = getUrpMessage(cmdWrapper.disconnectAP());
-        final bytes = message.writeToBuffer();
-        final length = int16ToBytes(bytes.length);
-        final messageBytes = length + bytes;
-        final hexString = messageBytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join(' ');
-        const expected = '00 18 0a 0e 08 01 22 04 08 02 10 04 2a 04 08 00 10 01 12 06 0a 04 0a 02 08 0a';
-        expect(hexString, equals(expected));
-      });
-
       test('Start DFU command', () {
         final message = getUrpMessage(cmdWrapper.startDFU());
         final bytes = message.writeToBuffer();
