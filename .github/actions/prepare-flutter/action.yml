@@ -28,13 +28,45 @@ runs:
         script: |
           const fs = require('fs');
           const YAML = require('yaml');
+          const path = require('path');
           const {execSync} = require('child_process');
           const pubspec = fs.readFileSync('${{ inputs.directory }}/pubspec.yaml', 'utf8');
           const doc = YAML.parse(pubspec);
 
-          if(fs.existsSync('${{ inputs.directory }}/example')){
-            console.log('Running pub get in example directory');
-            execSync('cd ${{ inputs.directory }}/example && dart pub get', {stdio: 'inherit'});
+          const directory = `${{ inputs.directory }}`;
+
+          function findExampleDirsWithPubspec(dir) {
+            let result = [];
+            const files = fs.readdirSync(dir);
+          
+            files.forEach(file => {
+              const fullPath = path.join(dir, file);
+              if (fs.statSync(fullPath).isDirectory()) {
+                if (file.startsWith('example')) {
+                  // Check if the directory contains pubspec.yaml
+                  const pubspecPath = path.join(fullPath, 'pubspec.yaml');
+                  if (fs.existsSync(pubspecPath)) {
+                    result.push(fullPath);
+                  }
+                }
+                // Recursively search in subdirectories
+                result = result.concat(findExampleDirsWithPubspec(fullPath));
+              }
+            });
+          
+            return result;
+          }
+          
+          // Find all "example" directories that contain a pubspec.yaml file
+          const exampleDirs = findExampleDirsWithPubspec(directory);
+          
+          if (exampleDirs.length > 0) {
+            exampleDirs.forEach(exampleDir => {
+              console.log(`Running pub get in ${exampleDir} directory`);
+              execSync(`cd ${directory}/${exampleDir} && dart pub get`, { stdio: 'inherit' });
+            });
+          } else {
+            console.log('No example directories with pubspec.yaml found.');
           }
 
           if( doc.dev_dependencies && doc.dev_dependencies.build_runner){
