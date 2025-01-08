@@ -1,6 +1,6 @@
 name: urp_core
 description: Software SDK for interface with URP Devices
-version: 7.0.0
+version: 8.0.2-0
 environment:
   sdk: ^3.0.5
 dependencies:
