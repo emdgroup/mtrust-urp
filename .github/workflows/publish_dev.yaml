@@ -48,8 +48,8 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin main
-          git reset --hard origin/main
+          git fetch origin dev
+          git reset --hard origin/dev
 
       - run: |
           cat ./${{ matrix.package }}/pubspec.yaml
@@ -102,8 +102,8 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin main
-          git reset --hard origin/main
+          git fetch origin dev
+          git reset --hard origin/dev
 
       - name: Publish mtrust_urp_core
         uses: ./.github/actions/publish-pub-dev
@@ -130,8 +130,8 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin main
-          git reset --hard origin/main
+          git fetch origin dev
+          git reset --hard origin/dev
 
       - name: Prepare Flutter for mtrust_urp_ui
         uses: ./.github/actions/prepare-flutter
@@ -195,4 +195,4 @@ jobs:
           git tag -d $TAG_NAME
           git push origin --delete $TAG_NAME
           git revert HEAD~1..HEAD
-          git push origin main
+          git push origin dev
