@@ -1,6 +1,6 @@
 {
   "name": "urp",
-  "version": "8.0.2-0",
+  "version": "8.0.2-1",
   "description": "This Package allows you to connect and interact with the URP Devices.",
   "main": "index.js",
   "directories": {
