@@ -1,5 +1,5 @@
 name: mtrust_urp_ble_strategy
-version: 8.0.2-0
+version: 8.0.2-2
 environment: 
   sdk: ^3.5.0
   flutter: '>=1.17.0'
@@ -9,7 +9,7 @@ dependencies:
     sdk: flutter
   freezed_annotation: ^2.0.3
   provider: ^6.0.2
-  mtrust_urp_core: ^8.0.2-0
+  mtrust_urp_core: ^8.0.2-2
   flutter_blue_plus: ^1.32.11
   json_annotation: ^4.8.1
   collection: ^1.18.0
