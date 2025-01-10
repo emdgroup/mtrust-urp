@@ -25,6 +25,12 @@ jobs:
           directory: "./mtrust_urp_core"
           publish_mode: --force
 
+      - name: Run package check for mtrust-urp-core
+        run: |
+          TAG_NAME=$(git describe --tags --abbrev=0)
+          chmod +x ./package_checker.sh
+          ./package_checker.sh mtrust_urp_core $TAG_NAME
+
   # Step 2: Validate dependent packages after mtrust-urp-core is published
   validate_dependents:
     name: Validate ${{ matrix.package }}
@@ -105,11 +111,17 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
 
-      - name: Publish mtrust_urp_core
+      - name: Publish ${{ matrix.package }}
         uses: ./.github/actions/publish-pub-dev
         with:
           directory: ./${{ matrix.package }}
           publish_mode: --force
+
+      - name: Run package check for mtrust-urp-core
+        run: |
+          TAG_NAME=$(git describe --tags --abbrev=0)
+          chmod +x ./package_checker.sh
+          ./package_checker.sh ${{ matrix.package }} $TAG_NAME
 
   # Step 4: Publish mtrust_urp_ui
   publish_urp_ui:
