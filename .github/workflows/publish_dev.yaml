@@ -184,6 +184,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch latest version and reset
+        run: |
+          git fetch origin dev
+          git reset --hard origin/dev
+
       - name: setup git
         run: |
           git config --global user.name "GitHub Actions"
