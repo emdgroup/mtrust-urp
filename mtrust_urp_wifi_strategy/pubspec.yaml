@@ -8,7 +8,8 @@ dependencies:
   flutter: 
     sdk: flutter
   web_socket_channel: ^2.2.0
-  mtrust_urp_core: ^9.0.0-0
+  mtrust_urp_core: 
+    path: ../mtrust_urp_core
 dev_dependencies: 
   flutter_test: 
     sdk: flutter

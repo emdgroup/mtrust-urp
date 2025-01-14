@@ -7,7 +7,8 @@ description: USB Connection Strategy for URP
 dependencies: 
   flutter: 
     sdk: flutter
-  mtrust_urp_core: ^9.0.0-0
+  mtrust_urp_core: 
+    path: ../mtrust_urp_core
   flutter_libserialport: ^0.4.0
 dev_dependencies: 
   flutter_test: 
