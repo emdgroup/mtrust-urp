@@ -1,5 +1,5 @@
 name: mtrust_urp_wifi_strategy
-version: 9.0.0-2
+version: 9.0.0-3
 environment: 
   sdk: '>=2.17.0 <4.0.0'
   flutter: '>=1.17.0'
@@ -8,7 +8,7 @@ dependencies:
   flutter: 
     sdk: flutter
   web_socket_channel: ^2.2.0
-  mtrust_urp_core: ^9.0.0-2
+  mtrust_urp_core: ^9.0.0-3
 dev_dependencies: 
   flutter_test: 
     sdk: flutter
