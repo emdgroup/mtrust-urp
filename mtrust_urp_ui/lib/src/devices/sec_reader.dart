@@ -75,11 +75,13 @@ class SecReaderVisualization extends StatelessWidget {
             heightFactor: 0.14 * 1 * 0.12466124661246612,
             widthFactor: 0.39 * 1,
             child: Flashing(
-                state: ledFlashingState,
-                builder: (_, value) => CustomPaint(
-                      painter:
-                          RPSCustomPainter(color: ledColor.withOpacity(value)),
-                    )),
+              state: ledFlashingState,
+              builder: (_, value) => CustomPaint(
+                painter: RPSCustomPainter(
+                  color: ledColor.withAlpha((255 * value).toInt()),
+                ),
+              ),
+            ),
           )),
 
           // The screen content
@@ -109,12 +111,12 @@ class SecReaderVisualization extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: buttonColor.withOpacity(value),
+                          color: buttonColor.withAlpha((255 * value).toInt()),
                           width: 8,
                         ),
                         gradient: RadialGradient(colors: [
-                          buttonColor.withOpacity(value * 0.5),
-                          buttonColor.withOpacity(value * 0.2),
+                          buttonColor.withAlpha((value * 0.5 * 255).toInt()),
+                          buttonColor.withAlpha((value * 0.2 * 255).toInt()),
                         ]),
                         shape: BoxShape.circle,
                       ),
@@ -124,7 +126,9 @@ class SecReaderVisualization extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: buttonColor.withOpacity(value * 0.5),
+                            color: buttonColor.withAlpha(
+                              (255 * value * 0.5).toInt(),
+                            ),
                             width: 8,
                           ),
                           shape: BoxShape.circle,
@@ -136,7 +140,9 @@ class SecReaderVisualization extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: buttonColor.withOpacity(value * 0.2),
+                            color: buttonColor.withAlpha(
+                              (value * 0.2 * 255).toInt(),
+                            ),
                             width: 8,
                           ),
                           shape: BoxShape.circle,

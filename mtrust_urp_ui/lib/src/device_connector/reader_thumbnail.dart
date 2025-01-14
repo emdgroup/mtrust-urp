@@ -35,7 +35,7 @@ class ReaderThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return LdTouchableSurface(
       onTap: onTap,
-      reactiveColors: LdTheme.of(context).palette.primary,
+      color: LdTheme.of(context).palette.primary,
       builder: (context, colors, touchState) {
         return LdSpring(
           initialPosition: 0,

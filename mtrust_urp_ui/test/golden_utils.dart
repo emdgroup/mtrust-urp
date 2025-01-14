@@ -33,7 +33,7 @@ Widget liquidFrame(Key key, Widget child, bool dark, LdThemeSize size) {
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: theme.background,
-              borderRadius: ldRadiusM,
+              borderRadius: theme.radius(LdSize.m),
             ),
             child: Directionality(
               textDirection: TextDirection.ltr,

@@ -121,5 +121,40 @@ Add a file at `android/app/src/main/res/xml/device_filter.xml` with the followin
 ## Contributing
 We welcome contributions! Please fork the repository and submit a pull request with your changes. Ensure that your code adheres to our coding standards and includes appropriate tests.
 
+Utility for interacting with this repo:
+
+```sh 
+dart pub get # Get dependencies
+dart run packages.dart 
+```
+
+```
+Manage mtrust_urp packages
+
+Usage: packages <command> [arguments]
+
+Global options:
+-h, --help    Print this usage information.
+--changed-only  Only run the command on packages that have staged changes
+
+Available commands:
+  analyze            Run flutter analyze in all packages
+  install            Run flutter pub get in all packages
+  set-deps           Set all packages dependencies to local or hosted
+  test               Run flutter test in all packages
+  update-urp-types   Update mtrust_urp_types in all packages
+
+Run "packages help <command>" for more information about a command.
+```
+
+This repository contains a husky pre-commit hook that runs analysis and tests before committing. Please ensure that you have installed husky before committing.
+
+```sh
+npm install 
+```
+
+
+
+
 ## License
 This project is licensed under the Apache 2.0 License. See the [LICENSE](./LICENSE) file for details.

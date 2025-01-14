@@ -72,7 +72,7 @@ class DeviceConnector extends StatelessWidget {
   Widget _buildPreferredReaderBadge(BuildContext context, FoundDevice reader) {
     final locales = UrpUiLocalizations.of(context);
     return LdBadge(
-      color: LdColorNames.neutral,
+      color: shadZinc,
       size: LdSize.s,
       child: Text(switch (mode) {
         (ReaderConnectorMode.ephemeral) => "",
@@ -105,8 +105,7 @@ class DeviceConnector extends StatelessWidget {
                       return const LdLoader();
                     }
 
-                    final preferredReader =
-                        preferredController.state.result;
+                    final preferredReader = preferredController.state.result;
 
                     // LdSubmit that handles triggering the scanning for readers
                     return LdSubmit<Stream<FoundDevice>>(

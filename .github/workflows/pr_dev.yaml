@@ -31,7 +31,7 @@ jobs:
       - name: 📍 Set Local Deps
         run: |
           dart pub get
-          dart packages.dart local
+          dart run packages.dart set-deps --source=local
 
       - name: 🔗 Get dependencies
         run: |
@@ -78,7 +78,7 @@ jobs:
       - name: 📍 Set Local Deps
         run: |
           dart pub get
-          dart packages.dart local
+          dart run packages.dart set-deps --source=local
 
       - name: 🔗 Get dependencies
         run: |

@@ -1,0 +1,4 @@
+dart run packages.dart set-deps --source=local
+dart run packages.dart install --changed-only
+dart run packages.dart test --changed-only
+dart run packages.dart analyze --changed-only
