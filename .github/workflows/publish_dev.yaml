@@ -54,7 +54,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev
+          git fetch origin dev --tags
           git reset --hard origin/dev
 
       - run: |
@@ -108,7 +108,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev
+          git fetch origin dev --tags
           git reset --hard origin/dev
 
       - name: Publish ${{ matrix.package }}
@@ -142,7 +142,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev
+          git fetch origin dev --tags
           git reset --hard origin/dev
 
       - name: Prepare Flutter for mtrust_urp_ui
@@ -198,7 +198,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev
+          git fetch origin dev --tags
           git reset --hard origin/dev
 
       - name: setup git
