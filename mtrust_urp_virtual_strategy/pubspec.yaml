@@ -1,5 +1,6 @@
 name: mtrust_urp_virtual_strategy
 version: 9.0.0-0
+publish_to: none
 environment: 
   sdk: '>=2.17.0 <4.0.0'
   flutter: '>=1.17.0'

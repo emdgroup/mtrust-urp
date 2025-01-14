@@ -1,23 +1,24 @@
 name: mtrust_urp_ble_strategy
 version: 9.0.0-0
-environment:
+publish_to: none
+environment: 
   sdk: ^3.5.0
-  flutter: ">=1.17.0"
+  flutter: '>=1.17.0'
 description: BLE Connection Strategy for URP
-dependencies:
-  flutter:
+dependencies: 
+  flutter: 
     sdk: flutter
   freezed_annotation: ^2.0.3
   provider: ^6.0.2
-  mtrust_urp_core:
+  mtrust_urp_core: 
     path: ../mtrust_urp_core
   flutter_blue_plus: ^1.32.11
   json_annotation: ^4.8.1
   collection: ^1.18.0
   async: ^2.11.0
-dev_dependencies:
-  flutter_test:
+dev_dependencies: 
+  flutter_test: 
     sdk: flutter
 repository: https://github.com/emdgroup/mtrust-urp
-flutter:
+flutter: 
   uses-material-design: false
