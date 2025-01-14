@@ -1,19 +1,30 @@
-/* Utility to work with all packages
-  
-  dart run packages.dart 
-    install - Install all packages dependencies
-    test - Run tests in all packages
-    analyze - Analyze all packages
-    set-deps [local] - Set all packages dependencies to local or hosted
-    update-urp-types - Update all packages dependencies to the latest version of mtrust_urp_types
-*/
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:args/command_runner.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:pubspec/pubspec.dart';
 import 'package:yaml_modify/yaml_modify.dart';
+
+void main(List<String> args) {
+  var parser = ArgParser();
+
+  parser.addFlag("changed-only", abbr: "c", defaultsTo: false);
+
+  final runner = CommandRunner("packages", "Manage mtrust_urp packages")
+    ..addCommand(SetDependenciesCmd())
+    ..addCommand(UpdateUrpTypesCmd())
+    ..addCommand(InstallCmd())
+    ..addCommand(TestCmd())
+    ..addCommand(AnalyzeCmd());
+
+  runner.run(args).catchError((error) {
+    if (error is! UsageException) throw error;
+    print(error);
+    exit(64); // Exit code 64 indicates a usage error.
+  });
+}
 
 List<String> changedPackagesOnly() {
   final result = Process.runSync("git", "diff --name-only --cached".split(" "));
@@ -132,42 +143,84 @@ void setDependencies(bool local) {
   }
 }
 
-void main(List<String> args) {
-  var parser = ArgParser();
+// Command definitions
+class SetDependenciesCmd extends Command {
+  @override
+  String get name => "set-deps";
 
-  parser.addFlag("changed-only", abbr: "c", defaultsTo: false);
+  @override
+  String get description => "Set all packages dependencies to local or hosted";
 
-  parser.addCommand("install");
-  parser.addCommand("test");
-  parser.addCommand("analyze");
-  final setDeps = parser.addCommand("set-deps");
-  setDeps.addOption("source", abbr: "s", allowed: ["local", "hosted"]);
-
-  parser.addCommand("update-urp-types");
-
-  var results = parser.parse(args);
-
-  if (results.command != null) {
-    switch (results.command!.name) {
-      case "install":
-        install(results.flag("changed-only"));
-        break;
-      case "test":
-        test(results.flag("changed-only"));
-        break;
-      case "analyze":
-        analyze(results.flag("changed-only"));
-        break;
-      case "set-deps":
-        setDependencies(results.command!["source"] == "local");
-        break;
-      case "update-urp-types":
-        updateUrpTypes();
-        break;
-    }
-    return;
+  SetDependenciesCmd() {
+    argParser.addOption("source", abbr: "s", allowed: ["local", "hosted"]);
   }
-  print("Invalid command");
 
-  print(parser.usage);
+  @override
+  Future<void> run() async {
+    setDependencies(argResults?.option("source") == "local");
+  }
+}
+
+class UpdateUrpTypesCmd extends Command {
+  @override
+  String get name => "update-urp-types";
+
+  @override
+  String get description => "Update mtrust_urp_types in all packages";
+
+  @override
+  Future<void> run() async {
+    updateUrpTypes();
+  }
+}
+
+class InstallCmd extends Command {
+  @override
+  String get name => "install";
+
+  @override
+  String get description => "Run flutter pub get in all packages";
+
+  InstallCmd() {
+    argParser.addFlag("changed-only", abbr: "c", defaultsTo: false);
+  }
+
+  @override
+  Future<void> run() async {
+    install(argResults!.flag("changed-only"));
+  }
+}
+
+class TestCmd extends Command {
+  @override
+  String get name => "test";
+
+  @override
+  String get description => "Run flutter test in all packages";
+
+  TestCmd() {
+    argParser.addFlag("changed-only", abbr: "c", defaultsTo: false);
+  }
+
+  @override
+  Future<void> run() async {
+    test(argResults!.flag("changed-only"));
+  }
+}
+
+class AnalyzeCmd extends Command {
+  @override
+  String get name => "analyze";
+
+  @override
+  String get description => "Run flutter analyze in all packages";
+
+  AnalyzeCmd() {
+    argParser.addFlag("changed-only", abbr: "c", defaultsTo: false);
+  }
+
+  @override
+  Future<void> run() async {
+    analyze(argResults!.flag("changed-only"));
+  }
 }
