@@ -2,29 +2,23 @@
   "name": "urp",
   "version": "9.0.0-0",
   "description": "This Package allows you to connect and interact with the URP Devices.",
-  "main": "index.js",
-  "directories": {
-    "example": "example",
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "standard-version"
-  },
   "repository": {
     "type": "git",
     "url": "https://dev.azure.com/M-Trust/Flutter%20Packages/_git/urp_core"
   },
+
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "devDependencies": {
-    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7",
     "yaml": "^2.7.0"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+  "scripts": {
+    "prepare": "husky",
+    "test": "dart run packages.dart test",
+    "lint": "dart run packages.dart analyze",
+    "local": "dart run packages.dart --source=local",
+    "hosted": "dart run packages.dart --source=hosted"
   }
 }

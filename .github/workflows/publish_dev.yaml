@@ -204,7 +204,7 @@ jobs:
       - name: setup git
         run: |
           git config --global user.name "GitHub Actions"
-          git config --global user.email "gh-actions@merckgroup.com"
+          git config --global user.email "gh-actions@emdgroup.com"
 
       - name: Failure cleanup
         run: |

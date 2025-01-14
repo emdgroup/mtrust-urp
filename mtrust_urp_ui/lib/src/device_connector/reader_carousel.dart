@@ -273,8 +273,8 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                 ),
 
               // Page indicator only if more than one reader
-              LdCollapse(
-                collapsed: _readers.isEmpty || type != LdSubmitStateType.idle,
+              LdReveal.quick(
+                revealed: _readers.isNotEmpty && type == LdSubmitStateType.idle,
                 child: DeviceCarouselDotIndicator(
                   count: _readers.length,
                   currentIndex: _page.round(),

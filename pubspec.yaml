@@ -4,6 +4,7 @@ version: 9.0.0-0
 environment:
   sdk: ^3.0.5
 dependencies:
+  args: ^2.6.0
   pub_semver: ^2.1.4
   pubspec: ^2.3.0
   yaml_modify: ^1.0.1

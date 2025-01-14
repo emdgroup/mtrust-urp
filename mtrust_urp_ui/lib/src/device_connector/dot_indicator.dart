@@ -10,7 +10,8 @@ class DeviceCarouselDotIndicator extends StatelessWidget {
   /// and color using the [LdTheme.warningColor]
   final int? preferredIndex;
 
-  const DeviceCarouselDotIndicator({super.key, 
+  const DeviceCarouselDotIndicator({
+    super.key,
     required this.count,
     required this.currentIndex,
     this.preferredIndex,
@@ -20,7 +21,7 @@ class DeviceCarouselDotIndicator extends StatelessWidget {
     if (preferredIndex != null && i == preferredIndex) {
       return LdTheme.of(context)
           .warningColor
-          .withOpacity(i == currentIndex ? 1 : 0.5);
+          .withAlpha(i == currentIndex ? 255 : 127);
     }
     return i == currentIndex
         ? LdTheme.of(context).neutralShade(6)
