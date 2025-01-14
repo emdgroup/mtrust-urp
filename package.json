@@ -1,12 +1,11 @@
 {
   "name": "urp",
-  "version": "9.0.0-0",
+  "version": "9.0.0-1",
   "description": "This Package allows you to connect and interact with the URP Devices.",
   "repository": {
     "type": "git",
     "url": "https://dev.azure.com/M-Trust/Flutter%20Packages/_git/urp_core"
   },
-
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
