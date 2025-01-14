@@ -9,6 +9,7 @@ LdModal makeDeviceConnectorModal({
     LdModal(
       bottomRadius: LdTheme.of(context).screenRadius,
       topRadius: LdTheme.of(context).screenRadius,
+      fixedDialogSize: const Size(400, 400),
       modalContent: (context) => AspectRatio(
         aspectRatio: 1,
         child: Padding(
