@@ -27,7 +27,7 @@ jobs:
 
       - name: Run package check for mtrust-urp-core
         run: |
-          TAG_NAME=$(git describe --tags --abbrev=0)
+          TAG_NAME=$(git describe --tags --abbrev=0 | cut -c 2-)
           chmod +x ./.github/workflows/package_checker.sh
           ./.github/workflows/package_checker.sh mtrust_urp_core $TAG_NAME
 
@@ -119,7 +119,7 @@ jobs:
 
       - name: Run package check for mtrust-urp-core
         run: |
-          TAG_NAME=$(git describe --tags --abbrev=0)
+          TAG_NAME=$(git describe --tags --abbrev=0 | cut -c 2-)
           chmod +x ./.github/workflows/package_checker.sh
           ./.github/workflows/package_checker.sh ${{ matrix.package }} $TAG_NAME
 
