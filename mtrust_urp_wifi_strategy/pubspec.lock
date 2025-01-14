@@ -203,10 +203,9 @@ packages:
   mtrust_urp_core:
     dependency: "direct main"
     description:
-      name: mtrust_urp_core
-      sha256: a118fe7b2373e00ab437d4b94e2287bff4a47386ced16888ccaaf5b1b80517c9
-      url: "https://pub.dev"
-    source: hosted
+      path: "../mtrust_urp_core"
+      relative: true
+    source: path
     version: "9.0.0-0"
   mtrust_urp_types:
     dependency: transitive
