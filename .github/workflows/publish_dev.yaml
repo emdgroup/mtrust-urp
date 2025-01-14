@@ -27,7 +27,8 @@ jobs:
 
       - name: Run package check for mtrust-urp-core
         run: |
-          TAG_NAME=$(git describe --tags --abbrev=0 | cut -c 2-)
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          TAG_NAME="${TAG_NAME#v}"
           chmod +x ./.github/workflows/package_checker.sh
           ./.github/workflows/package_checker.sh mtrust_urp_core $TAG_NAME
 
@@ -54,7 +55,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev --tags
+          git fetch origin dev
           git reset --hard origin/dev
 
       - run: |
@@ -108,7 +109,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev --tags
+          git fetch origin dev
           git reset --hard origin/dev
 
       - name: Publish ${{ matrix.package }}
@@ -119,7 +120,8 @@ jobs:
 
       - name: Run package check for mtrust-urp-core
         run: |
-          TAG_NAME=$(git describe --tags --abbrev=0 | cut -c 2-)
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          TAG_NAME="${TAG_NAME#v}"
           chmod +x ./.github/workflows/package_checker.sh
           ./.github/workflows/package_checker.sh ${{ matrix.package }} $TAG_NAME
 
@@ -142,7 +144,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev --tags
+          git fetch origin dev
           git reset --hard origin/dev
 
       - name: Prepare Flutter for mtrust_urp_ui
@@ -198,7 +200,7 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin dev --tags
+          git fetch origin dev
           git reset --hard origin/dev
 
       - name: setup git
@@ -208,7 +210,7 @@ jobs:
 
       - name: Failure cleanup
         run: |
-          TAG_NAME=$(git describe --tags --abbrev=0)
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
           git tag -d $TAG_NAME
           git push origin --delete $TAG_NAME
           git revert HEAD~1..HEAD
