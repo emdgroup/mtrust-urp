@@ -1,5 +1,5 @@
 name: mtrust_urp_ui
-version: 9.0.0-3
+version: 9.0.0-4
 environment: 
   sdk: ^3.5.0
   flutter: '>=1.17.0'
@@ -10,7 +10,7 @@ dependencies:
   flutter_localizations: 
     sdk: flutter
   mtrust_urp_types: ^4.1.0
-  mtrust_urp_core: ^9.0.0-3
+  mtrust_urp_core: ^9.0.0-4
   intl: ^0.19.0
   liquid_flutter: ^18.2.0
   shared_preferences: ^2.3.5
@@ -18,7 +18,7 @@ dev_dependencies:
   flutter_test: 
     sdk: flutter
   flutter_lints: ^4.0.0
-  mtrust_urp_virtual_strategy: ^9.0.0-3
+  mtrust_urp_virtual_strategy: ^9.0.0-4
   golden_toolkit: ^0.15.0
   liquid_flutter_emd_theme: ^0.0.1
   mocktail: ^1.0.4
