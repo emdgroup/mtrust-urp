@@ -157,6 +157,11 @@ class SetDependenciesCmd extends Command {
 
   @override
   Future<void> run() async {
+    if (argResults?.option("source") == null) {
+      print("Please provide a source option --source=<local|hosted>");
+      exit(1);
+    }
+
     setDependencies(argResults?.option("source") == "local");
   }
 }

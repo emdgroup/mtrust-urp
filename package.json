@@ -18,7 +18,7 @@
     "prepare": "husky",
     "test": "dart run packages.dart test",
     "lint": "dart run packages.dart analyze",
-    "local": "dart run packages.dart set-deps local",
-    "hosted": "dart run packages.dart set-deps hosted"
+    "local": "dart run packages.dart --source=local",
+    "hosted": "dart run packages.dart --source=hosted"
   }
 }

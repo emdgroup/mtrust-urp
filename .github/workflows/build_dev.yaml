@@ -89,7 +89,7 @@ jobs:
       - name: Update versions in child packages
         run: |
           dart pub get
-          dart run packages.dart set-deps local
+          dart run packages.dart set-deps --source=local
           cp CHANGELOG.md ./mtrust_urp_core/CHANGELOG.md
           cp CHANGELOG.md ./mtrust_urp_usb_strategy/CHANGELOG.md
           cp CHANGELOG.md ./mtrust_urp_wifi_strategy/CHANGELOG.md
