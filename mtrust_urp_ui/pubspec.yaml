@@ -1,38 +1,38 @@
 name: mtrust_urp_ui
 version: 9.0.0-5
-environment: 
+environment:
   sdk: ^3.5.0
-  flutter: '>=1.17.0'
+  flutter: ">=1.17.0"
 description: UI components for URP
-dependencies: 
-  flutter: 
+dependencies:
+  flutter:
     sdk: flutter
-  flutter_localizations: 
+  flutter_localizations:
     sdk: flutter
   mtrust_urp_types: ^4.1.0
   mtrust_urp_core: ^9.0.0-5
   intl: ^0.19.0
-  liquid_flutter: ^18.2.0
+  liquid_flutter: ^19.0.0
   shared_preferences: ^2.3.5
-dev_dependencies: 
-  flutter_test: 
+dev_dependencies:
+  flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
   mtrust_urp_virtual_strategy: ^9.0.0-5
   golden_toolkit: ^0.15.0
-  liquid_flutter_emd_theme: ^0.0.1
+  liquid_flutter_emd_theme: ^0.0.3
   mocktail: ^1.0.4
 repository: https://github.com/emdgroup/mtrust-urp
-flutter: 
+flutter:
   uses-material-design: true
   generate: true
-  assets: 
+  assets:
     - assets/sec_reader.png
     - assets/imp_reader.png
     - assets/sec_led.png
-  fonts: 
+  fonts:
     - family: Lato
-      fonts: 
+      fonts:
         - asset: packages/liquid_flutter/fonts/Lato-Regular.ttf
           weight: 500
         - asset: packages/liquid_flutter/fonts/Lato-Bold.ttf
