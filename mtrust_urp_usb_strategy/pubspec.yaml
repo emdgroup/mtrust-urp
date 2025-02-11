@@ -1,5 +1,5 @@
 name: mtrust_urp_usb_strategy
-version: 9.0.0-5
+version: 9.0.0-6
 environment: 
   sdk: '>=2.17.0 <4.0.0'
   flutter: '>=1.17.0'
@@ -7,7 +7,7 @@ description: USB Connection Strategy for URP
 dependencies: 
   flutter: 
     sdk: flutter
-  mtrust_urp_core: ^9.0.0-5
+  mtrust_urp_core: ^9.0.0-6
   flutter_libserialport: ^0.4.0
 dev_dependencies: 
   flutter_test: 
