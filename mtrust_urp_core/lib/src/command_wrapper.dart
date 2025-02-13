@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
+import 'package:mtrust_urp_core/src/api_service.dart';
 
 /// Abstract wrapper for the core commands, these commands need to be wrapped
 /// in a device specific Command Wrapper before they can be send to a device.
@@ -65,4 +66,14 @@ abstract class CmdWrapper extends ChangeNotifier {
 
   /// Identify a reader. Triggers the LED to identify the device.
   Future<void> identify();
+
+  /// Fetch new token
+  Future<UrpSecureToken?> getToken(
+    UrpSecureToken oldToken, 
+    UrpPublicKey publicKey,
+  ) async {
+    final token = await ApiService().requestToken(oldToken, publicKey);
+    urpLogger.d(token?.toProto3Json());
+    return token;
+  }
 }
