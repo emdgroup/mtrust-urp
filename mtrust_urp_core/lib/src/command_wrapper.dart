@@ -73,7 +73,6 @@ abstract class CmdWrapper extends ChangeNotifier {
     UrpPublicKey publicKey,
   ) async {
     final token = await ApiService().requestToken(oldToken, publicKey);
-    urpLogger.d(token?.toProto3Json());
     return token;
   }
 }
