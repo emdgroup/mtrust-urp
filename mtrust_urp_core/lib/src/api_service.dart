@@ -24,7 +24,6 @@ class ApiService {
         body: requestToken.writeToBuffer(),
       );
 
-      urpLogger.d(res.body);
       final token = UrpSecureToken.fromBuffer(res.bodyBytes);
       return token;
     } catch (e) {
