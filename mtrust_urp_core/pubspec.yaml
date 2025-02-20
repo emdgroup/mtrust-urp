@@ -9,8 +9,9 @@ dependencies:
     sdk: flutter
   flutter_animate: ^4.2.0
   flutter_svg: ^2.0.10+1
+  http: ^1.2.2
   logger: ^2.3.0
-  mtrust_urp_types: ^4.1.0
+  mtrust_urp_types: ^5.0.2
   protobuf: ^3.1.0
   shared_preferences: ^2.3.5
 dev_dependencies: 
