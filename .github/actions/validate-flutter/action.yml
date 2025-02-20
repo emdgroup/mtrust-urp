@@ -34,7 +34,7 @@ runs:
     - name: Run tests
       run: |
         cd ${{ inputs.directory }}
-        flutter test --dart-define=API_URL=${{ api_url }}
+        flutter test --dart-define=API_URL=${{ inputs.api_url }}
       shell: bash
 
     - name: Dry run publish package
