@@ -17,6 +17,10 @@ inputs:
     description: "Additional flags to pass to flutter analyze. Default is '--no-fatal-warnings'."
     required: false
     default: "--fatal-warnings"
+  api_url:
+    description: 'API URL'
+    required: true
+    default: 'https://api.mtrust.io'
 
 runs:
   using: "composite"
@@ -30,7 +34,7 @@ runs:
     - name: Run tests
       run: |
         cd ${{ inputs.directory }}
-        flutter test
+        flutter test --dart-define=API_URL=${{ inputs.api_url }}
       shell: bash
 
     - name: Dry run publish package
