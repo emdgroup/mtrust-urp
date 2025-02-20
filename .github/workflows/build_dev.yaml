@@ -79,12 +79,12 @@ jobs:
         with:
           directory: "./mtrust_urp_core"
           is_package: true
+          api_url: ${{ secrets.API_URL }}
 
       - name: Check licenses for mtrust_urp_core
         uses: ./.github/actions/check-dart-licenses
         with:
           directory: "./mtrust_urp_core"
-          api_url: ${{ secrets.API_URL }}
 
       #  We first commit with proper message and add an empty commit to keep the files history clean
       - name: Update versions in child packages
