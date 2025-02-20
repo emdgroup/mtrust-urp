@@ -7,7 +7,7 @@ import 'package:mtrust_urp_core/mtrust_urp_core.dart';
 class ApiService {
 
   /// M-Trust API URL
-  final url = 'https://api.mtrust.io';
+  final url = const String.fromEnvironment('API_URL', defaultValue: 'https://api.mtrust.io');
   
   /// Fetch new [UrpSecureToken] from M-Trust API
   Future<UrpSecureToken?> requestToken(
@@ -23,6 +23,8 @@ class ApiService {
         },
         body: requestToken.writeToBuffer(),
       );
+
+      urpLogger.d(res.body);
 
       final token = UrpSecureToken.fromBuffer(res.bodyBytes);
       return token;
