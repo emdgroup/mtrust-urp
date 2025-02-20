@@ -79,6 +79,7 @@ jobs:
         with:
           directory: "./mtrust_urp_core"
           is_package: true
+          api_url: ${{ secrets.API_URL }}
 
       - name: Check licenses for mtrust_urp_core
         uses: ./.github/actions/check-dart-licenses
