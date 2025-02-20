@@ -95,3 +95,4 @@ jobs:
         with:
           directory: ./${{ matrix.package }}
           analyze_flags: "--no-fatal-warnings"
+          api_url: ${{ secrets.API_URL }}
