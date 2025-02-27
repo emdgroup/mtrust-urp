@@ -196,10 +196,10 @@ packages:
     dependency: "direct main"
     description:
       name: mtrust_urp_types
-      sha256: fcc680b35d9511b0aca433575d03d266c992e5ab77b5420b67410bd914e1769d
+      sha256: "345280a2a59d2978249558979701c9455b09dc234c5b1d4b1fb44e6e0ee6a7ac"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.2"
+    version: "6.0.0"
   path:
     dependency: transitive
     description:
