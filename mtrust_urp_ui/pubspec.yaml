@@ -9,8 +9,9 @@ dependencies:
     sdk: flutter
   flutter_localizations: 
     sdk: flutter
-  mtrust_urp_types: ^5.0.2
-  mtrust_urp_core: ^9.0.0-7
+  mtrust_urp_types: ^6.0.0
+  mtrust_urp_core: 
+    path: ../mtrust_urp_core
   intl: ^0.19.0
   liquid_flutter: ^19.0.0
   shared_preferences: ^2.3.5
@@ -18,7 +19,8 @@ dev_dependencies:
   flutter_test: 
     sdk: flutter
   flutter_lints: ^4.0.0
-  mtrust_urp_virtual_strategy: ^9.0.0-7
+  mtrust_urp_virtual_strategy: 
+    path: ../mtrust_urp_virtual_strategy
   golden_toolkit: ^0.15.0
   liquid_flutter_emd_theme: ^0.0.3
   mocktail: ^1.0.4
@@ -37,3 +39,4 @@ flutter:
           weight: 500
         - asset: packages/liquid_flutter/fonts/Lato-Bold.ttf
           weight: 800
+publish_to: none
