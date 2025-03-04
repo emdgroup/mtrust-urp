@@ -24,6 +24,14 @@ class ApiService {
         body: requestToken.writeToBuffer(),
       );
 
+      if(res.statusCode != 200) {
+        urpLogger.e('API request failed with status code ${res.statusCode}');
+        final body = json.decode(res.body) as Map<String, dynamic>;
+        throw ApiException(
+          errorCode: res.statusCode,
+          errorMessage: body['message'].toString(),
+        );
+      }
       final token = UrpSecureToken.fromBuffer(res.bodyBytes);
       return token;
     } catch (e) {
