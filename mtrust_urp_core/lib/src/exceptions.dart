@@ -27,3 +27,22 @@ class DeviceError extends Error {
     return errorMessage;
   }
 }
+
+/// Thrown when an API call fails
+class ApiException extends Error {
+  /// Creates a new instance of [ApiException]
+  ApiException({
+    required this.errorCode,
+    required this.errorMessage,
+  });
+
+  /// The error code returned by the API
+  final int errorCode;
+  /// The error message returned by the API
+  final String errorMessage;
+
+  @override
+  String toString() {
+    return errorMessage;
+  }
+} 
