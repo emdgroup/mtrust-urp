@@ -23,7 +23,7 @@ class ApiService {
       body: requestToken.writeToBuffer(),
     );
 
-    if(res.statusCode != 200) {
+    if(res.statusCode != 200 || res.statusCode != 201) {
       urpLogger.e('API request failed with status code ${res.statusCode}');
       final body = json.decode(res.body) as Map<String, dynamic>;
       throw ApiException(
