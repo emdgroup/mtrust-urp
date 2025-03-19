@@ -6,8 +6,32 @@ on:
       - dev
 
 jobs:
+  commit-check:
+    name: Commit Checker
+    outputs:
+      success: ${{ steps.check.outputs.success }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check last commit
+        id: check
+        run: |
+          LAST_COMMITTER=$(git log -1 --pretty=format:'%an')
+  
+          if [[ "$LAST_COMMITTER" == "GitHub Actions" ]]; then
+            echo "Last commit was made by GitHub Actions. Exiting..."
+            echo "::set-output name=success::false"
+          else
+            echo "Last commit was made by a user. Executing..."
+            echo "::set-output name=success::true"
+          fi
+
   version:
     name: Version & Build
+    needs: commit-check
+    if: needs.commit-check.outputs.success == 'true'
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -100,7 +124,6 @@ jobs:
           cp CHANGELOG.md ./mtrust_urp_ui/CHANGELOG.md
           git add . 
           git commit -m "chore(release): ${{ steps.get_new_version.outputs.result }}"
-          git commit --allow-empty -m "chore(release): ${{ steps.get_new_version.outputs.result }} [skip ci]"
           git push origin dev
 
       #  For this part it is important to not push a commit with [skip ci] before the tag release
