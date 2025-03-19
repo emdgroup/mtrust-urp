@@ -26,7 +26,7 @@ jobs:
         run: |
           git fetch --prune --unshallow
           git config --global user.name "GitHub Actions"
-          git config --global user.email "gh-actions@merckgroup.com"
+          git config --global user.email "gh-actions@emdgroup.com"
         shell: bash
 
       # Retrieve the new version
@@ -89,7 +89,7 @@ jobs:
       - name: Update versions in child packages
         run: |
           dart pub get
-          dart run packages.dart
+          dart run packages.dart set-deps --source=hosted
           cp CHANGELOG.md ./mtrust_urp_core/CHANGELOG.md
           cp CHANGELOG.md ./mtrust_urp_usb_strategy/CHANGELOG.md
           cp CHANGELOG.md ./mtrust_urp_wifi_strategy/CHANGELOG.md
@@ -125,7 +125,7 @@ jobs:
       - name: Setup Git User
         run: |
           git config --global user.name "GitHub Actions"
-          git config --global user.email "gh-actions@merckgroup.com"
+          git config --global user.email "gh-actions@emdgroup.com"
 
       - name: Update Test Branch
         run: |

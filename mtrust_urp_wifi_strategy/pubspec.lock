@@ -203,19 +203,18 @@ packages:
   mtrust_urp_core:
     dependency: "direct main"
     description:
-      name: mtrust_urp_core
-      sha256: cd35bbc5c4027d07173c56420baafafd92f67f274cf7f7f3cf4d217902f7c4df
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.4"
+      path: "../mtrust_urp_core"
+      relative: true
+    source: path
+    version: "9.0.0-5"
   mtrust_urp_types:
     dependency: transitive
     description:
       name: mtrust_urp_types
-      sha256: "65478d9c303a67638e9613d784bd2434240dbfcfc6c6c41c1584b9d77fd07d6b"
+      sha256: fcc680b35d9511b0aca433575d03d266c992e5ab77b5420b67410bd914e1769d
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "5.0.2"
   path:
     dependency: transitive
     description:
@@ -292,18 +291,18 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences
-      sha256: "746e5369a43170c25816cc472ee016d3a66bc13fcf430c0bc41ad7b4b2922051"
+      sha256: a752ce92ea7540fc35a0d19722816e04d0e72828a4200e83a98cf1a1eb524c9a
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.3.5"
   shared_preferences_android:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "3b9febd815c9ca29c9e3520d50ec32f49157711e143b7a4ca039eb87e8ade5ab"
+      sha256: bf808be89fe9dc467475e982c1db6c2faf3d2acf54d526cd5ec37d86c99dbd84
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.3"
+    version: "2.4.1"
   shared_preferences_foundation:
     dependency: transitive
     description:

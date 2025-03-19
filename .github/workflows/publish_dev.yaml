@@ -25,6 +25,13 @@ jobs:
           directory: "./mtrust_urp_core"
           publish_mode: --force
 
+      - name: Run package check for mtrust-urp-core
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          TAG_NAME="${TAG_NAME#v}"
+          chmod +x ./.github/workflows/package_checker.sh
+          ./.github/workflows/package_checker.sh mtrust_urp_core $TAG_NAME
+
   # Step 2: Validate dependent packages after mtrust-urp-core is published
   validate_dependents:
     name: Validate ${{ matrix.package }}
@@ -48,8 +55,8 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin main
-          git reset --hard origin/main
+          git fetch origin dev
+          git reset --hard origin/dev
 
       - run: |
           cat ./${{ matrix.package }}/pubspec.yaml
@@ -102,14 +109,21 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin main
-          git reset --hard origin/main
+          git fetch origin dev
+          git reset --hard origin/dev
 
-      - name: Publish mtrust_urp_core
+      - name: Publish ${{ matrix.package }}
         uses: ./.github/actions/publish-pub-dev
         with:
           directory: ./${{ matrix.package }}
           publish_mode: --force
+
+      - name: Run package check for mtrust-urp-core
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          TAG_NAME="${TAG_NAME#v}"
+          chmod +x ./.github/workflows/package_checker.sh
+          ./.github/workflows/package_checker.sh ${{ matrix.package }} $TAG_NAME
 
   # Step 4: Publish mtrust_urp_ui
   publish_urp_ui:
@@ -130,8 +144,8 @@ jobs:
 
       - name: Fetch latest version and reset
         run: |
-          git fetch origin main
-          git reset --hard origin/main
+          git fetch origin dev
+          git reset --hard origin/dev
 
       - name: Prepare Flutter for mtrust_urp_ui
         uses: ./.github/actions/prepare-flutter
@@ -184,15 +198,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch latest version and reset
+        run: |
+          git fetch origin dev
+          git reset --hard origin/dev
+
       - name: setup git
         run: |
           git config --global user.name "GitHub Actions"
-          git config --global user.email "gh-actions@merckgroup.com"
+          git config --global user.email "gh-actions@emdgroup.com"
 
       - name: Failure cleanup
         run: |
-          TAG_NAME=$(git describe --tags --abbrev=0)
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
           git tag -d $TAG_NAME
           git push origin --delete $TAG_NAME
           git revert HEAD~1..HEAD
-          git push origin main
+          git push origin dev

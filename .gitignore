@@ -29,7 +29,7 @@
 .packages
 .pub-cache/
 .pub/
-/build/
+build/
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -49,3 +49,5 @@ app.*.map.json
 node_modules/
 
 .pub_feed_temp/
+
+mtrust_urp_ui/test/failures

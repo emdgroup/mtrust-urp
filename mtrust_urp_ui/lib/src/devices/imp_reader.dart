@@ -65,7 +65,7 @@ class IMPReaderVisualization extends StatelessWidget {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: ledColor.withOpacity(value),
+                          color: ledColor.withAlpha((255 * value).toInt()),
                           blurRadius: 32,
                           spreadRadius: 16,
                         ),

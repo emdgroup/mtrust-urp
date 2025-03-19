@@ -305,7 +305,11 @@ class UrpBleStrategy extends ConnectionStrategy {
       final value = _cmdQueue[0];
       _cmdQueue.removeAt(0);
       try {
-        await _characteristic?.write(value).timeout(Duration(seconds: 5));
+        // Chunk the data into max 512 byte chunks
+        for (var i = 0; i < value.length; i += 512) {
+          final chunk = value.sublist(i, i + 512 > value.length ? value.length : i + 512);
+          await _characteristic?.write(chunk).timeout(Duration(seconds: 5));
+        }
       } catch (e) {
         urpLogger.e("Write to characteristic failed: $e");
         _cmdQueue.insert(0, value);

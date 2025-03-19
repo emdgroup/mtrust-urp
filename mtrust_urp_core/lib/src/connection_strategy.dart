@@ -325,13 +325,18 @@ abstract class ConnectionStrategy extends ChangeNotifier {
         if (message.header.error.isNotEmpty) {
           urpLogger.e(
             'Reader returned error for ${cmd.request}: '
-            '${message.header.error}',
+            '${message.header.error}\n'
+            'Error Code: ${message.header.errorCode.value}',
           );
           if (cmd.completer.isCompleted) {
             _cmdQueue.remove(seq);
             return;
           }
-          cmd.completer.completeError(message.header.error);
+          final deviceError = DeviceError(
+            errorCode: message.header.errorCode.value, 
+            errorMessage: message.header.error,
+          );
+          cmd.completer.completeError(deviceError);
         } else {
           final duration = DateTime.now().difference(cmd.created);
           urpLogger
