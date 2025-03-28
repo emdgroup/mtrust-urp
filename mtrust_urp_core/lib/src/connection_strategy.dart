@@ -286,15 +286,15 @@ abstract class ConnectionStrategy extends ChangeNotifier {
     );
     _cmdQueue[_seqNr] = cmd;
 
-    urpLogger.d(
-      'Adding ${message.request} ($command) to queue '
-      '(current length:  ${_cmdQueue.length})',
-    );
+    // urpLogger.d(
+    //   'Adding ${message.request} ($command) to queue '
+    //   '(current length:  ${_cmdQueue.length})',
+    // );
 
     final bytes = message.writeToBuffer();
     final length = _int16ToBytes(bytes.length);
 
-    urpLogger.d('Length $length (${length.length})');
+    // urpLogger.d('Length $length (${length.length})');
 
     try {
       output(Uint8List.fromList(length + bytes));
@@ -338,12 +338,12 @@ abstract class ConnectionStrategy extends ChangeNotifier {
           );
           cmd.completer.completeError(deviceError);
         } else {
-          final duration = DateTime.now().difference(cmd.created);
-          urpLogger
-            ..d('Processing response for ${cmd.request}')
-            ..d(
-              'Command took ${duration.inMilliseconds}ms',
-            );
+          // final duration = DateTime.now().difference(cmd.created);
+          // urpLogger
+          //   ..d('Processing response for ${cmd.request}')
+          //   ..d(
+          //     'Command took ${duration.inMilliseconds}ms',
+          //   );
 
           if (cmd.completer.isCompleted) {
             urpLogger.d('Completer already completed');
