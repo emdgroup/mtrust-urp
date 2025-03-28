@@ -1,10 +1,6 @@
 {
   "name": "urp",
-<<<<<<< HEAD
-  "version": "9.0.0",
-=======
-  "version": "8.0.2-0",
->>>>>>> 3092deb (chore(release): 8.0.2-0)
+  "version": "8.0.1",
   "description": "This Package allows you to connect and interact with the URP Devices.",
   "repository": {
     "type": "git",
