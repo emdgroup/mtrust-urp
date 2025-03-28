@@ -24,17 +24,13 @@ jobs:
           git config --global user.email "gh-actions@emdgroup.com"
         shell: bash
 
-      - name: Check for potentialy major commits
-        run: |
-          git log --oneline --grep="BREAKING CHANGE" --grep="!" --pretty=format:"%h %s"
-
       # Retrieve the new version
       - name: 🔂 Run standard-version
         uses: actions/github-script@v7
         with:
           script: |
             const {execSync} = require('child_process');
-            execSync('npx standard-version --dry-run', {stdio: 'inherit'});
+            execSync('npx standard-version --skip.tag', {stdio: 'inherit'});
 
       # Retrieve the new version
       - name: ⏎ Get new version
@@ -53,6 +49,7 @@ jobs:
   build_and_version_osx:
     name: Validate ${{ matrix.package }}
     runs-on: macos-latest
+    needs: test_version
     needs: test_version
     strategy:
       matrix:
