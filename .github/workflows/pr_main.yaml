@@ -30,7 +30,7 @@ jobs:
         with:
           script: |
             const {execSync} = require('child_process');
-            execSync('npx standard-version --skip.tag', {stdio: 'inherit'});
+            execSync('npx standard-version --dry-run', {stdio: 'inherit'});
 
       # Retrieve the new version
       - name: ⏎ Get new version
