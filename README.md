@@ -10,7 +10,7 @@ The SDKs allow you to quickly integrate an identification and verification step 
 
 <details>
     <summary>All pub.dev packages included in the repository.</summary>
-
+ 
 #### mtrust_urp_core
 [![pub package](https://img.shields.io/pub/v/mtrust_urp_core.svg)](https://pub.dev/packages/mtrust_urp_core)
 [![pub points](https://img.shields.io/pub/points/mtrust_urp_core)](https://pub.dev/packages/mtrust_urp_core/score)
