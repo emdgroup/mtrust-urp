@@ -54,7 +54,6 @@ jobs:
     name: Validate ${{ matrix.package }}
     runs-on: macos-latest
     needs: test_version
-    needs: test_version
     strategy:
       matrix:
         package: ["mtrust_urp_ui"]
