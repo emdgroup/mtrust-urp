@@ -54,8 +54,6 @@ jobs:
     name: Version & Build
     needs: commit-check
     if: needs.commit-check.outputs.success == 'true'
-    needs: commit-check
-    if: needs.commit-check.outputs.success == 'true'
     runs-on: ubuntu-latest
     environment: release
     permissions:
