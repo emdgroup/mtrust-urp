@@ -30,21 +30,7 @@ jobs:
         with:
           script: |
             const {execSync} = require('child_process');
-            execSync('npx standard-version --skip.tag', {stdio: 'inherit'});
-
-      # Retrieve the new version
-      - name: ⏎ Get new version
-        uses: actions/github-script@v7
-        id: get_new_version
-        with:
-          result-encoding: string
-          script: |
-            const fs = require('fs');
-            const package = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            return package.version;
-
-      - name: Print new version
-        run: echo ${{ steps.get_new_version.outputs.result}}
+            execSync('npx standard-version --dry-run', {stdio: 'inherit'});
 
   build_and_version_osx:
     name: Validate ${{ matrix.package }}
@@ -90,7 +76,7 @@ jobs:
   build_and_version_ubuntu:
     name: Validate ${{ matrix.package }}
     runs-on: ubuntu-latest
-    needs: validate_pr
+    needs: test_version
     strategy:
       matrix:
         package: [
