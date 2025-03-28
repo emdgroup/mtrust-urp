@@ -12,7 +12,6 @@ dependencies:
   provider: ^6.0.2
   mtrust_urp_core: 
     path: ../mtrust_urp_core
-  mtrust_urp_core: ^9.0.0
   flutter_blue_plus: ^1.32.11
   json_annotation: ^4.8.1
   collection: ^1.18.0
@@ -23,4 +22,5 @@ dev_dependencies:
 repository: https://github.com/emdgroup/mtrust-urp
 flutter: 
   uses-material-design: false
+publish_to: none
 publish_to: none
