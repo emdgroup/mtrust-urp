@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.0.1](https://dev.azure.com///compare/v9.0.0...v9.0.1) (2025-03-28)
+
+
+### Bug Fixes
+
+* history ([0103bde](https://dev.azure.com///commit/0103bdef24140a0d825dfaea7c95667a543faec9))
+* Version issue ([40d1682](https://dev.azure.com///commit/40d1682392692c876863b20a9001d6f861154046))
+
 ### [11.0.3](https://dev.azure.com///compare/v11.0.2...v11.0.3) (2025-03-28)
 
 ### [11.0.2](https://dev.azure.com///compare/v11.0.1...v11.0.2) (2025-03-28)
