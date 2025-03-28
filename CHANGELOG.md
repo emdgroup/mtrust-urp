@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.3](https://dev.azure.com///compare/v11.0.2...v11.0.3) (2025-03-28)
+
 ### [11.0.2](https://dev.azure.com///compare/v11.0.1...v11.0.2) (2025-03-28)
 
 ### [11.0.1](https://dev.azure.com///compare/v11.0.0...v11.0.1) (2025-03-28)
