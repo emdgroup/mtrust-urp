@@ -97,16 +97,17 @@ jobs:
           cp CHANGELOG.md ./mtrust_urp_virtual_strategy/CHANGELOG.md
           cp CHANGELOG.md ./mtrust_urp_ui/CHANGELOG.md
           git add . 
-          git commit -m "chore(release): ${{ steps.get_new_version.outputs.result }}"
+          git commit -m "chore: ${{ steps.get_new_version.outputs.result }}"
           git commit --allow-empty -m "chore(release): ${{ steps.get_new_version.outputs.result }} [skip ci]"
           git push origin main
 
       #  For this part it is important to not push a commit with [skip ci] before the tag release
       - name: Push tag for pub.dev
         run: |
-          git commit --allow-empty -m "chore(release): ${{ steps.get_new_version.outputs.result }}"
+          git commit --allow-empty -m "chore: ${{ steps.get_new_version.outputs.result }}"
           git tag -a v${{ steps.get_new_version.outputs.result }} -m "Pub.dev version ${{ steps.get_new_version.outputs.result }}"
           git push origin v${{ steps.get_new_version.outputs.result }}
+          git push origin main
 
   rebase_dev:
     name: Write changes to dev branch
