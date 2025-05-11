@@ -15,5 +15,9 @@
   },
   "scripts": {
     "prepare": "husky"
+  },
+  "commit-and-tag-version": {
+    "releaseCount": 0,
+    "releaseCommitMessageFormat": "chore(release): {{currentTag}} [skip ci]"
   }
 }
