@@ -16,10 +16,12 @@ void main(List<String> args) {
     ..addCommand(SetDependenciesCmd())
     ..addCommand(UpdateUrpTypesCmd())
     ..addCommand(CheckLicensesCmd())
+    ..addCommand(WriteChangelogCmd())
     ..addCommand(InstallCmd())
     ..addCommand(TestCmd())
     ..addCommand(AnalyzeCmd())
-    ..addCommand(IntlCmd());
+    ..addCommand(IntlCmd())
+    ..addCommand(DryRunReleaseCmd());
 
   runner.run(args).catchError((error) {
     if (error is! UsageException) throw error;
@@ -87,6 +89,7 @@ void runAll(
 
     if (result.exitCode != 0) {
       print("❌ Error running $cmd ${args.join(" ")} in $subPackage");
+      print("🪲 ${result.stdout}");
       print("🪲 ${result.stderr}");
       exit(result.exitCode);
     }
@@ -130,7 +133,17 @@ void checkLicenses(bool changedOnly) {
 }
 
 void analyze(bool changedOnly) {
-  runAll("flutter", ["analyze"], changedOnly: changedOnly);
+  runAll("flutter", ["analyze", "--fatal-warnings"], changedOnly: changedOnly);
+}
+
+void dryRunRelease() {
+  runAll("flutter", [
+    "pub",
+    "publish",
+    "--dry-run"
+  ], exclude: {
+    "mtrust_urp_ui/example",
+  });
 }
 
 void updateUrpTypes() {
@@ -139,6 +152,12 @@ void updateUrpTypes() {
     ["pub", "upgrade", "mtrust_urp_types"],
     exclude: {"mtrust_urp_ui"},
   );
+}
+
+void writeChangelog() {
+  for (var subPackage in subPackages) {
+    Process.run("cp", ["CHANGELOG.md", "$subPackage/CHANGELOG.md"]);
+  }
 }
 
 void setDependencies(bool local) {
@@ -315,5 +334,31 @@ class IntlCmd extends Command {
   @override
   Future<void> run() async {
     intl(argResults!.flag("changed-only"));
+  }
+}
+
+class WriteChangelogCmd extends Command {
+  @override
+  String get name => "write-changelog";
+
+  @override
+  String get description => "Write changelog in all packages";
+
+  @override
+  Future<void> run() async {
+    writeChangelog();
+  }
+}
+
+class DryRunReleaseCmd extends Command {
+  @override
+  String get name => "dry-run-release";
+
+  @override
+  String get description => "Dry run flutter pub publish in all packages";
+
+  @override
+  Future<void> run() async {
+    dryRunRelease();
   }
 }
