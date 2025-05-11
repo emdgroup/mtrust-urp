@@ -2,6 +2,7 @@ on:
   pull_request:
     branches:
       - dev
+name: PR Dev
 jobs:
   validate_pr:
     permissions:
@@ -14,9 +15,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          token: ${{secrets.ELEVATED_TOKEN}}
-
       - name: 📇 Configure git
         run: |
           git fetch --prune --unshallow
@@ -32,14 +30,10 @@ jobs:
             const {execSync} = require('child_process');
             execSync('npx standard-version --dry-run', {stdio: 'inherit'});
 
-  build_and_version_osx:
-    name: Validate ${{ matrix.package }}
+  build_and_version:
+    name: 📦 Build and version
     runs-on: macos-latest
     needs: test_version
-    strategy:
-      matrix:
-        package: ["mtrust_urp_ui"]
-      fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
@@ -50,73 +44,16 @@ jobs:
       - name: 🎯 Prepare Flutter
         uses: ./.github/actions/prepare-flutter
         with:
-          directory: ./${{ matrix.package }}
+          directory: ./
 
-      - name: 📍 Set Local Deps
+      - name: 👨🏻‍⚖️ Check dependency licenses
         run: |
-          dart pub get
-          dart run packages.dart set-deps --source=local
+          dart run packages.dart check-licenses
 
-      - name: 🔗 Get dependencies
+      - name: 🔍 Analyze dart
         run: |
-          cd ./${{ matrix.package }}
-          dart pub get
+          dart run packages.dart analyze
 
-      # check licenses
-      - uses: ./.github/actions/check-dart-licenses
-        with:
-          directory: ./${{ matrix.package }}
-
-      # Validate dart
-      - uses: ./.github/actions/validate-flutter
-        with:
-          directory: ./${{ matrix.package }}
-          analyze_flags: "--no-fatal-warnings"
-
-  build_and_version_ubuntu:
-    name: Validate ${{ matrix.package }}
-    runs-on: ubuntu-latest
-    needs: test_version
-    strategy:
-      matrix:
-        package: [
-            "mtrust_urp_core",
-            #"mtrust_urp_usb_strategy",
-            #"mtrust_urp_wifi_strategy",
-            "mtrust_urp_ble_strategy",
-            "mtrust_urp_virtual_strategy",
-          ]
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      # Prepare all packages
-      - name: 🎯 Prepare Flutter
-        uses: ./.github/actions/prepare-flutter
-        with:
-          directory: ./${{ matrix.package }}
-
-      - name: 📍 Set Local Deps
+      - name: 🧪 Run tests
         run: |
-          dart pub get
-          dart run packages.dart set-deps --source=local
-
-      - name: 🔗 Get dependencies
-        run: |
-          cd ./${{ matrix.package }}
-          dart pub get
-
-      # check licenses
-      - uses: ./.github/actions/check-dart-licenses
-        with:
-          directory: ./${{ matrix.package }}
-
-      # Validate dart
-      - uses: ./.github/actions/validate-flutter
-        with:
-          directory: ./${{ matrix.package }}
-          analyze_flags: "--no-fatal-warnings"
-          api_url: ${{ secrets.API_URL }}
+          dart run packages.dart test
