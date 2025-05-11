@@ -1,0 +1,54 @@
+name: Version
+description: Version the packages
+
+inputs:
+  dry_run:
+    description: "Dry run the version"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: 🔂 Run standard-version
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { execSync } = require('child_process');
+          const eventName = process.env.GITHUB_EVENT_NAME;
+          const dryRunInput = process.env.INPUT_DRY_RUN === 'true';
+          let isDev = false;
+          let cmd = 'npx commit-and-tag-version';
+
+          // Always skip commit and tag
+          cmd += ' --skip.commit --skip.tag';
+
+          // Add dry-run if input is true
+          if (dryRunInput) {
+            cmd += ' --dry-run';
+          }
+
+          if (eventName === 'pull_request') {
+            const baseRef = process.env.GITHUB_BASE_REF;
+            isDev = baseRef === 'dev';
+            if (isDev) {
+              console.log('PR is targeting dev branch, running with prerelease flag');
+              cmd += ' --prerelease';
+            } else {
+              console.log('PR is targeting non-dev branch, running without prerelease flag');
+            }
+          } else if (eventName === 'push') {
+            const refName = process.env.GITHUB_REF_NAME;
+            isDev = refName === 'dev';
+            if (isDev) {
+              console.log('Push to dev branch, running with prerelease flag');
+              cmd += ' --prerelease';
+            } else {
+              console.log('Push to non-dev branch, running without prerelease flag');
+            }
+          } else {
+            console.log('Unknown event type:', eventName);
+          }
+
+          console.log('Running command:', cmd);
+          execSync(cmd, { stdio: 'inherit' });
