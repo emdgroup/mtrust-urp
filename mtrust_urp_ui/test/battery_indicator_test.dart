@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:mtrust_urp_ui/mtrust_urp_ui.dart';
 
 import 'golden_utils.dart';
-import 'test_utils.dart';
+import 'mock_storage_adapter.dart';
 
 void main() {
   testGoldens('BatteryIndicator', (WidgetTester test) async {
