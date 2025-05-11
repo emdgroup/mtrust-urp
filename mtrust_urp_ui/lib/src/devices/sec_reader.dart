@@ -20,6 +20,12 @@ class SecReaderVisualization extends StatelessWidget {
   /// The content of the screen
   final Widget screenContent;
 
+  /// Whether to cut off the bottom half of the reader
+  final bool cutOffBottom;
+
+  /// The color of the cutoff gradient
+  final Color cutoffGradientColor;
+
   /// Creates a new instance of [SecReaderVisualization]
   const SecReaderVisualization({
     required this.ledColor,
@@ -27,133 +33,168 @@ class SecReaderVisualization extends StatelessWidget {
     this.buttonColor = Colors.black,
     this.buttonFlashingState = FlashingState.off,
     required this.screenContent,
+    this.cutOffBottom = false,
+    this.cutoffGradientColor = Colors.transparent,
     super.key,
   });
 
   /// Creates a new instance of [SecReaderVisualization] with the LED off and no screen
   /// content
-  factory SecReaderVisualization.off() {
-    return const SecReaderVisualization(
+  factory SecReaderVisualization.off(Color cutoffGradientColor) {
+    return SecReaderVisualization(
       ledColor: Colors.black,
       ledFlashingState: FlashingState.off,
       buttonColor: Colors.blue,
       buttonFlashingState: FlashingState.flashing,
-      screenContent: Text(""),
+      screenContent: const Text(""),
+      cutOffBottom: true,
+      cutoffGradientColor: cutoffGradientColor,
     );
   }
 
   /// Creates a new instance of [SecReaderVisualization] with the LED flashing and the
   /// screen content set to "Connecting..."
-  factory SecReaderVisualization.waitingForConnection() {
-    return const SecReaderVisualization(
+  factory SecReaderVisualization.waitingForConnection({
+    Color cutoffGradientColor = Colors.transparent,
+  }) {
+    return SecReaderVisualization(
       ledColor: Colors.blue,
       ledFlashingState: FlashingState.flashing,
-      screenContent: Center(child: Text("Connecting...")),
+      cutOffBottom: true,
+      cutoffGradientColor: cutoffGradientColor,
+      screenContent: const Center(child: Text("Connecting...")),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.contain,
+    return FractionallySizedBox(
+      widthFactor: cutOffBottom ? 0.6 : null,
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          // The reader image
-          ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: 1,
-              minHeight: 1,
-            ),
-            child: Image.asset(
-              "assets/sec_reader.png",
-              package: "mtrust_urp_ui",
-            ),
-          ),
-          Positioned.fill(
-              child: FractionallySizedBox(
-            alignment: const FractionalOffset(0.5, 0.108),
-            heightFactor: 0.14 * 1 * 0.12466124661246612,
-            widthFactor: 0.39 * 1,
-            child: Flashing(
-              state: ledFlashingState,
-              builder: (_, value) => CustomPaint(
-                painter: RPSCustomPainter(
-                  color: ledColor.withAlpha((255 * value).toInt()),
+          FittedBox(
+            alignment: Alignment.topCenter,
+            clipBehavior: Clip.hardEdge,
+            fit: cutOffBottom ? BoxFit.fitWidth : BoxFit.contain,
+            child: Stack(
+              children: [
+                // The reader image
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 1,
+                    minHeight: 1,
+                  ),
+                  child: Image.asset(
+                    "assets/sec_reader.png",
+                    package: "mtrust_urp_ui",
+                  ),
                 ),
-              ),
-            ),
-          )),
+                Positioned.fill(
+                    child: FractionallySizedBox(
+                  alignment: const FractionalOffset(0.5, 0.108),
+                  heightFactor: 0.14 * 1 * 0.12466124661246612,
+                  widthFactor: 0.39 * 1,
+                  child: Flashing(
+                    state: ledFlashingState,
+                    builder: (_, value) => CustomPaint(
+                      painter: RPSCustomPainter(
+                        color: ledColor.withAlpha((255 * value).toInt()),
+                      ),
+                    ),
+                  ),
+                )),
 
-          // The screen content
-          Positioned.fill(
-            child: FractionallySizedBox(
-              alignment: const FractionalOffset(0.5, 0.19),
-              heightFactor: 0.08,
-              widthFactor: 0.5,
-              child: DefaultTextStyle(
-                style: const TextStyle(fontSize: 72, color: Colors.white),
-                textAlign: TextAlign.center,
-                child: screenContent,
-              ),
-            ),
-          ),
-          // Button overlay
-          Positioned.fill(
-            child: FractionallySizedBox(
-              alignment: const FractionalOffset(0.5, 0.22),
-              heightFactor: 0.51,
-              widthFactor: 0.51,
-              child: Flashing(
-                duration: const Duration(seconds: 2),
-                state: buttonFlashingState,
-                builder: (context, value) => Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: buttonColor.withAlpha((255 * value).toInt()),
-                          width: 8,
-                        ),
-                        gradient: RadialGradient(colors: [
-                          buttonColor.withAlpha((value * 0.5 * 255).toInt()),
-                          buttonColor.withAlpha((value * 0.2 * 255).toInt()),
-                        ]),
-                        shape: BoxShape.circle,
-                      ),
+                // The screen content
+                Positioned.fill(
+                  child: FractionallySizedBox(
+                    alignment: const FractionalOffset(0.5, 0.19),
+                    heightFactor: 0.08,
+                    widthFactor: 0.5,
+                    child: DefaultTextStyle(
+                      style: const TextStyle(fontSize: 72, color: Colors.white),
+                      textAlign: TextAlign.center,
+                      child: screenContent,
                     ),
-                    Transform.scale(
-                      scale: (value * 0.1 + 1),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: buttonColor.withAlpha(
-                              (255 * value * 0.5).toInt(),
-                            ),
-                            width: 8,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: (value * 0.2 + 1),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: buttonColor.withAlpha(
-                              (value * 0.2 * 255).toInt(),
-                            ),
-                            width: 8,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                // Button overlay
+                Positioned.fill(
+                  child: FractionallySizedBox(
+                    alignment: const FractionalOffset(0.5, 0.22),
+                    heightFactor: 0.51,
+                    widthFactor: 0.51,
+                    child: Flashing(
+                      duration: const Duration(seconds: 2),
+                      state: buttonFlashingState,
+                      builder: (context, value) => Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: buttonColor
+                                    .withAlpha((255 * value).toInt()),
+                                width: 8,
+                              ),
+                              gradient: RadialGradient(colors: [
+                                buttonColor
+                                    .withAlpha((value * 0.5 * 255).toInt()),
+                                buttonColor
+                                    .withAlpha((value * 0.2 * 255).toInt()),
+                              ]),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Transform.scale(
+                            scale: (value * 0.1 + 1),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: buttonColor.withAlpha(
+                                    (255 * value * 0.5).toInt(),
+                                  ),
+                                  width: 8,
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                          Transform.scale(
+                            scale: (value * 0.2 + 1),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: buttonColor.withAlpha(
+                                    (value * 0.2 * 255).toInt(),
+                                  ),
+                                  width: 8,
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+          if (cutOffBottom)
+            Positioned.fill(
+                child: DecoratedBox(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.5, 1],
+                colors: [
+                  cutoffGradientColor.withAlpha(0),
+                  cutoffGradientColor,
+                ],
+              )),
+            )),
         ],
       ),
     );
