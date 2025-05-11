@@ -1,0 +1,35 @@
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+name: Pull Request
+jobs:
+  semantic_pr:
+    name: Check for semantic PR
+    permissions:
+      pull-requests: write
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
+  test_version:
+    needs: semantic_pr
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: 📇 Configure git
+        run: |
+          git fetch --prune --unshallow
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "gh-actions@emdgroup.com"
+        shell: bash
+
+      - name: 🔂 Run versioning
+        uses: ./.github/actions/version
+        with:
+          dry_run: true
+
+  validate:
+    name: 📦 Run validations
+    needs: test_version
+    uses: ./.github/workflows/validate.yaml

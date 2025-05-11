@@ -48,6 +48,5 @@ app.*.map.json
 
 node_modules/
 
-.pub_feed_temp/
 
 mtrust_urp_ui/test/failures

@@ -1,0 +1,30 @@
+name: example
+description: "Example app for mtrust_urp_ui"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  liquid_flutter: ^22.0.1
+  mtrust_urp_core:
+    path: ../../mtrust_urp_core
+  mtrust_urp_ui:
+    path: ../
+  mtrust_urp_virtual_strategy:
+    path: ../../mtrust_urp_virtual_strategy
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

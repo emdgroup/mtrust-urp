@@ -4,7 +4,7 @@
   "description": "This Package allows you to connect and interact with the URP Devices.",
   "repository": {
     "type": "git",
-    "url": "https://dev.azure.com/M-Trust/Flutter%20Packages/_git/urp_core"
+    "url": "https://github.com/emdgroup/mtrust-urp.git"
   },
   "keywords": [],
   "author": "",
@@ -14,10 +14,10 @@
     "yaml": "^2.7.0"
   },
   "scripts": {
-    "prepare": "husky",
-    "test": "dart run packages.dart test",
-    "lint": "dart run packages.dart analyze",
-    "local": "dart run packages.dart --source=local",
-    "hosted": "dart run packages.dart --source=hosted"
+    "prepare": "husky"
+  },
+  "commit-and-tag-version": {
+    "releaseCount": 0,
+    "releaseCommitMessageFormat": "chore(release): {{currentTag}} [skip ci]"
   }
 }

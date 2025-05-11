@@ -1,9 +1,11 @@
-import 'package:mocktail/mocktail.dart';
-import 'package:mtrust_urp_ui/src/storage_adapter.dart';
+// ignore_for_file: avoid_print
+
+import 'package:flutter/material.dart' hide Image;
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
 import 'package:mtrust_urp_virtual_strategy/mtrust_urp_virtual_strategy.dart';
 
 import 'package:mtrust_urp_types/sec.pb.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 UrpVirtualStrategy securalicVirtualStrategy({bool withReaders = false}) {
   final strategy = UrpVirtualStrategy((UrpRequest request) async {
@@ -40,4 +42,12 @@ UrpVirtualStrategy securalicVirtualStrategy({bool withReaders = false}) {
   return strategy;
 }
 
-class MockStorageAdapter extends Mock implements StorageAdapter {}
+void expectRichText(WidgetTester tester, String text) {
+  expect(
+    find.byWidgetPredicate(
+      (widget) =>
+          widget is RichText && widget.text.toPlainText().contains(text),
+    ),
+    findsOneWidget,
+  );
+}

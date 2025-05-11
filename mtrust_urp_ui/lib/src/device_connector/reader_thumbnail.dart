@@ -18,8 +18,6 @@ class ReaderThumbnail extends StatelessWidget {
 
   final Function() onTap;
 
-  final Widget? badge;
-
   final double distanceFromCenter;
 
   const ReaderThumbnail({
@@ -27,15 +25,15 @@ class ReaderThumbnail extends StatelessWidget {
     this.mode = ReaderThumbnailMode.carousel,
     required this.onTap,
     required this.distanceFromCenter,
-    this.badge,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = LdTheme.of(context, listen: true);
     return LdTouchableSurface(
       onTap: onTap,
-      color: LdTheme.of(context).palette.primary,
+      color: theme.palette.primary,
       builder: (context, colors, touchState) {
         return LdSpring(
           initialPosition: 0,
@@ -79,7 +77,9 @@ class ReaderThumbnail extends StatelessWidget {
                               height: 200,
                               child: switch (reader.type) {
                                 (UrpDeviceType.urpSec) =>
-                                  SecReaderVisualization.waitingForConnection(),
+                                  SecReaderVisualization.waitingForConnection(
+                                    cutoffGradientColor: theme.surface,
+                                  ),
                                 (UrpDeviceType.urpImp) =>
                                   IMPReaderVisualization.waitingForConnection(),
                                 _ => throw UnimplementedError(),
@@ -90,18 +90,6 @@ class ReaderThumbnail extends StatelessWidget {
                   ),
                 ),
                 // Preferred badge
-
-                // Badge is revealed seperately to make sure the readers
-                // align when scrolled away from center
-                if (badge != null)
-                  LdReveal.quick(
-                    revealed: mode == ReaderThumbnailMode.carousel &&
-                        distanceFromCenter < 0.5,
-                    child: Opacity(
-                      opacity: (1 - distanceFromCenter).clamp(0.0, 1),
-                      child: badge,
-                    ),
-                  ),
               ],
             );
           },

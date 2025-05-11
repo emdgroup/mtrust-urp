@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "pub"
+    directories:
+      - "/mtrust_urp_core"
+      - "/mtrust_urp_ui"
+      - "/mtrust_urp_ble_strategy"
+      - "/mtrust_urp_virtual_strategy"
+      - "/mtrust_urp_usb_strategy"
+      - "/mtrust_urp_wifi_strategy"
+    schedule:
+      interval: "weekly"
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
