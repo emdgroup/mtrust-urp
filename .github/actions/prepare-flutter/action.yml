@@ -17,3 +17,4 @@ runs:
         dart pub get 
         dart run packages.dart set-deps --source=local
         dart run packages.dart install
+        dart run packages.dart intl
