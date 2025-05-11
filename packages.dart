@@ -98,7 +98,11 @@ void install(bool changedOnly) {
 }
 
 void test(bool changedOnly) {
-  runAll("flutter", ["test"], changedOnly: changedOnly);
+  runAll("flutter", ["test"],
+      changedOnly: changedOnly,
+      exclude: {
+        "mtrust_urp_ui/example",
+      });
 }
 
 void intl(bool changedOnly) {
