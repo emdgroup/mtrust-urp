@@ -1,23 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:mtrust_urp_ui/mtrust_urp_ui.dart';
 
 import 'golden_utils.dart';
-import 'mock_storage_adapter.dart';
 
 void main() {
   testGoldens('BatteryIndicator', (WidgetTester test) async {
     urpUiDisableAnimations = true;
-
-    final storageAdapter = MockStorageAdapter();
-
-    when(() => storageAdapter.getPairedReader()).thenAnswer(
-      (_) async => null,
-    );
-    when(() => storageAdapter.getLastConnectedReader()).thenAnswer(
-      (_) async => null,
-    );
 
     await multiGolden(
       test,

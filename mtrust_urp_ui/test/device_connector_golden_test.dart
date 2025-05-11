@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:mtrust_urp_ui/mtrust_urp_ui.dart';
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
 
@@ -14,13 +13,6 @@ void main() {
     urpUiDisableAnimations = true;
 
     final storageAdapter = MockStorageAdapter();
-
-    when(() => storageAdapter.getPairedReader()).thenAnswer(
-      (_) async => null,
-    );
-    when(() => storageAdapter.getLastConnectedReader()).thenAnswer(
-      (_) async => null,
-    );
 
     await multiGolden(
       test,
