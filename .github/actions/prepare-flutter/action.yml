@@ -1,11 +1,6 @@
 name: "Prepare flutter runner"
 description: "Prepares a flutter project by installing dependencies and running build_runner"
 inputs:
-  directory:
-    description: "Directory"
-    required: true
-    default: "."
-
   artifactory_key:
     description: "Artifactory key"
     required: true
