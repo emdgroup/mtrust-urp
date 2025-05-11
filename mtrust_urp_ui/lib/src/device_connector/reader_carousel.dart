@@ -182,9 +182,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                   aspectRatio: 1,
                   child: Container(
                       child: switch (type) {
-                    (UrpDeviceType.urpSec) => SecReaderVisualization.off(
-                        LdTheme.of(context).surface,
-                      ),
+                    (UrpDeviceType.urpSec) => SecReaderVisualization.off(),
                     (UrpDeviceType.urpImp) => IMPReaderVisualization.off(),
                     _ => throw UnimplementedError(),
                   }),
