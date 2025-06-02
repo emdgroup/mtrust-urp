@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -301,13 +302,14 @@ class UrpBleStrategy extends ConnectionStrategy {
   }
 
   void _queueNextCmd() async {
-    if (_cmdQueue.isNotEmpty && _characteristic != null) {
+    if (_cmdQueue.isNotEmpty && _characteristic != null && device != null) {
       final value = _cmdQueue[0];
       _cmdQueue.removeAt(0);
       try {
         // Chunk the data into max 512 byte chunks
-        for (var i = 0; i < value.length; i += 512) {
-          final chunk = value.sublist(i, i + 512 > value.length ? value.length : i + 512);
+        final chunkSize = min(device!.mtuNow - 3 , 512);
+        for (var i = 0; i < value.length; i += chunkSize) {
+          final chunk = value.sublist(i, min(i + chunkSize, value.length));
           await _characteristic?.write(chunk).timeout(Duration(seconds: 5));
         }
       } catch (e) {
