@@ -306,7 +306,9 @@ class UrpBleStrategy extends ConnectionStrategy {
       final value = _cmdQueue[0];
       _cmdQueue.removeAt(0);
       try {
-        // Chunk the data into max 512 byte chunks
+        // Chunk the data into max 512 byte chunks.
+        // Remove 3 bytes for BLE overhead, max chunk size is 512 bytes.
+        // This should prevent the communication from failing due to MTU size issues.
         final chunkSize = min(device!.mtuNow - 3 , 512);
         for (var i = 0; i < value.length; i += chunkSize) {
           final chunk = value.sublist(i, min(i + chunkSize, value.length));
