@@ -6,22 +6,18 @@ import 'package:mtrust_urp_core/mtrust_urp_core.dart';
 import 'package:mtrust_urp_core/src/api_service.dart';
 
 void main() {
+  // Test if the API is reachable and return a valid response.
+  // As no token is provided, the API should return a 401.
   test('M-Trust API Test', () async {
-    final fakeToken = UrpSecureToken();
-    final fakePublicKey = UrpPublicKey();
     final apiService = ApiService();
+
+    urpLogger.d('${apiService.url}/api/device/v1/device-tokens');
 
     final response = await http.post(
       Uri.parse('${apiService.url}/api/device/v1/device-tokens'),
-      headers: {
-        'Authorization': base64Encode(fakePublicKey.value),
-        'Content-Type': 'application/octet-stream',
-      },
-      body: fakeToken.writeToBuffer(),
     );
 
-    if ([404, 500].contains(response.statusCode)) {
-      fail('FAILED: Status code for API request: ${response.statusCode}');
-    }
+    expect(response.statusCode, 401);
+
   });
 }
