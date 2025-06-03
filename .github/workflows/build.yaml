@@ -81,7 +81,15 @@ jobs:
       - name: Print new version
         run: echo ${{ steps.get_new_version.outputs.result}}
 
-      # Bump the pubspec.yaml file
+      - name: Prepare Flutter, Install dependencies
+        uses: ./.github/actions/prepare-flutter
+
+      - name: Dry run release
+        run: |
+          dart run packages.dart set-deps --source=hosted
+          dart run packages.dart dry-run-release
+
+        # Bump the pubspec.yaml file
       - name: ⬆️ Bump pubspec.yaml
         uses: ./.github/actions/update-pubspec
         with:
@@ -92,14 +100,6 @@ jobs:
         uses: ./.github/actions/update-pubspec-readme-version
         with:
           directory: .
-
-      - name: Prepare Flutter, Install dependencies
-        uses: ./.github/actions/prepare-flutter
-
-      - name: Dry run release
-        run: |
-          dart run packages.dart set-deps --source=hosted
-          dart run packages.dart dry-run-release
 
       - name: Update changelogs
         run: |
