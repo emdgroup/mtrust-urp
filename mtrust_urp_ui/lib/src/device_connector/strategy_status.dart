@@ -21,7 +21,9 @@ class StrategyAvailabilityGuard extends StatelessWidget {
 
     return LdSubmit<StrategyAvailability>(
       config: LdSubmitConfig<StrategyAvailability>(
-        action: () => strategy.availability,
+        action: () async {
+          return strategy.availability;
+        },
         autoTrigger: true,
         allowResubmit: true,
       ),
@@ -52,15 +54,10 @@ class StrategyAvailabilityGuard extends StatelessWidget {
           );
         }
 
-        final retry = LdButton(
-          onPressed: controller.trigger,
-          child: Text(UrpUiLocalizations.of(context).retry),
-        );
-
         final localization = UrpUiLocalizations.of(context);
         return switch (stateType) {
-          LdSubmitStateType.idle => retry,
-          LdSubmitStateType.loading => const LdLoader(),
+          LdSubmitStateType.idle => const SizedBox.shrink(),
+          LdSubmitStateType.loading => const Center(child: LdLoader()),
           LdSubmitStateType.error => buildError(
               localization.error,
               localization.unableToPrepareStrategy(strategyName),

@@ -71,15 +71,11 @@ class DeviceConnector extends StatelessWidget {
 
   Widget _buildPreferredReaderBadge(BuildContext context, FoundDevice reader) {
     final locales = UrpUiLocalizations.of(context);
-    return LdBadge(
-      color: shadZinc,
-      size: LdSize.s,
-      child: Text(switch (mode) {
-        (ReaderConnectorMode.ephemeral) => "",
-        (ReaderConnectorMode.pair) => locales.pair,
-        (ReaderConnectorMode.preferLastConnected) => locales.lastUsed,
-      }),
-    );
+    return LdTextLs(switch (mode) {
+      (ReaderConnectorMode.ephemeral) => "",
+      (ReaderConnectorMode.pair) => locales.pair,
+      (ReaderConnectorMode.preferLastConnected) => locales.lastUsed,
+    });
   }
 
   @override
@@ -102,7 +98,7 @@ class DeviceConnector extends StatelessWidget {
                 builder: LdSubmitCustomBuilder<FoundDevice?>(
                   builder: (context, preferredController, prefferedState) {
                     if (prefferedState != LdSubmitStateType.result) {
-                      return const LdLoader();
+                      return const Center(child: LdLoader());
                     }
 
                     final preferredReader = preferredController.state.result;
@@ -117,6 +113,9 @@ class DeviceConnector extends StatelessWidget {
                         },
                       ),
                       builder: LdSubmitCenteredBuilder<Stream<FoundDevice>>(
+                        submitButtonBuilder: (context, controller) {
+                          return const SizedBox.shrink();
+                        },
                         resultBuilder: (context, result, controller) {
                           switch (mode) {
                             case ReaderConnectorMode.ephemeral:
@@ -125,7 +124,6 @@ class DeviceConnector extends StatelessWidget {
                                 types: deviceTypes,
                                 restartScanning: controller.trigger,
                                 onConnect: (FoundDevice reader) async {
-                                  await _storeConnectedReader(reader);
                                   return await connectionStrategy
                                       .connectToFoundDevice(reader);
                                 },

@@ -134,7 +134,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
   Widget _buildReaderPreview(FoundDevice reader, LdSubmitStateType type) {
     final i = _readers.indexOf(reader);
     final distance = (i - _page).abs();
-    final isPrefferedReader = widget.preferredReaderAddress == reader.address;
+
     final isSelectedReader = distance < 0.5;
 
     var mode = ReaderThumbnailMode.carousel;
@@ -165,9 +165,6 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
           duration: const Duration(milliseconds: 200),
         );
       },
-      badge: isPrefferedReader
-          ? widget.prefferedBadgeBuilder!(context, reader)
-          : null,
       distanceFromCenter: distance,
     );
   }
@@ -245,9 +242,8 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                 child: LdButton(
                   mode: _readers.isNotEmpty
                       ? LdButtonMode.ghost
-                      : LdButtonMode.filled,
+                      : LdButtonMode.vague,
                   size: _readers.isNotEmpty ? LdSize.s : LdSize.m,
-                  leading: const Icon(Icons.refresh),
                   onPressed: widget.restartScanning!,
                   child: Text(UrpUiLocalizations.of(context).searchAgain),
                 ),
@@ -276,13 +272,16 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
               LdReveal.quick(
                 revealed: _readers.isNotEmpty && type == LdSubmitStateType.idle,
                 child: DeviceCarouselDotIndicator(
-                  count: _readers.length,
+                  devices: _readers,
                   currentIndex: _page.round(),
                   preferredIndex: _readers.indexWhere(
                     (reader) => reader.address == widget.preferredReaderAddress,
                   ),
+                  preferredBadgeBuilder: widget.prefferedBadgeBuilder,
                 ),
               ),
+
+              ldSpacerL,
 
               // Connect button
               _buildConnectButton(context, submit),
@@ -296,14 +295,6 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                       UrpUiLocalizations.of(context).ensureTurnedOn,
                       textAlign: TextAlign.center,
                     ),
-                    // Retry the same connection
-                    LdButton(
-                      onPressed: submit.trigger,
-                      child: Text(
-                        UrpUiLocalizations.of(context)
-                            .retryConnect(_selectedReader?.name ?? ""),
-                      ),
-                    ),
                     // Connect to a different reader
                     LdButtonGhost(
                       child: Text(
@@ -313,6 +304,14 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                         submit.reset();
                         widget.restartScanning?.call();
                       },
+                    ),
+                    // Retry the same connection
+                    LdButton(
+                      onPressed: submit.trigger,
+                      child: Text(
+                        UrpUiLocalizations.of(context)
+                            .retryConnect(_selectedReader?.name ?? ""),
+                      ),
                     ),
                   ],
                 ),
@@ -333,7 +332,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
           _readers.isNotEmpty && submit.state.type != LdSubmitStateType.error,
       child: LdButton(
         key: const Key("connect_button"),
-        mode: LdButtonMode.filled,
+        mode: LdButtonMode.vague,
         loading: submit.state.type == LdSubmitStateType.loading,
         loadingText: UrpUiLocalizations.of(context).connecting,
         onPressed: submit.trigger,

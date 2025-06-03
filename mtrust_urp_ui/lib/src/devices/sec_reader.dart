@@ -44,7 +44,9 @@ class SecReaderVisualization extends StatelessWidget {
 
   /// Creates a new instance of [SecReaderVisualization] with the LED flashing and the
   /// screen content set to "Connecting..."
-  factory SecReaderVisualization.waitingForConnection() {
+  factory SecReaderVisualization.waitingForConnection({
+    Color cutoffGradientColor = Colors.transparent,
+  }) {
     return const SecReaderVisualization(
       ledColor: Colors.blue,
       ledFlashingState: FlashingState.flashing,
@@ -54,108 +56,118 @@ class SecReaderVisualization extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.contain,
-      child: Stack(
-        children: [
-          // The reader image
-          ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: 1,
-              minHeight: 1,
-            ),
-            child: Image.asset(
-              "assets/sec_reader.png",
-              package: "mtrust_urp_ui",
-            ),
-          ),
-          Positioned.fill(
-              child: FractionallySizedBox(
-            alignment: const FractionalOffset(0.5, 0.108),
-            heightFactor: 0.14 * 1 * 0.12466124661246612,
-            widthFactor: 0.39 * 1,
-            child: Flashing(
-              state: ledFlashingState,
-              builder: (_, value) => CustomPaint(
-                painter: RPSCustomPainter(
-                  color: ledColor.withAlpha((255 * value).toInt()),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        FittedBox(
+          alignment: Alignment.topCenter,
+          clipBehavior: Clip.hardEdge,
+          fit: BoxFit.contain,
+          child: Stack(
+            children: [
+              // The reader image
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: 1,
+                  minHeight: 1,
+                ),
+                child: Image.asset(
+                  "assets/sec_reader.png",
+                  package: "mtrust_urp_ui",
                 ),
               ),
-            ),
-          )),
+              Positioned.fill(
+                  child: FractionallySizedBox(
+                alignment: const FractionalOffset(0.5, 0.18),
+                heightFactor: 0.14 * 1 * 0.12466124661246612,
+                widthFactor: 0.39 * 1,
+                child: Flashing(
+                  state: ledFlashingState,
+                  builder: (_, value) => CustomPaint(
+                    painter: RPSCustomPainter(
+                      color: ledColor.withAlpha((255 * value).toInt()),
+                    ),
+                  ),
+                ),
+              )),
 
-          // The screen content
-          Positioned.fill(
-            child: FractionallySizedBox(
-              alignment: const FractionalOffset(0.5, 0.19),
-              heightFactor: 0.08,
-              widthFactor: 0.5,
-              child: DefaultTextStyle(
-                style: const TextStyle(fontSize: 72, color: Colors.white),
-                textAlign: TextAlign.center,
-                child: screenContent,
-              ),
-            ),
-          ),
-          // Button overlay
-          Positioned.fill(
-            child: FractionallySizedBox(
-              alignment: const FractionalOffset(0.5, 0.22),
-              heightFactor: 0.51,
-              widthFactor: 0.51,
-              child: Flashing(
-                duration: const Duration(seconds: 2),
-                state: buttonFlashingState,
-                builder: (context, value) => Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: buttonColor.withAlpha((255 * value).toInt()),
-                          width: 8,
-                        ),
-                        gradient: RadialGradient(colors: [
-                          buttonColor.withAlpha((value * 0.5 * 255).toInt()),
-                          buttonColor.withAlpha((value * 0.2 * 255).toInt()),
-                        ]),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: (value * 0.1 + 1),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: buttonColor.withAlpha(
-                              (255 * value * 0.5).toInt(),
-                            ),
-                            width: 8,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: (value * 0.2 + 1),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: buttonColor.withAlpha(
-                              (value * 0.2 * 255).toInt(),
-                            ),
-                            width: 8,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ],
+              // The screen content
+              Positioned.fill(
+                child: FractionallySizedBox(
+                  alignment: const FractionalOffset(0.5, 0.33),
+                  heightFactor: 0.08,
+                  widthFactor: 0.5,
+                  child: DefaultTextStyle(
+                    style: const TextStyle(fontSize: 72, color: Colors.white),
+                    textAlign: TextAlign.center,
+                    child: screenContent,
+                  ),
                 ),
               ),
-            ),
+              // Button overlay
+              Positioned.fill(
+                child: FractionallySizedBox(
+                  alignment: const FractionalOffset(0.5, 0.66),
+                  heightFactor: 0.51,
+                  widthFactor: 0.51,
+                  child: Flashing(
+                    duration: const Duration(seconds: 2),
+                    state: buttonFlashingState,
+                    builder: (context, value) => Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color:
+                                  buttonColor.withAlpha((255 * value).toInt()),
+                              width: 8,
+                            ),
+                            gradient: RadialGradient(colors: [
+                              buttonColor
+                                  .withAlpha((value * 0.5 * 255).toInt()),
+                              buttonColor
+                                  .withAlpha((value * 0.2 * 255).toInt()),
+                            ]),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Transform.scale(
+                          scale: (value * 0.1 + 1),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: buttonColor.withAlpha(
+                                  (255 * value * 0.5).toInt(),
+                                ),
+                                width: 8,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                        Transform.scale(
+                          scale: (value * 0.2 + 1),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: buttonColor.withAlpha(
+                                  (value * 0.2 * 255).toInt(),
+                                ),
+                                width: 8,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
