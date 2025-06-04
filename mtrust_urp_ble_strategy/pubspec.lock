@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.0"
+  bluez:
+    dependency: transitive
+    description:
+      name: bluez
+      sha256: "61a7204381925896a374301498f2f5399e59827c6498ae1e924aaa598751b545"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -49,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
+  dbus:
+    dependency: transitive
+    description:
+      name: dbus
+      sha256: "79e0c23480ff85dc68de79e2cd6334add97e48f7f4865d17686dd6ea81a47e8c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.11"
   fake_async:
     dependency: transitive
     description:
@@ -172,10 +188,10 @@ packages:
     dependency: "direct main"
     description:
       name: freezed_annotation
-      sha256: c87ff004c8aa6af2d531668b46a4ea379f7191dc6dfa066acd53d506da6e044b
+      sha256: c2e2d632dd9b8a2b7751117abcfc2b4888ecfe181bd9fca7170d9ef02e595fe2
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "2.4.4"
   http:
     dependency: transitive
     description:
@@ -259,11 +275,10 @@ packages:
   mtrust_urp_core:
     dependency: "direct main"
     description:
-      name: mtrust_urp_core
-      sha256: "3bbc807e10f5218433469e94b7e48cf78464514d16f725643b794c9a80968355"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.0.1"
+      path: "../mtrust_urp_core"
+      relative: true
+    source: path
+    version: "9.1.0-0"
   mtrust_urp_types:
     dependency: transitive
     description:
