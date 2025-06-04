@@ -62,6 +62,11 @@ jobs:
           git config --global user.email "gh-actions@emdgroup.com"
         shell: bash
 
+      - name: Dry run release
+        run: |
+          dart run packages.dart set-deps --source=hosted
+          dart run packages.dart dry-run-release
+
       - name: 🔂 Run versioning
         uses: ./.github/actions/version
         with:
@@ -84,10 +89,6 @@ jobs:
       - name: Prepare Flutter, Install dependencies
         uses: ./.github/actions/prepare-flutter
 
-      - name: Dry run release
-        run: |
-          dart run packages.dart set-deps --source=hosted
-          dart run packages.dart dry-run-release
 
         # Bump the pubspec.yaml file
       - name: ⬆️ Bump pubspec.yaml
