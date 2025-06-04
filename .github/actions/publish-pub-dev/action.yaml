@@ -28,8 +28,6 @@ runs:
         git config --global user.email "gh-actions@emdgroup.com"
         dart pub get
         dart run packages.dart set-deps --source=hosted
-        git add .
-        git commit -m "chore: prepare for pub.dev"
         
     - name: Push to pub.dev
       run: |
