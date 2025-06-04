@@ -84,11 +84,6 @@ jobs:
       - name: Prepare Flutter, Install dependencies
         uses: ./.github/actions/prepare-flutter
 
-      - name: Dry run release
-        run: |
-          dart run packages.dart set-deps --source=hosted
-          dart run packages.dart dry-run-release
-
         # Bump the pubspec.yaml file
       - name: ⬆️ Bump pubspec.yaml
         uses: ./.github/actions/update-pubspec
