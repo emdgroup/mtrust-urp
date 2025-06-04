@@ -203,9 +203,10 @@ packages:
   mtrust_urp_core:
     dependency: "direct main"
     description:
-      path: "../mtrust_urp_core"
-      relative: true
-    source: path
+      name: mtrust_urp_core
+      sha256: "3bbc807e10f5218433469e94b7e48cf78464514d16f725643b794c9a80968355"
+      url: "https://pub.dev"
+    source: hosted
     version: "9.0.1"
   mtrust_urp_types:
     dependency: transitive
@@ -485,5 +486,5 @@ packages:
     source: hosted
     version: "6.5.0"
 sdks:
-  dart: ">=3.5.0 <4.0.0"
+  dart: ">=3.7.0-0 <4.0.0"
   flutter: ">=3.24.0"
