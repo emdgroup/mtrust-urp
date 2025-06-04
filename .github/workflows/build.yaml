@@ -62,10 +62,7 @@ jobs:
           git config --global user.email "gh-actions@emdgroup.com"
         shell: bash
 
-      - name: Dry run release
-        run: |
-          dart run packages.dart set-deps --source=hosted
-          dart run packages.dart dry-run-release
+      
 
       - name: 🔂 Run versioning
         uses: ./.github/actions/version
