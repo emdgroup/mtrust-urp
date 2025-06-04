@@ -84,6 +84,11 @@ jobs:
       - name: Prepare Flutter, Install dependencies
         uses: ./.github/actions/prepare-flutter
 
+      - name: Set dependencies to hosted
+        run: |
+          dart run packages.dart set-deps --source=hosted
+
+
         # Bump the pubspec.yaml file
       - name: ⬆️ Bump pubspec.yaml
         uses: ./.github/actions/update-pubspec
