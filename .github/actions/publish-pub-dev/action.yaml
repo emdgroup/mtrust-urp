@@ -21,8 +21,11 @@ runs:
         flutter-version: "3.32.1"
     
     - name: Prepare Flutter for mtrust_urp_core 
+      # We commit to prevent a warning while publishing of uncommitted changes
       shell: bash
       run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "gh-actions@emdgroup.com"
         dart pub get
         dart run packages.dart set-deps --source=hosted
         git add .
