@@ -106,10 +106,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_libserialport
-      sha256: "20c320dcde8592a16f9badc0cacad61b1fb283dbec647b6ebfc1020f8274c67b"
+      sha256: d193b5ac819db6540d20cc8d20d9f5ec9e3396edb4d2c4a23c97863fa9132336
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.5.0"
   flutter_shaders:
     dependency: transitive
     description:
