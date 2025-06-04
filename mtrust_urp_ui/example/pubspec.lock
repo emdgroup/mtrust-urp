@@ -331,7 +331,7 @@ packages:
       path: "../../mtrust_urp_core"
       relative: true
     source: path
-    version: "9.1.0-2"
+    version: "9.1.0-3"
   mtrust_urp_types:
     dependency: transitive
     description:
@@ -346,14 +346,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "9.1.0-2"
+    version: "9.1.0-3"
   mtrust_urp_virtual_strategy:
     dependency: "direct main"
     description:
       path: "../../mtrust_urp_virtual_strategy"
       relative: true
     source: path
-    version: "9.1.0-2"
+    version: "9.1.0-3"
   multi_split_view:
     dependency: transitive
     description:
