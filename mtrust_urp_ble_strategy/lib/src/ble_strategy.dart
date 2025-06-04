@@ -307,9 +307,10 @@ class UrpBleStrategy extends ConnectionStrategy {
       _cmdQueue.removeAt(0);
       try {
         // Chunk the data into max 512 byte chunks.
-        // Remove 3 bytes for BLE overhead, max. chunk size is 512 bytes.
+        // Remove 5 bytes for BLE overhead according to Android Docs, max. chunk size is 512 bytes.
         // This should prevent the communication from failing due to MTU size limitations.
-        final chunkSize = min(device!.mtuNow - 3, 512);
+        // Android documentation: https://developer.android.com/about/versions/14/behavior-changes-all#mtu-set-to-517
+        final chunkSize = min(device!.mtuNow - 5, 512);
         for (var i = 0; i < value.length; i += chunkSize) {
           final chunk = value.sublist(i, min(i + chunkSize, value.length));
           await _characteristic?.write(chunk).timeout(Duration(seconds: 5));
