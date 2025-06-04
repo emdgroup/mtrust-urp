@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [9.1.0-4](https://github.com/emdgroup/mtrust-urp/compare/v9.0.1...v9.1.0-4) (2025-06-04)
+## [9.1.0-5](https://github.com/emdgroup/mtrust-urp/compare/v9.0.1...v9.1.0-5) (2025-06-04)
 
 
 ### Features
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. See [commit
 * adjust chunk size according to actual mtu size ([b6845af](https://github.com/emdgroup/mtrust-urp/commit/b6845af13abbe7a83b2b61470082a089abf7c589))
 * crop the reader using the png source file to prevent flickering ([de0cfb5](https://github.com/emdgroup/mtrust-urp/commit/de0cfb580fe8d6b0df5fe015a91fd91c4439fb55))
 * prevent split frame submit button showing ([1fd701b](https://github.com/emdgroup/mtrust-urp/commit/1fd701be3e8715005a7918e12b06a49fac9a70eb))
+* publish dependencies ([#34](https://github.com/emdgroup/mtrust-urp/issues/34)) ([7f6399e](https://github.com/emdgroup/mtrust-urp/commit/7f6399e4b13f13fc2331baa01c3ff5bdca9449b3))
 
 ## [9.0.1](https://github.com/emdgroup/mtrust-urp/compare/v9.0.0...v9.0.1) (2025-03-28)
 
