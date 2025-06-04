@@ -15,11 +15,19 @@ runs:
     - name: Generate OIDC token
       uses: dart-lang/setup-dart@v1
 
-    - name: Prepare Flutter for mtrust_urp_core
-      uses: ./.github/actions/prepare-flutter
+    - name: Install Flutter
+      uses: subosito/flutter-action@v2
       with:
-        directory: ${{ inputs.directory }}
-
+        flutter-version: "3.32.1"
+    
+    - name: Prepare Flutter for mtrust_urp_core 
+      shell: bash
+      run: |
+        dart pub get
+        dart run packages.dart set-deps --source=hosted
+        git add .
+        git commit -m "chore: prepare for pub.dev"
+        
     - name: Push to pub.dev
       run: |
         cd ${{ inputs.directory }}
