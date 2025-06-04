@@ -62,8 +62,6 @@ jobs:
           git config --global user.email "gh-actions@emdgroup.com"
         shell: bash
 
-      
-
       - name: 🔂 Run versioning
         uses: ./.github/actions/version
         with:
@@ -85,7 +83,6 @@ jobs:
 
       - name: Prepare Flutter, Install dependencies
         uses: ./.github/actions/prepare-flutter
-
 
         # Bump the pubspec.yaml file
       - name: ⬆️ Bump pubspec.yaml
