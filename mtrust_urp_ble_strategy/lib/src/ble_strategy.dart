@@ -223,10 +223,6 @@ class UrpBleStrategy extends ConnectionStrategy {
       await device.connect(
           timeout: const Duration(seconds: 5), autoConnect: false);
 
-      if (Platform.isAndroid) {
-        await _device?.requestMtu(512);
-      }
-
       _deviceSubscription = device.connectionState.listen(_deviceStateChanged);
 
       urpLogger.d("Connected to device.. Discovering services..");
