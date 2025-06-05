@@ -8,6 +8,7 @@ on:
 jobs:
   # Step 1: Publish mtrust-urp-core
   release_urp_core:
+    name: Release mtrust-urp-core
     permissions:
       id-token: write
     runs-on: ubuntu-latest

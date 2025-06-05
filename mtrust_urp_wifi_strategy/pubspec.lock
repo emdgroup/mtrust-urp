@@ -203,11 +203,10 @@ packages:
   mtrust_urp_core:
     dependency: "direct main"
     description:
-      name: mtrust_urp_core
-      sha256: "3bbc807e10f5218433469e94b7e48cf78464514d16f725643b794c9a80968355"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.0.1"
+      path: "../mtrust_urp_core"
+      relative: true
+    source: path
+    version: "9.1.0-6"
   mtrust_urp_types:
     dependency: transitive
     description:
@@ -453,22 +452,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  web_socket:
-    dependency: transitive
-    description:
-      name: web_socket
-      sha256: "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   web_socket_channel:
     dependency: "direct main"
     description:
       name: web_socket_channel
-      sha256: d645757fb0f4773d602444000a8131ff5d48c9e47adfe9772652dd1a4f2d45c8
+      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+    version: "2.4.0"
   xdg_directories:
     dependency: transitive
     description:

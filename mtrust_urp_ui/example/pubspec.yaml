@@ -1,5 +1,5 @@
 name: example
-version: 9.0.1
+version: 9.1.0-6
 environment: 
   sdk: ^3.5.0
   flutter: '>=1.17.0'

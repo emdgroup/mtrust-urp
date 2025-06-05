@@ -106,10 +106,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_libserialport
-      sha256: d193b5ac819db6540d20cc8d20d9f5ec9e3396edb4d2c4a23c97863fa9132336
+      sha256: "20c320dcde8592a16f9badc0cacad61b1fb283dbec647b6ebfc1020f8274c67b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.4.0"
   flutter_shaders:
     dependency: transitive
     description:
@@ -219,11 +219,10 @@ packages:
   mtrust_urp_core:
     dependency: "direct main"
     description:
-      name: mtrust_urp_core
-      sha256: "3bbc807e10f5218433469e94b7e48cf78464514d16f725643b794c9a80968355"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.0.1"
+      path: "../mtrust_urp_core"
+      relative: true
+    source: path
+    version: "9.1.0-6"
   mtrust_urp_types:
     dependency: transitive
     description:
