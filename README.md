@@ -44,7 +44,8 @@ Depending on the connection strategies you want to enable please make sure to co
 
 # Installation
 
-## Android
+## Bluetooth
+### Android
 
 In `android/app/src/main/AndroidManifest.xml`, add the following permissions:
 
@@ -58,7 +59,7 @@ In `android/app/src/main/AndroidManifest.xml`, add the following permissions:
 </manifest>
 ```
 
-## iOS
+### iOS
 
 In `ios/Runner/Info.plist`, add the following keys for Bluetooth and location permissions:
 
@@ -76,6 +77,9 @@ In `ios/Runner/Info.plist`, add the following keys for Bluetooth and location pe
 	    <key>NSLocationWhenInUseUsageDescription</key>
 	    <string>Need Location permission</string>
 ```
+
+### :warning: Required MTU Size
+For the communication with the M-Trust devices your device must support a MTU size of at least 512 bytes.
 
 ## USB Serial
 ### MacOS

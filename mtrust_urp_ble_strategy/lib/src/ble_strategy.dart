@@ -14,6 +14,16 @@ class BleNotEnabledException implements Exception {}
 
 class BleUnsupportedException implements Exception {}
 
+class BleMtuSizeException implements Exception {
+  final String message;
+  BleMtuSizeException(this.message);
+
+  @override
+  String toString() {
+    return "BleMtuSizeException: $message";
+  }
+}
+
 class UrpBleStrategy extends ConnectionStrategy {
   Set<String> bleCharacteristicIds = Set();
   Set<String> bleServiceIds = Set();
@@ -304,12 +314,18 @@ class UrpBleStrategy extends ConnectionStrategy {
       try {
         // Chunk the data into 512 byte chunks.
         final chunkSize = 512;
+        if(device!.mtuNow < 512) {
+          throw BleMtuSizeException('MTU size is too small: ${device!.mtuNow}. MTU size must be at least 512 bytes.');
+        }
         for (var i = 0; i < value.length; i += chunkSize) {
           final chunk = value.sublist(i, min(i + chunkSize, value.length));
           await _characteristic?.write(chunk).timeout(Duration(seconds: 5));
         }
       } catch (e) {
         urpLogger.e("Write to characteristic failed: $e");
+        if(e is BleMtuSizeException) {
+          rethrow;
+        }
         _cmdQueue.insert(0, value);
       }
     }
