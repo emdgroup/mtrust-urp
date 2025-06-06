@@ -38,3 +38,6 @@
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app needs location when in use to function</string>
     ```
+
+### :warning: Required MTU Size
+For the communication with the M-Trust devices your device must support a MTU size of at least 512 bytes.
