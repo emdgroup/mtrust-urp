@@ -84,101 +84,94 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return LdThemeProvider(
       child: LdThemedAppBuilder(
-        appBuilder:
-            (context, theme) => MaterialApp(
-              localizationsDelegates: [
-                UrpUiLocalizations.delegate,
-                LiquidLocalizations.delegate,
-              ],
-              theme: theme,
-              home: Scaffold(
-                appBar: LdAppBar(
-                  context: context,
-                  title: Text("URP UI Playground"),
-                ),
-                body:
-                    LdAutoSpace(
-                      children: [
-                        LdSwitch(
-                          label: "Availability of the connection strategy",
-                          onChanged: (value) {
-                            _setAvailability(value);
-                          },
-                          children: {
-                            StrategyAvailability.disabled: Text("Disabled "),
-                            StrategyAvailability.missingPermissions: Text(
-                              "Missing permissions",
-                            ),
-                            StrategyAvailability.unsupported: Text(
-                              "Unsupported",
-                            ),
-                            StrategyAvailability.ready: Text("Ready"),
-                          },
-                          value: _availability,
-                        ),
-
-                        LdSwitch(
-                          label: "Device connector mode",
-                          children: {
-                            ReaderConnectorMode.ephemeral: Text("Ephemeral"),
-                            ReaderConnectorMode.pair: Text("Pair"),
-                            ReaderConnectorMode.preferLastConnected: Text(
-                              "Prefer last connected",
-                            ),
-                          },
-                          value: _connectorMode,
-                          onChanged: _setConnectorMode,
-                        ),
-
-                        LdToggle(
-                          checked: _debugFailConnection,
-                          onChanged: _setDebugFailConnection,
-                          label: "Debug fail connection",
-                        ),
-
-                        LdButtonVague(
-                          onPressed: _addReader,
-                          child: Text("Add reader"),
-                        ),
-                        LdButtonVague(
-                          onPressed: _removeReaders,
-                          child: Text("Remove readers"),
-                        ),
-                        LdButtonVague(
-                          onPressed: () {
-                            virtualStrategy.disconnectDevice();
-                          },
-                          child: Text("Disconnect"),
-                        ),
-
-                        Builder(
-                          builder: (context) {
-                            return LdButton(
-                              child: Text("Open device connector"),
-                              onPressed: () {
-                                final modal = makeDeviceConnectorModal(
-                                  deviceConnector: DeviceConnector(
-                                    mode: _connectorMode,
-                                    connectionStrategy: virtualStrategy,
-                                    connectedBuilder:
-                                        (context) => const Text('Connected'),
-                                    deviceTypes: {
-                                      UrpDeviceType.urpSec,
-                                      UrpDeviceType.urpImp,
-                                    },
-                                  ),
-                                  context: context,
-                                );
-
-                                modal.show(context);
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ).padL(),
-              ),
+        appBuilder: (context, theme) => MaterialApp(
+          localizationsDelegates: [
+            UrpUiLocalizations.delegate,
+            LiquidLocalizations.delegate,
+          ],
+          theme: theme,
+          home: Scaffold(
+            appBar: LdAppBar(
+              title: Text("URP UI Playground"),
             ),
+            body: LdAutoSpace(
+              children: [
+                LdSwitch(
+                  label: "Availability of the connection strategy",
+                  onChanged: (value) {
+                    _setAvailability(value);
+                  },
+                  children: {
+                    StrategyAvailability.disabled: Text("Disabled "),
+                    StrategyAvailability.missingPermissions: Text(
+                      "Missing permissions",
+                    ),
+                    StrategyAvailability.unsupported: Text(
+                      "Unsupported",
+                    ),
+                    StrategyAvailability.ready: Text("Ready"),
+                  },
+                  value: _availability,
+                ),
+                LdSwitch(
+                  label: "Device connector mode",
+                  children: {
+                    ReaderConnectorMode.ephemeral: Text("Ephemeral"),
+                    ReaderConnectorMode.pair: Text("Pair"),
+                    ReaderConnectorMode.preferLastConnected: Text(
+                      "Prefer last connected",
+                    ),
+                  },
+                  value: _connectorMode,
+                  onChanged: _setConnectorMode,
+                ),
+                LdToggle(
+                  checked: _debugFailConnection,
+                  onChanged: _setDebugFailConnection,
+                  label: "Debug fail connection",
+                ),
+                LdButtonVague(
+                  onPressed: _addReader,
+                  child: Text("Add reader"),
+                ),
+                LdButtonVague(
+                  onPressed: _removeReaders,
+                  child: Text("Remove readers"),
+                ),
+                LdButtonVague(
+                  onPressed: () {
+                    virtualStrategy.disconnectDevice();
+                  },
+                  child: Text("Disconnect"),
+                ),
+                Builder(
+                  builder: (context) {
+                    return LdButton(
+                      child: Text("Open device connector"),
+                      onPressed: () {
+                        final modal = makeDeviceConnectorModal(
+                          deviceConnector: DeviceConnector(
+                            mode: _connectorMode,
+                            connectionStrategy: virtualStrategy,
+                            connectedBuilder: (context) =>
+                                const Text('Connected'),
+                            deviceTypes: {
+                              UrpDeviceType.urpSec,
+                              UrpDeviceType.urpImp,
+                            },
+                          ),
+                          context: context,
+                        );
+
+                        modal.show(context);
+                      },
+                    );
+                  },
+                ),
+              ],
+            ).padL(),
+          ),
+        ),
       ),
     );
   }
