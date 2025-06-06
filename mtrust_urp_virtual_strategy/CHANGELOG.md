@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [9.1.0-7](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-6...v9.1.0-7) (2025-06-06)
+
+
+### Bug Fixes
+
+* add exception for mtu sizes smaller than 512 bytes ([7de8532](https://github.com/emdgroup/mtrust-urp/commit/7de8532dfe9a874b737a7bc4f5e8eddc1086386d))
+* check mtu size after connection ([5937c0e](https://github.com/emdgroup/mtrust-urp/commit/5937c0e22c63c1f394afc0dd76a39a7b254a28b4))
+
 ## [9.1.0-6](https://github.com/emdgroup/mtrust-urp/compare/v9.0.1...v9.1.0-6) (2025-06-04)
 
 
