@@ -1,5 +1,5 @@
 name: example
-version: 9.1.0-8
+version: 9.1.0-9
 environment: 
   sdk: ^3.5.0
   flutter: '>=1.17.0'
@@ -8,9 +8,9 @@ dependencies:
   flutter: 
     sdk: flutter
   liquid_flutter: ^22.0.1
-  mtrust_urp_core: ^9.1.0-8
-  mtrust_urp_ui: ^9.1.0-8
-  mtrust_urp_virtual_strategy: ^9.1.0-8
+  mtrust_urp_core: ^9.1.0-9
+  mtrust_urp_ui: ^9.1.0-9
+  mtrust_urp_virtual_strategy: ^9.1.0-9
 dev_dependencies: 
   flutter_test: 
     sdk: flutter
