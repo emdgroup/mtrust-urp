@@ -5,7 +5,6 @@ import 'package:mtrust_urp_core/src/api_service.dart';
 /// Abstract wrapper for the core commands, these commands need to be wrapped
 /// in a device specific Command Wrapper before they can be send to a device.
 abstract class CmdWrapper extends ChangeNotifier {
-
   /// Ping the device.
   Future<void> ping();
 
@@ -45,7 +44,7 @@ abstract class CmdWrapper extends ChangeNotifier {
   /// Stop DFU.
   Future<void> stopDFU();
 
-  /// Put the device to sleep mode. 
+  /// Put the device to sleep mode.
   /// It will disconnect from the device.
   Future<void> sleep();
 
@@ -58,7 +57,7 @@ abstract class CmdWrapper extends ChangeNotifier {
   /// Prevent the device from going to sleep mode.
   Future<void> stayAwake();
 
-  /// Get the public key of the device. 
+  /// Get the public key of the device.
   Future<UrpPublicKey> getPublicKey();
 
   /// Get the device id
@@ -68,11 +67,10 @@ abstract class CmdWrapper extends ChangeNotifier {
   Future<void> identify();
 
   /// Fetch new token
-  Future<UrpSecureToken?> getToken(
-    UrpSecureToken oldToken, 
+  Future<UrpSecureToken> getToken(
+    UrpSecureToken oldToken,
     UrpPublicKey publicKey,
   ) async {
-    final token = await ApiService().requestToken(oldToken, publicKey);
-    return token;
+    return ApiService().requestToken(oldToken, publicKey);
   }
 }
