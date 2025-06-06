@@ -12,7 +12,7 @@ dependencies:
   mtrust_urp_types: ^6.2.0
   mtrust_urp_core: 
     path: ../mtrust_urp_core
-  intl: ^0.20.2
+  intl: any
   liquid_flutter: ^22.0.2
   shared_preferences: ^2.3.5
 dev_dependencies: 
