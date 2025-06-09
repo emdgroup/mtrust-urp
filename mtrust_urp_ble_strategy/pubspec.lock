@@ -188,10 +188,10 @@ packages:
     dependency: "direct main"
     description:
       name: freezed_annotation
-      sha256: c2e2d632dd9b8a2b7751117abcfc2b4888ecfe181bd9fca7170d9ef02e595fe2
+      sha256: c87ff004c8aa6af2d531668b46a4ea379f7191dc6dfa066acd53d506da6e044b
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.4"
+    version: "3.0.0"
   http:
     dependency: transitive
     description:
@@ -275,9 +275,10 @@ packages:
   mtrust_urp_core:
     dependency: "direct main"
     description:
-      path: "../mtrust_urp_core"
-      relative: true
-    source: path
+      name: mtrust_urp_core
+      sha256: "225745795a036ded39ec83eb1d88c53ff3f3d37afd6446a9bdf495f90637b7d3"
+      url: "https://pub.dev"
+    source: hosted
     version: "9.1.0-9"
   mtrust_urp_types:
     dependency: transitive
