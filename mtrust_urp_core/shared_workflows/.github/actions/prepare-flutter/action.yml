@@ -72,10 +72,10 @@ runs:
 
           if( doc.dev_dependencies && doc.dev_dependencies.build_runner){
             console.log('Running build_runner');
-            execSync('cd ${{ inputs.directory }} && dart pub run build_runner build --delete-conflicting-outputs', {stdio: 'inherit'});
+            execSync(`cd ${{ inputs.directory }} && dart pub run build_runner build --delete-conflicting-outputs`, {stdio: 'inherit'});
           }
 
           if(doc.flutter && doc.flutter.generate){
             console.log('Running flutter gen-l10n');
-            execSync('cd ${{ inputs.directory }} && flutter gen-l10n', {stdio: 'inherit'});
+            execSync(`cd ${{ inputs.directory }} && flutter gen-l10n`, {stdio: 'inherit'});
           }
