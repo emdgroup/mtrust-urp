@@ -1,0 +1,30 @@
+name: Update pubspec readme version
+description: Update readme installation hints with current version
+inputs:
+  directory:
+    description: "Directory"
+    required: true
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - run: cd ${{ inputs.directory }}
+      shell: bash
+    - name: Update version in pubspec
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          const readmePath = path.join("./", 'README.md');
+          const packagePath = path.join("./", 'package.json');
+          const package = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+
+          const readme = fs.readFileSync(readmePath, 'utf8');
+          const version = package.version;
+          const packageName = package.name;
+          const versionRegex = new RegExp(`dependencies:\n\\s+${packageName}:\n\\s+version:\\s+(.+)`, "g");
+          const newReadme = readme.replace(versionRegex, `dependencies:\n  ${packageName}:\n    version: ^${version}`);
+          fs.writeFileSync(readmePath, newReadme, 'utf8');

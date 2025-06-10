@@ -7,10 +7,6 @@ inputs:
   flutter_version:
     description: "Flutter version to be used"
     default: "3.32.1"
-  core:
-    description: "Usage of action in mtrust_urp"
-    type: boolean
-    default: 'true'
   publish_mode:
     description: "Publish mode: --dry-run or --force"
     default: "--dry-run" # Default to --dry-run for safety
@@ -34,9 +30,7 @@ runs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "gh-actions@emdgroup.com"
         dart pub get
-        if [[ "${{ inputs.core }} == "true" ]]; then
-          dart run packages.dart set-deps --source=hosted
-        fi
+        dart run packages.dart set-deps --source=hosted
         
     - name: Push to pub.dev
       run: |

@@ -1,0 +1,16 @@
+name: "Check dart licenses"
+description: "Check dart licenses"
+inputs:
+  directory:
+    description: "Directory"
+    required: false
+    default: "."
+runs:
+  using: "composite"
+  steps:
+    - name: Check licenses
+      run: |
+        cd ${{ inputs.directory }}
+        dart pub global activate very_good_cli
+        ~/.pub-cache/bin/very_good packages check licenses --allowed=MIT,Apache-2.0,BSD-3-Clause,BSD-2-Clause
+      shell: bash
