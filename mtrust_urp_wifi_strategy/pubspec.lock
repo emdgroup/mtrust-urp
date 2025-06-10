@@ -206,7 +206,7 @@ packages:
       path: "../mtrust_urp_core"
       relative: true
     source: path
-    version: "9.1.0-9"
+    version: "9.1.0-10"
   mtrust_urp_types:
     dependency: transitive
     description:

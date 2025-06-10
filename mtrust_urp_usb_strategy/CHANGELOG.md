@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [9.1.0-10](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-9...v9.1.0-10) (2025-06-10)
+
 ## [9.1.0-9](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-8...v9.1.0-9) (2025-06-06)
 
 ## [9.1.0-8](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-7...v9.1.0-8) (2025-06-06)
