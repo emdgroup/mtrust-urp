@@ -4,6 +4,13 @@ inputs:
   directory:
     description: "Directory"
     default: "."
+  flutter_version:
+    description: "Flutter version to be used"
+    default: "3.32.1"
+  core:
+    description: "Usage of action in mtrust_urp"
+    type: boolean
+    default: 'true'
   publish_mode:
     description: "Publish mode: --dry-run or --force"
     default: "--dry-run" # Default to --dry-run for safety
@@ -18,7 +25,7 @@ runs:
     - name: Install Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: "3.32.1"
+        flutter-version: "${{ inputs.flutter_version }}"
     
     - name: Prepare Flutter for mtrust_urp_core 
       # We commit to prevent a warning while publishing of uncommitted changes
@@ -27,7 +34,9 @@ runs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "gh-actions@emdgroup.com"
         dart pub get
-        dart run packages.dart set-deps --source=hosted
+        if [[ "${{ inputs.core }} == "true" ]]; then
+          dart run packages.dart set-deps --source=hosted
+        fi
         
     - name: Push to pub.dev
       run: |
