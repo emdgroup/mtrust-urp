@@ -1,16 +1,21 @@
 name: "Prepare flutter runner"
 description: "Prepares a flutter project by installing dependencies and running build_runner"
 inputs:
+  flutter_version:
+    description: "Flutter version to be used"
+    default: "3.32.1"
   artifactory_key:
     description: "Artifactory key"
     required: true
+
 runs:
   using: "composite"
   steps:
     - name: Install Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: "3.32.1"
+        flutter-version: "${{ inputs.flutter_version }}"
+
     - name: 📦 Install dependencies
       shell: bash
       run: |

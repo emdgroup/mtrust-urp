@@ -91,13 +91,13 @@ jobs:
 
         # Bump the pubspec.yaml file
       - name: ⬆️ Bump pubspec.yaml
-        uses: ./.github/actions/update-pubspec
+        uses: ./mtrust_urp_core/shared_workflows/.github/actions/update-pubspec
         with:
           version: ${{ steps.get_new_version.outputs.result }}
           directory: .
 
       - name: 📝 Update version in readme
-        uses: ./.github/actions/update-pubspec-readme-version
+        uses: ./mtrust_urp_core/shared_workflows/.github/actions/update-pubspec-readme-version
         with:
           directory: .
 

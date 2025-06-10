@@ -168,7 +168,7 @@ jobs:
           path: ./mtrust_urp_ui/test/failures
 
       - name: Check licenses for mtrust_urp_ui
-        uses: ./.github/actions/check-dart-licenses
+        uses: ./mtrust_urp_core/shared_workflows/.github/actions/check-dart-licenses
         with:
           directory: "./mtrust_urp_ui"
 
