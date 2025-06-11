@@ -16,7 +16,7 @@ runs:
       uses: dart-lang/setup-dart@v1
 
     - name: Prepare Flutter
-      uses: emdgroup/mtrust-urp/mtrust_urp_core/shared_workflows/.github/actions/prepare-flutter@main
+      uses: emdgroup/mtrust-urp/.github/shared_actions/prepare-flutter@dev
       with:
         directory: ${{ inputs.directory }}
 
