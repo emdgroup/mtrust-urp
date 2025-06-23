@@ -31,8 +31,7 @@ class UrpBleStrategy extends ConnectionStrategy {
   String get name => "Bluetooth";
 
   static String _batteryServiceUUID = '0000180F-0000-1000-8000-00805F9B34FB';
-  static String _batteryCharacteristicUUI =
-      '00002A19-0000-1000-8000-00805F9B34FB';
+  static String _batteryCharacteristicUUI = '00002A19-0000-1000-8000-00805F9B34FB';
 
   // Ble
   BluetoothDevice? _device;
@@ -87,16 +86,14 @@ class UrpBleStrategy extends ConnectionStrategy {
   /// Will try to find a reader of the given type. If a deviceAddress is given, it will try to connect to that device.
   /// If no deviceAddress is given, it will scan for devices and connect to the first one found.
   /// Returns [true] if the connection was successful, [false] otherwise.
-  Future<bool> findAndConnectDevice(
-      {String? deviceAddress, required Set<UrpDeviceType> readerTypes}) async {
+  Future<bool> findAndConnectDevice({String? deviceAddress, required Set<UrpDeviceType> readerTypes}) async {
     _applyIds(readerTypes);
 
     if (!await FlutterBluePlus.isSupported) {
       throw BleUnsupportedException();
     }
 
-    if ((await FlutterBluePlus.adapterState.first) !=
-        BluetoothAdapterState.on) {
+    if ((await FlutterBluePlus.adapterState.first) != BluetoothAdapterState.on) {
       throw BleNotEnabledException();
     }
 
@@ -146,9 +143,7 @@ class UrpBleStrategy extends ConnectionStrategy {
   }
 
   UrpDeviceType readerTypeFromServiceId(String serviceId) {
-    return BleServiceUUIDs.entries
-        .firstWhere((element) => element.value == serviceId)
-        .key;
+    return BleServiceUUIDs.entries.firstWhere((element) => element.value == serviceId).key;
   }
 
   Future<bool> writeValue(Uint8List value) async {
@@ -161,10 +156,8 @@ class UrpBleStrategy extends ConnectionStrategy {
   void _applyIds(Set<UrpDeviceType> readerTypes) {
     assert(readerTypes.isNotEmpty, "Reader types cannot be empty");
 
-    bleServiceIds =
-        readerTypes.map((e) => BleServiceUUIDs[e]!.toLowerCase()).toSet();
-    bleCharacteristicIds =
-        readerTypes.map((e) => (BleTXCharacteristicUUIDs[e]!)).toSet();
+    bleServiceIds = readerTypes.map((e) => BleServiceUUIDs[e]!.toLowerCase()).toSet();
+    bleCharacteristicIds = readerTypes.map((e) => (BleTXCharacteristicUUIDs[e]!)).toSet();
   }
 
   Future<List<FoundBleDevice>> _checkAlreadyConnectedDevices() async {
@@ -173,16 +166,14 @@ class UrpBleStrategy extends ConnectionStrategy {
     List<FoundBleDevice> connectedDevices = [];
 
     for (var device in alreadyConnected) {
-      if (await device.connectionState.first ==
-          BluetoothConnectionState.connected) {
+      if (await device.connectionState.first == BluetoothConnectionState.connected) {
         try {
           var services = await device.discoverServices();
 
           for (var service in services) {
             final serviceId = service.uuid.toString().toLowerCase();
             if (bleServiceIds.contains(serviceId)) {
-              urpLogger.d(
-                  "Found a matching device ${device.platformName} already connected");
+              urpLogger.d("Found a matching device ${device.platformName} already connected");
               connectedDevices.add(
                 FoundBleDevice(
                   address: device.remoteId.str,
@@ -230,12 +221,11 @@ class UrpBleStrategy extends ConnectionStrategy {
     try {
       urpLogger.d("Trying to connect to device...");
 
-      await device.connect(
-          timeout: const Duration(seconds: 5), autoConnect: false);
+      await device.connect(timeout: const Duration(seconds: 5), autoConnect: false);
 
-      if(device.mtuNow < 512) {
+      /*if(device.mtuNow < 512) {
         throw BleMtuSizeException('MTU size is too small: ${device.mtuNow}. MTU size must be at least 512 bytes.');
-      }
+      }*/
 
       _deviceSubscription = device.connectionState.listen(_deviceStateChanged);
 
@@ -245,7 +235,7 @@ class UrpBleStrategy extends ConnectionStrategy {
     } catch (e) {
       print(e);
       disconnectDevice();
-      if(e is BleMtuSizeException) {
+      if (e is BleMtuSizeException) {
         rethrow;
       }
     }
@@ -452,8 +442,7 @@ class UrpBleStrategy extends ConnectionStrategy {
       (BluetoothAdapterState.turningOff) => StrategyAvailability.disabled,
       (BluetoothAdapterState.unknown) => StrategyAvailability.disabled,
       (BluetoothAdapterState.unavailable) => StrategyAvailability.unsupported,
-      (BluetoothAdapterState.unauthorized) =>
-        StrategyAvailability.missingPermissions,
+      (BluetoothAdapterState.unauthorized) => StrategyAvailability.missingPermissions,
     };
   }
 
