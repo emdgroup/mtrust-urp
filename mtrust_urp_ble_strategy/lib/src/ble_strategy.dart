@@ -233,7 +233,7 @@ class UrpBleStrategy extends ConnectionStrategy {
       await device.connect(
           timeout: const Duration(seconds: 5), autoConnect: false);
 
-      if(device.mtuNow < 512) {
+      if(Platform.isAndroid && device.mtuNow < 512) {
         throw BleMtuSizeException('MTU size is too small: ${device.mtuNow}. MTU size must be at least 512 bytes.');
       }
 
