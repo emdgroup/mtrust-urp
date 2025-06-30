@@ -106,10 +106,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: d44bf546b13025ec7353091516f6881f1d4c633993cb109c3916c3a0159dadf1
+      sha256: cd57f7969b4679317c17af6fd16ee233c1e60a82ed209d8a475c54fd6fd6f845
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -164,10 +164,10 @@ packages:
     dependency: "direct main"
     description:
       name: logger
-      sha256: be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1
+      sha256: "2621da01aabaf223f8f961e751f2c943dbb374dc3559b982f200ccedadaa6999"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.0"
   matcher:
     dependency: transitive
     description:
@@ -425,10 +425,10 @@ packages:
     dependency: "direct dev"
     description:
       name: very_good_analysis
-      sha256: "9ae7f3a3bd5764fb021b335ca28a34f040cd0ab6eec00a1b213b445dae58a4b8"
+      sha256: e479fbc0941009262343db308133e121bf8660c2c81d48dd8e952df7b7e1e382
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+    version: "9.0.0"
   vm_service:
     dependency: transitive
     description:
