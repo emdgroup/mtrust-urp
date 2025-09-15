@@ -231,11 +231,10 @@ class UrpBleStrategy extends ConnectionStrategy {
       urpLogger.d("Trying to connect to device...");
 
       await device.connect(
-          timeout: const Duration(seconds: 5), autoConnect: false);
-
-      if(device.mtuNow < 512) {
-        throw BleMtuSizeException('MTU size is too small: ${device.mtuNow}. MTU size must be at least 512 bytes.');
-      }
+        timeout: const Duration(seconds: 5), 
+        autoConnect: false,
+        mtu: 515, // Android only: Set the MTU size to 515 bytes (512 + 3 for the header, required on some android devices)
+      );
 
       _deviceSubscription = device.connectionState.listen(_deviceStateChanged);
 
