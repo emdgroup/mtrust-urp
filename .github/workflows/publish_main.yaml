@@ -63,7 +63,7 @@ jobs:
           directory: "./${{ matrix.package }}"
 
       - name: Validate Flutter for ${{ matrix.package }}
-        uses: ./mtrust_urp_core/shared_workflows/.github/actions/validate-flutter
+        uses: ./.github/shared_actions/validate-flutter
         with:
           directory: "./${{ matrix.package }}"
           is_package: true
@@ -140,7 +140,7 @@ jobs:
 
       - name: Validate Flutter for mtrust_urp_ui
         id: validate
-        uses: ./mtrust_urp_core/shared_workflows/.github/actions/validate-flutter
+        uses: ./.github/shared_actions/validate-flutter
         with:
           directory: "./mtrust_urp_ui"
           is_package: true
