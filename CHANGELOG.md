@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [9.1.0-12](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-11...v9.1.0-12) (2025-10-01)
+
+
+### Bug Fixes
+
+* actions reference in workflows ([06cf939](https://github.com/emdgroup/mtrust-urp/commit/06cf939624bba7d9c449caa3d649ec92af71860b))
+* increase MTU size for Android to 515 (512 bytes data + 3 bytes header, as required for some devices) ([d95d9d5](https://github.com/emdgroup/mtrust-urp/commit/d95d9d598ecbbd21777738f10ac86cdbf45d14ca))
+
 ## [9.1.0-11](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-9...v9.1.0-11) (2025-06-10)
 
 ## [9.1.0-9](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-8...v9.1.0-9) (2025-06-06)

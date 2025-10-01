@@ -222,7 +222,7 @@ packages:
       path: "../mtrust_urp_core"
       relative: true
     source: path
-    version: "9.1.0-11"
+    version: "9.1.0-12"
   mtrust_urp_types:
     dependency: transitive
     description:
