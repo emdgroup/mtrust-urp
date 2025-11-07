@@ -59,6 +59,7 @@ abstract class ConnectionStrategy extends ChangeNotifier {
   /// Callback when the device is pinged
   void Function()? pingDeviceCallback;
 
+  /// Callback when a request is received from the device
   void Function(UrpMessage msg)? onRequestCallback;
 
   /// Set callback when the device is connected
