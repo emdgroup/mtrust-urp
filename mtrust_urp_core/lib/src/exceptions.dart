@@ -1,3 +1,5 @@
+import 'package:mtrust_urp_types/wrapper.pb.dart';
+
 /// Thrown when a command is cancelled
 class CommandCancelledException extends Error {}
 
@@ -17,7 +19,7 @@ class DeviceError extends Error {
   });
 
   /// The error code returned by the device
-  final int errorCode;
+  final UrpErrorCode errorCode;
 
   /// The error message returned by the device
   final String errorMessage;

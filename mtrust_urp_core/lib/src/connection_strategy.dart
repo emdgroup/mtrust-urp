@@ -314,54 +314,50 @@ abstract class ConnectionStrategy extends ChangeNotifier {
     try {
       final message = UrpMessage.fromBuffer(buffer);
 
+      // check if the origin is myself
+      if (message.header.origin.deviceClass == UrpDeviceClass.urpHost) {
+        urpLogger.w(
+          'Received message for different origin: ${message.header.origin}',
+        );
+        return;
+      }
+
       // handle message
-      if (message.whichPayload() == UrpMessage_Payload.request) {
+      if (message.whichPayload() == UrpMessage_Payload.response) {
+        final seq = message.header.seqNr;
+
+        // get attaches cmd to resolve the completer
+        final cmd = _cmdQueue[seq];
+        if (cmd == null) {
+          urpLogger.e('Unknown response from reader $seq');
+          return;
+        }
+
+        // check if cmd was already completed
+        if (cmd.completer.isCompleted) {
+          _cmdQueue.remove(seq);
+          return;
+        }
+
+        // check if device returned an error
+        if (message.header.errorCode != UrpErrorCode.urpNoError) {
+          final deviceError = DeviceError(
+            errorCode: message.header.errorCode,
+            errorMessage: message.header.error,
+          );
+          cmd.completer.completeError(deviceError);
+        } else {
+          // complete the command with the response
+          cmd.completer.complete(message.response);
+        }
+        _cmdQueue.remove(seq);
+      } else if (message.whichPayload() == UrpMessage_Payload.request) {
         if (onRequestCallback != null) {
           onRequestCallback!(message);
         } else {
           urpLogger.w('No callback defined for incoming requests: $message');
         }
-      } else if (message.whichPayload() == UrpMessage_Payload.response) {
-        final seq = message.header.seqNr;
-        final cmd = _cmdQueue[seq];
-
-        if (cmd == null) {
-          urpLogger.e('Unknown seq from reader $seq');
-          return;
-        }
-
-        if (message.header.error.isNotEmpty) {
-          urpLogger.e(
-            'Reader returned error for : '
-            '$message\n',
-          );
-          if (cmd.completer.isCompleted) {
-            _cmdQueue.remove(seq);
-            return;
-          }
-          final deviceError = DeviceError(
-            errorCode: message.header.errorCode.value,
-            errorMessage: message.header.error,
-          );
-          cmd.completer.completeError(deviceError);
-        } else {
-          // final duration = DateTime.now().difference(cmd.created);
-          // urpLogger
-          //   ..d('Processing response for ${cmd.request}')
-          //   ..d(
-          //     'Command took ${duration.inMilliseconds}ms',
-          //   );
-
-          if (cmd.completer.isCompleted) {
-            urpLogger.d('Completer already completed');
-            _cmdQueue.remove(seq);
-            return;
-          }
-
-          cmd.completer.complete(message.response);
-        }
-        _cmdQueue.remove(seq);
-      } else if (message.whichPayload() == UrpMessage_Payload.notSet) {
+      } else {
         urpLogger.log(
           Level.warning,
           'No Payload set in message $message',
