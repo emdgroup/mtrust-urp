@@ -314,15 +314,13 @@ abstract class ConnectionStrategy extends ChangeNotifier {
     try {
       final message = UrpMessage.fromBuffer(buffer);
 
-      // check if the origin is myself
-      if (message.header.origin.deviceClass == UrpDeviceClass.urpHost) {
-        urpLogger.w(
-          'Received message for different origin: ${message.header.origin}',
-        );
+      // for now only allow messages from readers
+      if (message.header.origin.deviceClass != UrpDeviceClass.urpReader) {
         return;
       }
 
       // handle message
+      // not checking the origin here to keep downward compatibility
       if (message.whichPayload() == UrpMessage_Payload.response) {
         final seq = message.header.seqNr;
 
