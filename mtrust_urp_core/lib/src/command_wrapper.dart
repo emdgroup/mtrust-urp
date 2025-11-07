@@ -186,7 +186,6 @@ abstract class CmdWrapper extends ChangeNotifier {
   }
 
   /// Fetch new token
-  /// TODO: rephrase this to refreshToken or something similar
   Future<UrpSecureToken> getToken(
     UrpSecureToken oldToken,
     UrpPublicKey publicKey,

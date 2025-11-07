@@ -47,16 +47,3 @@ class ApiException extends Error {
     return errorMessage;
   }
 }
-
-class UrpProtocolException extends Error {
-  /// Creates a new instance of [UrpProtocolException]
-  UrpProtocolException(this.message);
-
-  /// The error message
-  final String message;
-
-  @override
-  String toString() {
-    return message;
-  }
-}
