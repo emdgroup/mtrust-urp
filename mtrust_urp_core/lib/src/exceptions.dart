@@ -10,7 +10,6 @@ class ConnectionStrategyDisposedException extends CommandCancelledException {}
 
 /// Thrown when the device returns an error for a command
 class DeviceError extends Error {
-
   /// Creates a new instance of [DeviceError]
   DeviceError({
     required this.errorCode,
@@ -19,6 +18,7 @@ class DeviceError extends Error {
 
   /// The error code returned by the device
   final int errorCode;
+
   /// The error message returned by the device
   final String errorMessage;
 
@@ -38,6 +38,7 @@ class ApiException extends Error {
 
   /// The error code returned by the API
   final int errorCode;
+
   /// The error message returned by the API
   final String errorMessage;
 
@@ -45,4 +46,17 @@ class ApiException extends Error {
   String toString() {
     return errorMessage;
   }
-} 
+}
+
+class UrpProtocolException extends Error {
+  /// Creates a new instance of [UrpProtocolException]
+  UrpProtocolException(this.message);
+
+  /// The error message
+  final String message;
+
+  @override
+  String toString() {
+    return message;
+  }
+}

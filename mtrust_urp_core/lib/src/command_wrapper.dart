@@ -5,68 +5,188 @@ import 'package:mtrust_urp_core/src/api_service.dart';
 /// Abstract wrapper for the core commands, these commands need to be wrapped
 /// in a device specific Command Wrapper before they can be send to a device.
 abstract class CmdWrapper extends ChangeNotifier {
-  /// Ping the device.
-  Future<void> ping();
+  /// Adds a core command to the queue.
+  /// Need to be implemented by the specific device wrapper.
+  Future<UrpResponse> addCoreCmdToQueue(UrpCoreCommand command);
 
-  /// Get the device info.
-  Future<UrpDeviceInfo> info();
+  /// Gets the power state of the device.
+  Future<UrpPowerState> getPower() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpGetPower,
+    );
+    final res = await addCoreCmdToQueue(cmd);
 
-  /// Get the power state of the device.
-  Future<UrpPowerState> getPower();
+    return UrpPowerState.fromBuffer(res.payload);
+  }
 
-  /// Set the device name.
-  Future<void> setName(String? name);
+  /// Pings the device.
+  Future<void> ping() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpPing,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Get the device name.
-  Future<UrpDeviceName> getName();
+  /// Returns the device info. Throws an error if failed.
+  Future<UrpDeviceInfo> info() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpGetInfo,
+    );
+    final res = await addCoreCmdToQueue(cmd);
 
-  /// Pair a device.
-  Future<void> pair();
+    return UrpDeviceInfo.fromBuffer(res.payload);
+  }
 
-  /// Unpair a device.
-  Future<void> unpair();
+  /// Sets the name of the device.
+  Future<void> setName(String? name) async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpSetName,
+      setNameParameters: UrpSetNameParameters(name: name),
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Start an access point for the firmware update.
-  Future<UrpWifiState> startAP(String ssid, String apk);
+  /// Returns the device name. Throws an error if failed.
+  Future<UrpDeviceName> getName() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpGetName,
+    );
+    final res = await addCoreCmdToQueue(cmd);
 
-  /// Stop the access point.
-  Future<void> stopAP();
+    return UrpDeviceName.fromBuffer(res.payload);
+  }
 
-  /// Connect to an access point.
-  Future<UrpWifiState> connectAP(String ssid, String apk);
+  /// Unpair the device.
+  Future<void> unpair() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpUnpair,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Disconnect from an access point.
-  Future<void> disconnectAP();
+  /// Starts the DFU mode of the device.
+  Future<void> startDFU() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpStartDfu,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Start DFU.
-  Future<void> startDFU();
+  /// Start AP. Throws an error if failed.
+  Future<UrpWifiState> startAP(String ssid, String apk) async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpStartAp,
+      apParameters: UrpApParamters(ssid: ssid, password: apk),
+    );
+    final res = await addCoreCmdToQueue(cmd);
 
-  /// Stop DFU.
-  Future<void> stopDFU();
+    return UrpWifiState.fromBuffer(res.payload);
+  }
 
-  /// Put the device to sleep mode.
-  /// It will disconnect from the device.
-  Future<void> sleep();
+  /// Stop AP.
+  Future<void> stopAP() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpStopAp,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Turn the device off. It will disconnect from the device.
-  Future<void> off();
+  /// Connect AP. Throws an error if failed.
+  Future<UrpWifiState> connectAP(String ssid, String apk) async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpConnectAp,
+      apParameters: UrpApParamters(ssid: ssid, password: apk),
+    );
+    final res = await addCoreCmdToQueue(cmd);
 
-  /// Reboot the device. It will disconnect from the device.
-  Future<void> reboot();
+    return UrpWifiState.fromBuffer(res.payload);
+  }
 
-  /// Prevent the device from going to sleep mode.
-  Future<void> stayAwake();
+  /// Disconnect AP.
+  Future<void> disconnectAP() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpDisconnectAp,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Get the public key of the device.
-  Future<UrpPublicKey> getPublicKey();
+  /// Stops the DFU mode of the device.
+  Future<void> stopDFU() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpStopDfu,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Get the device id
-  Future<UrpDeviceId> getDeviceId();
+  /// Puts the device to sleep mode. This will disconnect the device.
+  Future<void> sleep() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpSleep,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
 
-  /// Identify a reader. Triggers the LED to identify the device.
-  Future<void> identify();
+  /// Turns the device off. This will disconnect the device.
+  Future<void> off() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpOff,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
+
+  /// Reboots the device. This will disconnect the device.
+  Future<void> reboot() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpReboot,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
+
+  /// Prevents the device from going to sleep mode.
+  Future<void> stayAwake() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpStayAwake,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
+
+  /// Returns the public key of the device. Throws an error if failed.
+  Future<UrpPublicKey> getPublicKey() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpGetPublicKey,
+    );
+    final res = await addCoreCmdToQueue(cmd);
+    return UrpPublicKey.fromBuffer(res.payload);
+  }
+
+  /// Return the device id. Throws an error if failed.
+  Future<UrpDeviceId> getDeviceId() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpGetDeviceId,
+    );
+    final res = await addCoreCmdToQueue(cmd);
+    return UrpDeviceId.fromBuffer(res.payload);
+  }
+
+  /// Identify reader. Triggers the LED to identify the device.
+  Future<void> identify() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpIdentify,
+    );
+    await addCoreCmdToQueue(cmd);
+  }
+
+  /// Get the URP types version supported by the device
+  Future<UrpTypesVersion> getVersion() async {
+    final cmd = UrpCoreCommand(
+      command: UrpCommand.urpGetVersion,
+    );
+    final res = await addCoreCmdToQueue(cmd);
+    return UrpTypesVersion.fromBuffer(res.payload);
+  }
 
   /// Fetch new token
+  /// TODO: rephrase this to refreshToken or something similar
   Future<UrpSecureToken> getToken(
     UrpSecureToken oldToken,
     UrpPublicKey publicKey,

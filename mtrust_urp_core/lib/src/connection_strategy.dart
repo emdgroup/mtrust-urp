@@ -59,6 +59,8 @@ abstract class ConnectionStrategy extends ChangeNotifier {
   /// Callback when the device is pinged
   void Function()? pingDeviceCallback;
 
+  void Function(UrpMessage msg)? onRequestCallback;
+
   /// Set callback when the device is connected
   void onConnect(void Function() callback) {
     _setupTimers();
@@ -311,10 +313,15 @@ abstract class ConnectionStrategy extends ChangeNotifier {
     try {
       final message = UrpMessage.fromBuffer(buffer);
 
-      if (message.whichPayload() == UrpMessage_Payload.response) {
-        //securalicLogger.i(message.toDebugString());
+      // handle message
+      if (message.whichPayload() == UrpMessage_Payload.request) {
+        if (onRequestCallback != null) {
+          onRequestCallback!(message);
+        } else {
+          urpLogger.w('No callback defined for incoming requests: $message');
+        }
+      } else if (message.whichPayload() == UrpMessage_Payload.response) {
         final seq = message.header.seqNr;
-
         final cmd = _cmdQueue[seq];
 
         if (cmd == null) {
@@ -324,16 +331,15 @@ abstract class ConnectionStrategy extends ChangeNotifier {
 
         if (message.header.error.isNotEmpty) {
           urpLogger.e(
-            'Reader returned error for ${cmd.request}: '
-            '${message.header.error}\n'
-            'Error Code: ${message.header.errorCode.value}',
+            'Reader returned error for : '
+            '$message\n',
           );
           if (cmd.completer.isCompleted) {
             _cmdQueue.remove(seq);
             return;
           }
           final deviceError = DeviceError(
-            errorCode: message.header.errorCode.value, 
+            errorCode: message.header.errorCode.value,
             errorMessage: message.header.error,
           );
           cmd.completer.completeError(deviceError);
