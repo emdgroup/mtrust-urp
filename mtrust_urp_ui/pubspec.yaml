@@ -10,8 +10,7 @@ dependencies:
     sdk: flutter
   flutter_localizations: 
     sdk: flutter
-  mtrust_urp_types: 
-    path: ../../mtrust-urp-types/packages/urp_types_dart
+  mtrust_urp_types: ^6.2.1
   mtrust_urp_core: 
     path: ../mtrust_urp_core
   intl: 0.20.2
