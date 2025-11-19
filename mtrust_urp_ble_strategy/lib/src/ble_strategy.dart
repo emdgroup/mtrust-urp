@@ -301,11 +301,6 @@ class UrpBleStrategy extends ConnectionStrategy {
       urpLogger.w("Characteristic was null");
       disconnectDevice();
     }
-    try {
-      await _getBatteryCharacteristic();
-    } catch (e) {
-      urpLogger.w("Battery characteristic not supported: $e");
-    }
   }
 
   /// called when batteryCharacteristic value changes.
