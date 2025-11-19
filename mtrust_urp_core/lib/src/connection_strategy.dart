@@ -316,6 +316,8 @@ abstract class ConnectionStrategy extends ChangeNotifier {
 
       // for now only allow messages from readers
       if (message.header.origin.deviceClass != UrpDeviceClass.urpReader) {
+        urpLogger.w(
+            'Ignoring message from unknown origin: ${message.header.origin}');
         return;
       }
 
