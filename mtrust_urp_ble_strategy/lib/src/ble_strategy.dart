@@ -374,7 +374,7 @@ class UrpBleStrategy extends ConnectionStrategy {
     // Wait for the adapter to be ready if needed.
     // This is especially important on iOS/macOS where the service needs longer to initialize.
     // See FlutterBluePlus documentation for more details.
-    if (Platform.isIOS || Platform.isMacOS) {
+    if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) {
       if (await FlutterBluePlus.adapterState.first ==
           BluetoothAdapterState.unknown) {
         await Future.delayed(const Duration(seconds: 1));
