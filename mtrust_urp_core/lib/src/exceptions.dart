@@ -1,3 +1,5 @@
+import 'package:mtrust_urp_types/wrapper.pb.dart';
+
 /// Thrown when a command is cancelled
 class CommandCancelledException extends Error {}
 
@@ -10,7 +12,6 @@ class ConnectionStrategyDisposedException extends CommandCancelledException {}
 
 /// Thrown when the device returns an error for a command
 class DeviceError extends Error {
-
   /// Creates a new instance of [DeviceError]
   DeviceError({
     required this.errorCode,
@@ -18,7 +19,8 @@ class DeviceError extends Error {
   });
 
   /// The error code returned by the device
-  final int errorCode;
+  final UrpErrorCode errorCode;
+
   /// The error message returned by the device
   final String errorMessage;
 
@@ -38,6 +40,7 @@ class ApiException extends Error {
 
   /// The error code returned by the API
   final int errorCode;
+
   /// The error message returned by the API
   final String errorMessage;
 
@@ -45,4 +48,4 @@ class ApiException extends Error {
   String toString() {
     return errorMessage;
   }
-} 
+}

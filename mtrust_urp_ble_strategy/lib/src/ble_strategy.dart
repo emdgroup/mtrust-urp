@@ -103,7 +103,9 @@ class UrpBleStrategy extends ConnectionStrategy {
     FoundBleDevice? device;
 
     await for (final item in _scanForDevices()) {
-      if (deviceAddress == null || item.address == deviceAddress) {
+      if (deviceAddress == null ||
+          item.address == deviceAddress ||
+          item.name == deviceAddress) {
         device = item;
         break;
       }
@@ -231,9 +233,10 @@ class UrpBleStrategy extends ConnectionStrategy {
       urpLogger.d("Trying to connect to device...");
 
       await device.connect(
-        timeout: const Duration(seconds: 5), 
+        timeout: const Duration(seconds: 5),
         autoConnect: false,
-        mtu: 515, // Android only: Set the MTU size to 515 bytes (512 + 3 for the header, required on some android devices)
+        mtu:
+            515, // Android only: Set the MTU size to 515 bytes (512 + 3 for the header, required on some android devices)
       );
 
       _deviceSubscription = device.connectionState.listen(_deviceStateChanged);
@@ -244,7 +247,7 @@ class UrpBleStrategy extends ConnectionStrategy {
     } catch (e) {
       print(e);
       disconnectDevice();
-      if(e is BleMtuSizeException) {
+      if (e is BleMtuSizeException) {
         rethrow;
       }
     }
@@ -298,7 +301,6 @@ class UrpBleStrategy extends ConnectionStrategy {
       urpLogger.w("Characteristic was null");
       disconnectDevice();
     }
-    _getBatteryCharacteristic();
   }
 
   /// called when batteryCharacteristic value changes.
@@ -338,7 +340,7 @@ class UrpBleStrategy extends ConnectionStrategy {
     await FlutterBluePlus.stopScan();
   }
 
-  // if continueImmediately is true, the scanning will be stopped
+// if continueImmediately is true, the scanning will be stopped
   // after the first reader is found
   Stream<FoundBleDevice> _scanForDevices() async* {
     List<FoundBleDevice> foundDevices = [];
@@ -363,6 +365,16 @@ class UrpBleStrategy extends ConnectionStrategy {
     final timeout = Duration(seconds: 10);
 
     urpLogger.d("Starting scan");
+
+    // Wait for the adapter to be ready if needed.
+    // This is especially important on iOS/macOS where the service needs longer to initialize.
+    // See FlutterBluePlus documentation for more details.
+    if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) {
+      if (await FlutterBluePlus.adapterState.first ==
+          BluetoothAdapterState.unknown) {
+        await Future.delayed(const Duration(seconds: 1));
+      }
+    }
 
     await FlutterBluePlus.startScan(
       timeout: timeout,
