@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [9.1.0-13](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-12...v9.1.0-13) (2025-11-20)
+
+
+### Features
+
+* add callback for handling requests received from the device ([41fd86f](https://github.com/emdgroup/mtrust-urp/commit/41fd86f77ae017d7ace6a002aa9304f35d013e12))
+* enhance device connection logic and improve battery characteristic handling ([2667413](https://github.com/emdgroup/mtrust-urp/commit/26674135a9f74bcd63162235981a0bd26967caec))
+
+
+### Bug Fixes
+
+* check if not kIsWeb ([f2e02b0](https://github.com/emdgroup/mtrust-urp/commit/f2e02b00c3a45f6a6e8166a776ca9533ae42f1ea))
+* improve logging for ignored messages from unknown device origins ([9c60bf7](https://github.com/emdgroup/mtrust-urp/commit/9c60bf7e48ca7000053daa22521467b3b232a684))
+* log warning for messages from unknown device origins ([9f6a5da](https://github.com/emdgroup/mtrust-urp/commit/9f6a5dad1869f80528aa62fc07ff4b5cbe6b8609))
+* remove unnecessary battery characteristic retrieval in connection logic ([bef1bc4](https://github.com/emdgroup/mtrust-urp/commit/bef1bc47cff5db7d7bf9489247a510170dc7429e))
+* restrict message handling to only allow messages from readers ([bb6c049](https://github.com/emdgroup/mtrust-urp/commit/bb6c049183007e0bd091a5ca7f871345dfff350b))
+* revert mtrust_urp_types dependency to version constraint ([41ff7d8](https://github.com/emdgroup/mtrust-urp/commit/41ff7d8391bf26ed919f600c13c270976c82dc61))
+* update mtrust_urp_types dependency to use version constraint ([eac5b06](https://github.com/emdgroup/mtrust-urp/commit/eac5b06d86e4fbe831dcceb53298048bd0352e77))
+
 ## [9.1.0-12](https://github.com/emdgroup/mtrust-urp/compare/v9.1.0-11...v9.1.0-12) (2025-10-01)
 
 
