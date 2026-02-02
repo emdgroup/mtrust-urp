@@ -7,7 +7,7 @@ description: WiFi Connection Strategy for URP
 dependencies: 
   flutter: 
     sdk: flutter
-  web_socket_channel: ^2.2.0
+  web_socket_channel: ">=2.2.0 <4.0.0"
   mtrust_urp_core: ^9.1.0-13
 dev_dependencies: 
   flutter_test: 
