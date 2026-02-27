@@ -32,9 +32,9 @@ class ReaderThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = LdTheme.of(context, listen: true);
     return LdTouchableSurface(
-      onTap: onTap,
+      onPressed: onTap,
       color: theme.palette.primary,
-      builder: (context, colors, touchState) {
+      builder: (context, colors, touchState, child) {
         return LdSpring(
           initialPosition: 0,
           position: switch (mode) {
@@ -43,54 +43,42 @@ class ReaderThumbnail extends StatelessWidget {
             (ReaderThumbnailMode.highlightGrayed) => 1,
             (ReaderThumbnailMode.hidden) => 0,
           },
-          builder: (context, state) {
+          builder: (context, state, child) {
             double scale = switch (mode) {
-              (ReaderThumbnailMode.carousel) =>
-                (1 - distanceFromCenter).clamp(0.5, 1),
+              (ReaderThumbnailMode.carousel) => (1 - distanceFromCenter).clamp(0.5, 1),
               (ReaderThumbnailMode.highlight) => 1,
               (ReaderThumbnailMode.highlightGrayed) => 1,
               (ReaderThumbnailMode.hidden) => 0,
             };
 
             double opacity = switch (mode) {
-              (ReaderThumbnailMode.carousel) =>
-                (1 - distanceFromCenter).clamp(0.3, 1),
+              (ReaderThumbnailMode.carousel) => (1 - distanceFromCenter).clamp(0.3, 1),
               (ReaderThumbnailMode.highlight) => 1,
               (ReaderThumbnailMode.highlightGrayed) => 0.6,
               (ReaderThumbnailMode.hidden) => 0,
             };
 
-            return LdAutoSpace(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Reader image
-                Expanded(
-                  child: Opacity(
-                    opacity: opacity,
-                    child: LdSpring(
-                        initialPosition: 0,
-                        position: scale + (touchState.active ? 0.1 : 0),
-                        builder: (context, scrollState) {
-                          return Transform.scale(
-                            scale: scrollState.position * 0.9,
-                            child: SizedBox(
-                              height: 200,
-                              child: switch (reader.type) {
-                                (UrpDeviceType.urpSec) =>
-                                  SecReaderVisualization.waitingForConnection(
-                                    cutoffGradientColor: theme.surface,
-                                  ),
-                                (UrpDeviceType.urpImp) =>
-                                  IMPReaderVisualization.waitingForConnection(),
-                                _ => throw UnimplementedError(),
-                              },
-                            ),
-                          );
-                        }),
-                  ),
-                ),
-                // Preferred badge
-              ],
+            return Opacity(
+              opacity: opacity,
+              child: LdSpring(
+                initialPosition: 0,
+                position: scale + (touchState.active ? 0.1 : 0),
+                builder: (context, scrollState, child) {
+                  return Transform.scale(
+                    scale: scrollState.position * 0.9,
+                    child: SizedBox(
+                      height: 200,
+                      child: switch (reader.type) {
+                        (UrpDeviceType.urpSec) => SecReaderVisualization.waitingForConnection(
+                            cutoffGradientColor: theme.surface,
+                          ),
+                        (UrpDeviceType.urpImp) => IMPReaderVisualization.waitingForConnection(),
+                        _ => throw UnimplementedError(),
+                      },
+                    ),
+                  );
+                },
+              ),
             );
           },
         );

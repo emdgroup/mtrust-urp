@@ -90,11 +90,13 @@ class _MyAppState extends State<MyApp> {
             LiquidLocalizations.delegate,
           ],
           theme: theme,
-          home: Scaffold(
-            appBar: LdAppBar(
-              title: Text("URP UI Playground"),
-            ),
-            body: LdAutoSpace(
+          home: LdScaffold(
+            appBars: [
+              LdAppBar(
+                title: Text("URP UI Playground"),
+              )
+            ],
+            body: LdScaffoldBody(
               children: [
                 LdSwitch(
                   label: "Availability of the connection strategy",
@@ -130,15 +132,15 @@ class _MyAppState extends State<MyApp> {
                   onChanged: _setDebugFailConnection,
                   label: "Debug fail connection",
                 ),
-                LdButtonVague(
+                LdButton.vague(
                   onPressed: _addReader,
                   child: Text("Add reader"),
                 ),
-                LdButtonVague(
+                LdButton.vague(
                   onPressed: _removeReaders,
                   child: Text("Remove readers"),
                 ),
-                LdButtonVague(
+                LdButton.vague(
                   onPressed: () {
                     virtualStrategy.disconnectDevice();
                   },
@@ -153,8 +155,7 @@ class _MyAppState extends State<MyApp> {
                           deviceConnector: DeviceConnector(
                             mode: _connectorMode,
                             connectionStrategy: virtualStrategy,
-                            connectedBuilder: (context) =>
-                                const Text('Connected'),
+                            connectedBuilder: (context) => const Text('Connected'),
                             deviceTypes: {
                               UrpDeviceType.urpSec,
                               UrpDeviceType.urpImp,

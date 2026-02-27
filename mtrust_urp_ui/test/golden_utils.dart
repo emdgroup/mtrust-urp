@@ -24,9 +24,7 @@ Widget liquidFrame(Key key, Widget child, bool dark, LdThemeSize size) {
       textDirection: TextDirection.ltr,
       child: LdThemeProvider(
         theme: theme,
-        autoSize: false,
-        brightnessMode:
-            dark ? LdThemeBrightnessMode.dark : LdThemeBrightnessMode.light,
+        brightnessMode: dark ? LdThemeBrightnessMode.dark : LdThemeBrightnessMode.light,
         child: Builder(builder: (context) {
           return Container(
             padding: const EdgeInsets.all(16),
@@ -80,8 +78,7 @@ Future<void> multiGolden(
           );
         });
 
-        final size =
-            find.byKey(ValueKey(slug)).evaluate().single.size ?? Size.zero;
+        final size = find.byKey(ValueKey(slug)).evaluate().single.size ?? Size.zero;
 
         await tester.pumpAndSettle();
 

@@ -19,16 +19,17 @@ class StrategyAvailabilityGuard extends StatelessWidget {
   Widget build(BuildContext context) {
     final strategyName = strategy.name;
 
-    return LdSubmit<StrategyAvailability>(
-      config: LdSubmitConfig<StrategyAvailability>(
-        action: () async {
-          return strategy.availability;
+    return LdSubmit<StrategyAvailability, ConnectionStrategy>(
+      arg: strategy,
+      config: LdSubmitConfig<StrategyAvailability, ConnectionStrategy>(
+        action: (strategy) async {
+          return strategy!.availability;
         },
         autoTrigger: true,
         allowResubmit: true,
       ),
-      builder: LdSubmitCustomBuilder<StrategyAvailability>(
-          builder: (context, controller, stateType) {
+      builder:
+          LdSubmitCustomBuilder<StrategyAvailability, ConnectionStrategy>(builder: (context, controller, stateType) {
         // Helper function to build an error message
         Widget buildError(String title, String submessage, bool canRetry) {
           return Center(
@@ -36,7 +37,7 @@ class StrategyAvailabilityGuard extends StatelessWidget {
               animate: true,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                LdTextHs(
+                LdText.hs(
                   title,
                   textAlign: TextAlign.center,
                 ),
@@ -63,8 +64,7 @@ class StrategyAvailabilityGuard extends StatelessWidget {
               localization.unableToPrepareStrategy(strategyName),
               true,
             ),
-          LdSubmitStateType.result => switch (
-                controller.state.result as StrategyAvailability) {
+          LdSubmitStateType.result => switch (controller.state.result as StrategyAvailability) {
               (StrategyAvailability.ready) => readyBuilder(context),
               (StrategyAvailability.disabled) => buildError(
                   localization.strategyDisabled(strategyName),

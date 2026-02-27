@@ -22,8 +22,8 @@ class ConnectionError extends StatelessWidget {
     return LdAutoSpace(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        LdTextHs(UrpUiLocalizations.of(context).connectionFailed),
-        LdTextP(
+        LdText.hs(UrpUiLocalizations.of(context).connectionFailed),
+        LdText.p(
           UrpUiLocalizations.of(context).ensureTurnedOn,
           textAlign: TextAlign.center,
         ),

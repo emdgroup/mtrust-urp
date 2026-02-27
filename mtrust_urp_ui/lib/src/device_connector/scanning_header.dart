@@ -22,12 +22,10 @@ class ScanningHeader extends StatelessWidget {
       children: [
         // Loader if still scanning
         Flexible(
-          child: LdTextHs(
+          child: LdText.hs(
             switch (state) {
-              LdSubmitStateType.loading =>
-                UrpUiLocalizations.of(context).connecting,
-              LdSubmitStateType.error =>
-                UrpUiLocalizations.of(context).connectionFailed,
+              LdSubmitStateType.loading => UrpUiLocalizations.of(context).connecting,
+              LdSubmitStateType.error => UrpUiLocalizations.of(context).connectionFailed,
               _ => UrpUiLocalizations.of(context).nReadersFound(nReadersFound),
             },
             lineHeight: 1,

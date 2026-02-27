@@ -18,11 +18,12 @@ class WaitingForDevice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LdSubmit<bool>(
-      config: LdSubmitConfig<bool>(
+    return LdSubmit<bool, FoundDevice>(
+      arg: expectedReader,
+      config: LdSubmitConfig<bool, FoundDevice>(
         autoTrigger: true,
-        action: () async {
-          final connected = await strategy.connectToFoundDevice(expectedReader);
+        action: (reader) async {
+          final connected = await strategy.connectToFoundDevice(reader!);
 
           if (!connected) {
             throw Exception('Could not connect to reader');
@@ -30,23 +31,23 @@ class WaitingForDevice extends StatelessWidget {
           return true;
         },
       ),
-      builder: LdSubmitCustomBuilder<bool>(
+      builder: LdSubmitCustomBuilder<bool, FoundDevice>(
         builder: (context, controller, type) {
           return LdAutoSpace(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               switch (type) {
-                (LdSubmitStateType.error) => LdTextHs(
+                (LdSubmitStateType.error) => LdText.hs(
                     UrpUiLocalizations.of(context).connectionFailed,
                   ),
-                (_) => LdTextHs(
+                (_) => LdText.hs(
                     UrpUiLocalizations.of(context).waitingForReader(
                       expectedReader.name,
                     ),
                     textAlign: TextAlign.center,
                   ),
               },
-              LdTextP(
+              LdText.p(
                 UrpUiLocalizations.of(context).ensureTurnedOn,
                 textAlign: TextAlign.center,
               ),
@@ -56,8 +57,7 @@ class WaitingForDevice extends StatelessWidget {
                   onTap: () {},
                   distanceFromCenter: 0,
                   mode: switch (type) {
-                    (LdSubmitStateType.error) =>
-                      ReaderThumbnailMode.highlightGrayed,
+                    (LdSubmitStateType.error) => ReaderThumbnailMode.highlightGrayed,
                     (_) => ReaderThumbnailMode.highlight,
                   },
                 ),
@@ -67,14 +67,13 @@ class WaitingForDevice extends StatelessWidget {
                 child: LdButton(
                   onPressed: controller.trigger,
                   child: Text(
-                    UrpUiLocalizations.of(context)
-                        .retryConnect(expectedReader.name),
+                    UrpUiLocalizations.of(context).retryConnect(expectedReader.name),
                   ),
                 ),
               ),
               LdReveal(
                 revealed: controller.state.type == LdSubmitStateType.error,
-                child: LdButtonGhost(
+                child: LdButton.ghost(
                   onPressed: onConnectToDifferentReader,
                   child: Text(
                     UrpUiLocalizations.of(context).connectDifferentReader,

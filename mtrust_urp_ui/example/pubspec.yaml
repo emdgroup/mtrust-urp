@@ -1,5 +1,6 @@
 name: example
 version: 9.1.0-13
+publish_to: none
 environment: 
   sdk: ^3.5.0
   flutter: '>=1.17.0'
@@ -7,10 +8,13 @@ description: Example app for mtrust_urp_ui
 dependencies: 
   flutter: 
     sdk: flutter
-  liquid_flutter: ^22.0.1
-  mtrust_urp_core: ^9.1.0-13
-  mtrust_urp_ui: ^9.1.0-13
-  mtrust_urp_virtual_strategy: ^9.1.0-13
+  liquid_flutter: ^23.0.0-1
+  mtrust_urp_core: 
+    path: ../../mtrust_urp_core
+  mtrust_urp_ui: 
+    path: ../../mtrust_urp_ui
+  mtrust_urp_virtual_strategy: 
+    path: ../../mtrust_urp_virtual_strategy
 dev_dependencies: 
   flutter_test: 
     sdk: flutter

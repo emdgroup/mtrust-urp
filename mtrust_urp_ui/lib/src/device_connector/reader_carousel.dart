@@ -20,8 +20,7 @@ class ReaderCarousel extends StatefulWidget {
   final Future<void> Function()? restartScanning;
 
   /// A function to build a badge for the preferred reader
-  final Widget Function(BuildContext context, FoundDevice reader)?
-      prefferedBadgeBuilder;
+  final Widget Function(BuildContext context, FoundDevice reader)? prefferedBadgeBuilder;
 
   /// A function to build the action widget below the selected reader
   final Future<bool> Function(FoundDevice reader) onConnect;
@@ -203,7 +202,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
         // Nothing was found show instructions and a button to search again
         _buildReaderTypes(context),
 
-        LdTextP(
+        LdText.p(
           UrpUiLocalizations.of(context).turnOnInstructions,
           textAlign: TextAlign.center,
         ),
@@ -213,10 +212,14 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return LdSubmit<bool>(
-      config: LdSubmitConfig<bool>(
-        action: () async {
-          final connected = await widget.onConnect(_selectedReader!);
+    return LdSubmit<bool, FoundDevice?>(
+      arg: _selectedReader,
+      config: LdSubmitConfig<bool, FoundDevice?>(
+        action: (reader) async {
+          if (reader == null) {
+            throw Exception("No reader selected");
+          }
+          final connected = await widget.onConnect(reader);
 
           if (!connected) {
             throw Exception("Failed to connect");
@@ -224,7 +227,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
           return connected;
         },
       ),
-      builder: LdSubmitCustomBuilder<bool>(
+      builder: LdSubmitCustomBuilder<bool, FoundDevice?>(
         builder: (context, submit, type) {
           return LdAutoSpace(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -240,9 +243,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
               LdReveal.quick(
                 revealed: _isDone && type == LdSubmitStateType.idle,
                 child: LdButton(
-                  mode: _readers.isNotEmpty
-                      ? LdButtonMode.ghost
-                      : LdButtonMode.vague,
+                  mode: _readers.isNotEmpty ? LdButtonMode.ghost : LdButtonMode.vague,
                   size: _readers.isNotEmpty ? LdSize.s : LdSize.m,
                   onPressed: widget.restartScanning!,
                   child: Text(UrpUiLocalizations.of(context).searchAgain),
@@ -291,12 +292,12 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                 child: LdAutoSpace(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    LdTextP(
+                    LdText.p(
                       UrpUiLocalizations.of(context).ensureTurnedOn,
                       textAlign: TextAlign.center,
                     ),
                     // Connect to a different reader
-                    LdButtonGhost(
+                    LdButton.ghost(
                       child: Text(
                         UrpUiLocalizations.of(context).connectDifferentReader,
                       ),
@@ -309,8 +310,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                     LdButton(
                       onPressed: submit.trigger,
                       child: Text(
-                        UrpUiLocalizations.of(context)
-                            .retryConnect(_selectedReader?.name ?? ""),
+                        UrpUiLocalizations.of(context).retryConnect(_selectedReader?.name ?? ""),
                       ),
                     ),
                   ],
@@ -325,13 +325,13 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
 
   Widget _buildConnectButton(
     BuildContext context,
-    LdSubmitController<dynamic> submit,
+    LdSubmitController<bool, FoundDevice?> submit,
   ) {
     return LdReveal.quick(
-      revealed:
-          _readers.isNotEmpty && submit.state.type != LdSubmitStateType.error,
+      revealed: _readers.isNotEmpty && submit.state.type != LdSubmitStateType.error,
       child: LdButton(
         key: const Key("connect_button"),
+        size: LdSize.l,
         mode: LdButtonMode.vague,
         loading: submit.state.type == LdSubmitStateType.loading,
         loadingText: UrpUiLocalizations.of(context).connecting,
