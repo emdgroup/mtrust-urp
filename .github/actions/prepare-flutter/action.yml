@@ -3,7 +3,7 @@ description: "Prepares a flutter project by installing dependencies and running 
 inputs:
   flutter_version:
     description: "Flutter version to be used"
-    default: "3.32.1"
+    default: "3.41.2"
   artifactory_key:
     description: "Artifactory key"
     required: true
