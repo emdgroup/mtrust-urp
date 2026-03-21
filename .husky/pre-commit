@@ -1,2 +1,2 @@
-melos analyze
-melos test
+melos run analyze --no-select
+melos run test --no-select
