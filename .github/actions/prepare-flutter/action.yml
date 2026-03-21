@@ -20,5 +20,6 @@ runs:
       shell: bash
       run: |
         dart pub get
-        dart run melos bootstrap
-        dart run melos run intl
+        dart pub global activate melos
+        melos bootstrap
+        melos run intl
