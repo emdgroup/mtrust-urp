@@ -19,7 +19,6 @@ runs:
     - name: 📦 Install dependencies
       shell: bash
       run: |
-        dart pub get 
-        dart run packages.dart set-deps --source=local
-        dart run packages.dart install
-        dart run packages.dart intl
+        dart pub get
+        dart run melos bootstrap
+        dart run melos run intl

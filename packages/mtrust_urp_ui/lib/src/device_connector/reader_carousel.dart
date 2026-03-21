@@ -332,6 +332,8 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
       child: LdButton(
         key: const Key("connect_button"),
         size: LdSize.l,
+        width: double.infinity,
+        borderRadius: LdTheme.of(context).radius(LdSize.l),
         mode: LdButtonMode.vague,
         loading: submit.state.type == LdSubmitStateType.loading,
         loadingText: UrpUiLocalizations.of(context).connecting,

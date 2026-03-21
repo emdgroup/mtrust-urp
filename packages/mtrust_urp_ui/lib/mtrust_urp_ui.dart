@@ -1,5 +1,3 @@
-library mtrust_urp_ui;
-
 export 'src/device_connector/device_connector_modal.dart';
 export 'src/device_connector/device_connector.dart';
 export 'src/devices/imp_reader.dart';

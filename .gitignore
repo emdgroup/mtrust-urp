@@ -29,6 +29,7 @@
 .packages
 .pub-cache/
 .pub/
+pubspec.lock
 build/
 
 # Web related
@@ -49,4 +50,4 @@ app.*.map.json
 node_modules/
 
 
-mtrust_urp_ui/test/failures
+packages/mtrust_urp_ui/test/failures

@@ -171,20 +171,20 @@ abstract class ConnectionStrategy extends ChangeNotifier {
         return;
       }
       pingDeviceCallback?.call();
-    } catch (e) {
-      urpLogger.e('Ping failed: $e');
+    } on Object catch (e, st) {
+      urpLogger.e('Ping failed: $e\n$st');
       _pingTimer?.cancel();
     }
   }
 
   void _setupTimers() {
-    _ping();
+    unawaited(_ping());
 
     _pingTimer?.cancel();
     _powerTimer?.cancel();
 
     _pingTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      _ping();
+      unawaited(_ping());
     });
   }
 
@@ -364,9 +364,9 @@ abstract class ConnectionStrategy extends ChangeNotifier {
           'No Payload set in message $message',
         );
       }
-    } catch (e) {
-      urpLogger.e('FATAL Error processing buffer: $e');
-      disconnectDevice();
+    } on Object catch (e, st) {
+      urpLogger.e('FATAL Error processing buffer: $e\n$st');
+      unawaited(disconnectDevice());
     }
   }
 }

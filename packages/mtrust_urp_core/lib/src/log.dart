@@ -15,7 +15,7 @@ class _SimplePrinter extends LogPrinter {
     this.colors = true,
     this.prefix,
   });
-  static final levelPrefixes = {
+  static final Map<Level, String> levelPrefixes = {
     Level.trace: '[V]',
     Level.debug: '[D]',
     Level.info: '[I]',
@@ -24,7 +24,7 @@ class _SimplePrinter extends LogPrinter {
     Level.fatal: '[WTF]',
   };
 
-  static final levelColors = {
+  static final Map<Level, AnsiColor> levelColors = {
     Level.trace: AnsiColor.fg(AnsiColor.grey(0.5)),
     Level.debug: const AnsiColor.none(),
     Level.info: const AnsiColor.fg(12),
@@ -56,7 +56,7 @@ class _SimplePrinter extends LogPrinter {
   }
 
   String _stringifyMessage(dynamic message) {
-    // ignore: avoid_dynamic_calls
+    // ignore: avoid_dynamic_calls, it's a dynamic message
     final finalMessage = message is Function ? message() : message;
     if (finalMessage is Map || finalMessage is Iterable) {
       const encoder = JsonEncoder.withIndent(null);
