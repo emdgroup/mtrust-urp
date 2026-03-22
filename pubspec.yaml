@@ -1,10 +1,48 @@
-name: urp_core
-description: Software SDK for interface with URP Devices
-version: 9.1.0-13
+name: _
+publish_to: none
 environment:
-  sdk: ^3.0.5
-dependencies:
-  args: ^2.6.0
-  pub_semver: ^2.1.4
-  pubspec: ^2.3.0
-  yaml_modify: ^1.0.1
+  sdk: ^3.6.0
+workspace:
+  - packages/mtrust_urp_core
+  - packages/mtrust_urp_ui
+  - packages/mtrust_urp_ble_strategy
+  - packages/mtrust_urp_usb_strategy
+  - packages/mtrust_urp_wifi_strategy
+  - packages/mtrust_urp_virtual_strategy
+  - apps/example
+dev_dependencies:
+  melos: ^7.1.0
+melos:
+  categories:
+    testable:
+      - packages/mtrust_urp_core
+      - packages/mtrust_urp_ui
+      - packages/mtrust_urp_ble_strategy
+      - packages/mtrust_urp_usb_strategy
+      - packages/mtrust_urp_wifi_strategy
+      - packages/mtrust_urp_virtual_strategy
+    intl:
+      - packages/mtrust_urp_ui
+  scripts:
+    test:
+      exec: flutter test
+      packageFilters:
+        category: testable
+    analyze:
+      exec: dart analyze --fatal-warnings
+      packageFilters:
+        category: testable
+      
+    intl:
+      exec: flutter gen-l10n
+      packageFilters:
+        category: intl
+    check-licenses:
+      exec: very_good packages check licenses --allowed=MIT,Apache-2.0,BSD-3-Clause,BSD-2-Clause
+      packageFilters:
+        category: testable
+    write-changelog:
+      run: |
+        for dir in packages/mtrust_urp_core packages/mtrust_urp_ui packages/mtrust_urp_ble_strategy packages/mtrust_urp_usb_strategy packages/mtrust_urp_wifi_strategy packages/mtrust_urp_virtual_strategy apps/example; do
+          cp CHANGELOG.md "$dir/"
+        done

@@ -84,12 +84,7 @@ jobs:
       - name: Prepare Flutter, Install dependencies
         uses: ./.github/actions/prepare-flutter
 
-      - name: Set dependencies to hosted
-        run: |
-          dart run packages.dart set-deps --source=hosted
-
-
-        # Bump the pubspec.yaml file
+      # Bump the pubspec.yaml file
       - name: ⬆️ Bump pubspec.yaml
         uses: ./.github/shared_actions/update-pubspec
         with:
@@ -103,7 +98,7 @@ jobs:
 
       - name: Update changelogs
         run: |
-          dart run packages.dart write-changelog
+          dart run melos run write-changelog
 
       #  We first commit with proper message and add an empty commit to keep the files history clean
       - name: Update versions in child packages

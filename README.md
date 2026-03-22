@@ -125,30 +125,14 @@ Add a file at `android/app/src/main/res/xml/device_filter.xml` with the followin
 ## Contributing
 We welcome contributions! Please fork the repository and submit a pull request with your changes. Ensure that your code adheres to our coding standards and includes appropriate tests.
 
-Utility for interacting with this repo:
+This repo uses a [pub workspace](https://dart.dev/tools/pub/workspaces) and [Melos](https://melos.invertase.dev/) for monorepo tooling. Layout: `packages/` (libraries) and `apps/` (applications).
 
-```sh 
-dart pub get # Get dependencies
-dart run packages.dart 
-```
-
-```
-Manage mtrust_urp packages
-
-Usage: packages <command> [arguments]
-
-Global options:
--h, --help    Print this usage information.
---changed-only  Only run the command on packages that have staged changes
-
-Available commands:
-  analyze            Run flutter analyze in all packages
-  install            Run flutter pub get in all packages
-  set-deps           Set all packages dependencies to local or hosted
-  test               Run flutter test in all packages
-  update-urp-types   Update mtrust_urp_types in all packages
-
-Run "packages help <command>" for more information about a command.
+```sh
+dart pub get              # Install root deps (includes Melos)
+dart run melos bootstrap # Install workspace dependencies
+dart run melos run test   # Run tests in testable packages
+dart run melos run analyze # Run analyzer in testable packages
+dart run melos run intl   # Generate l10n (e.g. packages/mtrust_urp_ui)
 ```
 
 This repository contains a husky pre-commit hook that runs analysis and tests before committing. Please ensure that you have installed husky before committing.

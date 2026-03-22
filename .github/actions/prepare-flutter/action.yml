@@ -3,7 +3,7 @@ description: "Prepares a flutter project by installing dependencies and running 
 inputs:
   flutter_version:
     description: "Flutter version to be used"
-    default: "3.32.1"
+    default: "3.41.2"
   artifactory_key:
     description: "Artifactory key"
     required: true
@@ -19,7 +19,7 @@ runs:
     - name: 📦 Install dependencies
       shell: bash
       run: |
-        dart pub get 
-        dart run packages.dart set-deps --source=local
-        dart run packages.dart install
-        dart run packages.dart intl
+        dart pub get
+        dart pub global activate melos
+        melos bootstrap
+        melos run intl

@@ -12,20 +12,21 @@ jobs:
 
       - name: 👨🏻‍⚖️ Check dependency licenses
         run: |
-          dart run packages.dart check-licenses
+          dart pub global activate very_good_cli
+          dart run melos run check-licenses
 
       - name: 🔍 Analyze dart
         run: |
-          dart run packages.dart analyze
+          dart run melos run analyze
 
       - name: 🧪 Run tests
         id: test
         run: |
-          dart run packages.dart test
+          dart run melos run test
 
       - name: Upload test failures if tests fail
         uses: actions/upload-artifact@v4
         if: always() && steps.test.conclusion == 'failure'
         with:
           name: Golden test failures
-          path: ./mtrust_urp_ui/test/failures
+          path: packages/mtrust_urp_ui/test/failures

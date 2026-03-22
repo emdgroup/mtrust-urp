@@ -22,7 +22,7 @@ jobs:
       - name: Publish mtrust_urp_core
         uses: ./.github/actions/publish-pub-dev
         with:
-          directory: "./mtrust_urp_core"
+          directory: "./packages/mtrust_urp_core"
           publish_mode: --force
 
   # Step 2: Validate dependent packages after mtrust-urp-core is published
@@ -52,20 +52,18 @@ jobs:
           git reset --hard origin/main
 
       - run: |
-          cat ./${{ matrix.package }}/pubspec.yaml
+          cat ./packages/${{ matrix.package }}/pubspec.yaml
 
       - name: Setup Dart
         uses: dart-lang/setup-dart@v1
 
       - name: Prepare Flutter for ${{ matrix.package }}
         uses: ./.github/actions/prepare-flutter
-        with:
-          directory: "./${{ matrix.package }}"
 
       - name: Validate Flutter for ${{ matrix.package }}
         uses: ./.github/shared_actions/validate-flutter
         with:
-          directory: "./${{ matrix.package }}"
+          directory: "./packages/${{ matrix.package }}"
           is_package: true
 
       - name: Define output packages
@@ -108,7 +106,7 @@ jobs:
       - name: Publish mtrust_urp_core
         uses: ./.github/actions/publish-pub-dev
         with:
-          directory: ./${{ matrix.package }}
+          directory: ./packages/${{ matrix.package }}
           publish_mode: --force
 
   # Step 4: Publish mtrust_urp_ui
@@ -135,14 +133,12 @@ jobs:
 
       - name: Prepare Flutter for mtrust_urp_ui
         uses: ./.github/actions/prepare-flutter
-        with:
-          directory: "./mtrust_urp_ui"
 
       - name: Validate Flutter for mtrust_urp_ui
         id: validate
         uses: ./.github/shared_actions/validate-flutter
         with:
-          directory: "./mtrust_urp_ui"
+          directory: "./packages/mtrust_urp_ui"
           is_package: true
 
       - name: Report
@@ -150,17 +146,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Golden-Report
-          path: ./mtrust_urp_ui/test/failures
+          path: packages/mtrust_urp_ui/test/failures
 
       - name: Check licenses for mtrust_urp_ui
         uses: ./.github/actions/check-dart-licenses
         with:
-          directory: "./mtrust_urp_ui"
+          directory: "./packages/mtrust_urp_ui"
 
       - name: Publish mtrust_urp_ui
         uses: ./.github/actions/publish-pub-dev
         with:
-          directory: ./mtrust_urp_ui
+          directory: ./packages/mtrust_urp_ui
           publish_mode: --force
 
   failure_cleanup:
