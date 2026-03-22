@@ -8,6 +8,7 @@ import 'package:mtrust_urp_ui/src/shared_prefs_storage_adapter.dart';
 import 'package:mtrust_urp_ui/src/storage_adapter.dart';
 import 'package:mtrust_urp_ui/src/device_connector/waiting_for_reader.dart';
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
+import 'package:provider/provider.dart';
 
 enum ReaderConnectorMode {
   ephemeral,
@@ -95,9 +96,13 @@ class DeviceConnector extends StatelessWidget {
                     return _getPreferredReader();
                   },
                 ),
-                builder: LdSubmitCustomBuilder<FoundDevice?, void>(
-                  builder: (context, preferredController, prefferedState) {
-                    if (prefferedState != LdSubmitStateType.result) {
+                child: Builder(
+                  builder: (
+                    context,
+                  ) {
+                    final preferredController = context.watch<LdSubmitController<FoundDevice?, void>>();
+                    final preferredState = preferredController.state.type;
+                    if (preferredState != LdSubmitStateType.result) {
                       return const Center(child: LdLoader());
                     }
 
@@ -113,10 +118,7 @@ class DeviceConnector extends StatelessWidget {
                           return connectionStrategy.findDevices(deviceTypes!);
                         },
                       ),
-                      builder: LdSubmitCenteredBuilder<Stream<FoundDevice>, Set<UrpDeviceType>>(
-                        submitButtonBuilder: (context, controller) {
-                          return const SizedBox.shrink();
-                        },
+                      child: LdSubmitCenteredBuilder<Stream<FoundDevice>, Set<UrpDeviceType>>(
                         resultBuilder: (context, result, controller) {
                           switch (mode) {
                             case ReaderConnectorMode.ephemeral:

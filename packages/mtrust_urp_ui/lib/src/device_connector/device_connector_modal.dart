@@ -11,5 +11,5 @@ LdModalRoute makeDeviceConnectorModal({
       sheetAspectRatio: 1,
       sheetBorderRadius: BorderRadius.circular(LdTheme.of(context).screenRadius),
       fixedDialogSize: const Size(400, 400),
-      pageBuilder: (context) => LdScaffold(body: deviceConnector.padM()),
+      pageBuilder: (context) => LdScaffold(body: deviceConnector.padL()),
     );

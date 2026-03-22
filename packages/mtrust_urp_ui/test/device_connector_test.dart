@@ -135,6 +135,8 @@ void main() {
 
         await tester.pumpWidget(harness.build());
         await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pumpAndSettle();
 
         switch (strategyStatus) {
           case StrategyAvailability.unsupported:
@@ -168,6 +170,9 @@ void main() {
 
       await tester.pumpWidget(harness.build());
 
+      await tester.pump(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 5));
       await tester.pumpAndSettle();
 
       expectRichText(tester, 'No readers found');
@@ -201,8 +206,7 @@ void main() {
     });
 
     group('Prefer last mode', () {
-      testWidgets('Selects correct reader from multiple',
-          (WidgetTester tester) async {
+      testWidgets('Selects correct reader from multiple', (WidgetTester tester) async {
         final harness = DeviceConnectorTestHarness(
           mode: ReaderConnectorMode.preferLastConnected,
         );
@@ -211,14 +215,16 @@ void main() {
 
         await tester.pumpWidget(harness.build());
 
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
         await tester.pumpAndSettle();
 
         expectRichText(tester, 'Connect to Test Reader 1');
         expectRichText(tester, 'Last used');
       });
 
-      testWidgets('Flaky reader connection and retry',
-          (WidgetTester tester) async {
+      testWidgets('Flaky reader connection and retry', (WidgetTester tester) async {
         final harness = DeviceConnectorTestHarness(
           mode: ReaderConnectorMode.preferLastConnected,
         );
@@ -228,6 +234,8 @@ void main() {
         harness.virtualStrategy.debugFailConnection = true;
 
         await tester.pumpWidget(harness.build());
+        await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
         await tester.pumpAndSettle();
 
         expectRichText(tester, 'Connect to Test Reader 1');
@@ -249,8 +257,7 @@ void main() {
         await tester.pump(const Duration(seconds: 10));
       });
 
-      testWidgets('Flaky reader, user chooses different reader',
-          (WidgetTester tester) async {
+      testWidgets('Flaky reader, user chooses different reader', (WidgetTester tester) async {
         final harness = DeviceConnectorTestHarness(
           mode: ReaderConnectorMode.preferLastConnected,
         );
@@ -260,6 +267,8 @@ void main() {
         harness.virtualStrategy.debugFailConnection = true;
 
         await tester.pumpWidget(harness.build());
+        await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
         await tester.pumpAndSettle();
 
         expectRichText(tester, 'Connect to Test Reader 1');
@@ -283,8 +292,7 @@ void main() {
     });
 
     group('Paired mode', () {
-      testWidgets('No paired reader with multiple readers',
-          (WidgetTester tester) async {
+      testWidgets('No paired reader with multiple readers', (WidgetTester tester) async {
         final harness = DeviceConnectorTestHarness(
           mode: ReaderConnectorMode.pair,
         );
@@ -314,7 +322,9 @@ void main() {
         );
 
         await tester.pumpWidget(harness.build());
-
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
         await tester.pumpAndSettle();
 
         expectRichText(tester, 'Connect to Test Reader 2');
@@ -340,6 +350,8 @@ void main() {
 
         await tester.pumpWidget(harness.build());
         await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pumpAndSettle();
 
         // Should show waiting for paired device
         expectRichText(tester, 'Looking for Test Reader');
@@ -360,6 +372,8 @@ void main() {
 
         await tester.pumpWidget(harness.build());
         await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pumpAndSettle();
 
         expectRichText(tester, 'Connected');
 
@@ -367,8 +381,7 @@ void main() {
         await tester.pump(const Duration(seconds: 10));
       });
 
-      testWidgets('Paired mode - paired flaky reader',
-          (WidgetTester tester) async {
+      testWidgets('Paired mode - paired flaky reader', (WidgetTester tester) async {
         final harness = DeviceConnectorTestHarness(
           mode: ReaderConnectorMode.pair,
         );
@@ -377,6 +390,8 @@ void main() {
         harness.virtualStrategy.debugFailConnection = true;
 
         await tester.pumpWidget(harness.build());
+        await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 5));
         await tester.pumpAndSettle();
 
         expectRichText(tester, 'Failed to connect to reader');

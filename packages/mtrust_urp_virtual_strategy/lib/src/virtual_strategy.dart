@@ -66,14 +66,16 @@ class UrpVirtualStrategy extends ConnectionStrategy {
   }
 
   Future<void> delay(Duration duration) {
-    return simulateDelays ? Future.delayed(duration) : Future.value();
+    return simulateDelays ? Future.delayed(duration) : Future.delayed(Duration.zero);
   }
 
   /// Returns [true] if the connection was successful, [false] otherwise.
   /// Will run [findDevices] and connect to the first reader found.
   @override
-  Future<bool> findAndConnectDevice(
-      {required Set<UrpDeviceType> readerTypes, String? deviceAddress}) async {
+  Future<bool> findAndConnectDevice({
+    required Set<UrpDeviceType> readerTypes,
+    String? deviceAddress,
+  }) async {
     setStatus(ConnectionStatus.searching);
 
     await delay(Duration(seconds: 1));
@@ -87,8 +89,7 @@ class UrpVirtualStrategy extends ConnectionStrategy {
 
     await for (var reader in stream) {
       await delay(Duration(milliseconds: 300));
-      if (readerTypes.contains(reader.type) &&
-          (deviceAddress == null || deviceAddress == reader.address)) {
+      if (readerTypes.contains(reader.type) && (deviceAddress == null || deviceAddress == reader.address)) {
         urpLogger.d("Found device: ${reader.name}");
         connectedReaderType = reader.type;
         connectedReaderAddress = reader.address;

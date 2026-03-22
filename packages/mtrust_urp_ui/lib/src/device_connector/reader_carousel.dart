@@ -8,6 +8,7 @@ import 'package:mtrust_urp_ui/src/device_connector/dot_indicator.dart';
 import 'package:mtrust_urp_ui/src/device_connector/reader_thumbnail.dart';
 import 'package:mtrust_urp_ui/src/device_connector/scanning_header.dart';
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
+import 'package:provider/provider.dart';
 
 class ReaderCarousel extends StatefulWidget {
   /// A stream of found readers
@@ -227,8 +228,11 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
           return connected;
         },
       ),
-      builder: LdSubmitCustomBuilder<bool, FoundDevice?>(
-        builder: (context, submit, type) {
+      child: Builder(
+        builder: (context) {
+          final submitController = context.watch<LdSubmitController<bool, FoundDevice?>>();
+          final stateType = submitController.state.type;
+
           return LdAutoSpace(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -236,12 +240,12 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
               ScanningHeader(
                 nReadersFound: _readers.length,
                 isScanning: !_isDone,
-                state: type,
+                state: stateType,
               ),
 
               if (_readers.isEmpty) Expanded(child: _buildEmptyState()),
               LdReveal.quick(
-                revealed: _isDone && type == LdSubmitStateType.idle,
+                revealed: _isDone && stateType == LdSubmitStateType.idle,
                 child: LdButton(
                   mode: _readers.isNotEmpty ? LdButtonMode.ghost : LdButtonMode.vague,
                   size: _readers.isNotEmpty ? LdSize.s : LdSize.m,
@@ -256,14 +260,14 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                 Expanded(
                   child: PageView(
                     controller: _pageController,
-                    physics: type != LdSubmitStateType.idle
+                    physics: stateType != LdSubmitStateType.idle
                         ? const NeverScrollableScrollPhysics()
                         : const PageScrollPhysics(),
                     children: [
                       for (var reader in _readers)
                         _buildReaderPreview(
                           reader,
-                          type,
+                          stateType,
                         ),
                     ],
                   ),
@@ -271,7 +275,7 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
 
               // Page indicator only if more than one reader
               LdReveal.quick(
-                revealed: _readers.isNotEmpty && type == LdSubmitStateType.idle,
+                revealed: _readers.isNotEmpty && stateType == LdSubmitStateType.idle,
                 child: DeviceCarouselDotIndicator(
                   devices: _readers,
                   currentIndex: _page.round(),
@@ -285,10 +289,10 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
               ldSpacerL,
 
               // Connect button
-              _buildConnectButton(context, submit),
+              _buildConnectButton(context, submitController),
 
               LdReveal.quick(
-                revealed: type == LdSubmitStateType.error,
+                revealed: stateType == LdSubmitStateType.error,
                 child: LdAutoSpace(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -302,13 +306,14 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
                         UrpUiLocalizations.of(context).connectDifferentReader,
                       ),
                       onPressed: () {
-                        submit.reset();
+                        submitController.reset();
                         widget.restartScanning?.call();
                       },
                     ),
                     // Retry the same connection
-                    LdButton(
-                      onPressed: submit.trigger,
+                    LdButton.vague(
+                      size: LdSize.l,
+                      onPressed: submitController.trigger,
                       child: Text(
                         UrpUiLocalizations.of(context).retryConnect(_selectedReader?.name ?? ""),
                       ),
@@ -332,7 +337,6 @@ class _ReaderCarouselState extends State<ReaderCarousel> {
       child: LdButton(
         key: const Key("connect_button"),
         size: LdSize.l,
-        width: double.infinity,
         borderRadius: LdTheme.of(context).radius(LdSize.l),
         mode: LdButtonMode.vague,
         loading: submit.state.type == LdSubmitStateType.loading,

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:liquid_flutter/liquid_flutter.dart';
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
+import 'package:provider/provider.dart';
 
 import '../l10n/generated/ui_ui_localizations.dart';
 
@@ -28,8 +29,9 @@ class StrategyAvailabilityGuard extends StatelessWidget {
         autoTrigger: true,
         allowResubmit: true,
       ),
-      builder:
-          LdSubmitCustomBuilder<StrategyAvailability, ConnectionStrategy>(builder: (context, controller, stateType) {
+      child: Builder(builder: (context) {
+        final controller = context.watch<LdSubmitController<StrategyAvailability, ConnectionStrategy>>();
+        final stateType = controller.state.type;
         // Helper function to build an error message
         Widget buildError(String title, String submessage, bool canRetry) {
           return Center(

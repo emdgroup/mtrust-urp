@@ -19,7 +19,9 @@ void main() {
       "DeviceConnector",
       {
         'Idle': (tester, place) async {
-          final connectionStrategy = securalicVirtualStrategy();
+          final connectionStrategy = securalicVirtualStrategy(
+            withReaders: false,
+          );
           await place(
             AspectRatio(
               aspectRatio: 1,
@@ -49,7 +51,11 @@ void main() {
               ),
             ),
           );
+          await tester.pump(const Duration(seconds: 5));
           await tester.pumpAndSettle();
+          await tester.pump(const Duration(seconds: 10));
+          await tester.pumpAndSettle();
+
           await tester.tap(find.byKey(const Key("connect_button")));
         },
         'Failed Connection': (tester, place) async {
@@ -69,6 +75,9 @@ void main() {
               ),
             ),
           );
+          await tester.pump(const Duration(seconds: 5));
+          await tester.pumpAndSettle();
+          await tester.pump(const Duration(seconds: 10));
           await tester.pumpAndSettle();
           await tester.tap(find.byKey(const Key("connect_button")));
           await tester.pumpAndSettle();

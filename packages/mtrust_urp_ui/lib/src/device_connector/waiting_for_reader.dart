@@ -3,6 +3,7 @@ import 'package:liquid_flutter/liquid_flutter.dart';
 import 'package:mtrust_urp_ui/mtrust_urp_ui.dart';
 import 'package:mtrust_urp_ui/src/device_connector/reader_thumbnail.dart';
 import 'package:mtrust_urp_core/mtrust_urp_core.dart';
+import 'package:provider/provider.dart';
 
 class WaitingForDevice extends StatelessWidget {
   final ConnectionStrategy strategy;
@@ -31,12 +32,14 @@ class WaitingForDevice extends StatelessWidget {
           return true;
         },
       ),
-      builder: LdSubmitCustomBuilder<bool, FoundDevice>(
-        builder: (context, controller, type) {
+      child: Builder(
+        builder: (context) {
+          final controller = context.watch<LdSubmitController<bool, FoundDevice>>();
+          final stateType = controller.state.type;
           return LdAutoSpace(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              switch (type) {
+              switch (stateType) {
                 (LdSubmitStateType.error) => LdText.hs(
                     UrpUiLocalizations.of(context).connectionFailed,
                   ),
@@ -56,7 +59,7 @@ class WaitingForDevice extends StatelessWidget {
                   reader: expectedReader,
                   onTap: () {},
                   distanceFromCenter: 0,
-                  mode: switch (type) {
+                  mode: switch (stateType) {
                     (LdSubmitStateType.error) => ReaderThumbnailMode.highlightGrayed,
                     (_) => ReaderThumbnailMode.highlight,
                   },

@@ -29,9 +29,10 @@ melos:
       packageFilters:
         category: testable
     analyze:
-      exec: flutter analyze --fatal-warnings
+      exec: dart analyze --fatal-warnings
       packageFilters:
         category: testable
+      
     intl:
       exec: flutter gen-l10n
       packageFilters:
