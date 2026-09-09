@@ -67,7 +67,13 @@ class UrpBleStrategy extends ConnectionStrategy {
     _batteryCharacteristicSubscription?.cancel();
     _characteristic = null;
 
-    _device?.disconnect();
+    // Await the actual platform disconnect instead of firing-and-forgetting
+    // it. Otherwise a subsequent findAndConnectDevice() can race this: it
+    // may see the device as still connected at the OS/GATT level (or find
+    // it that way via _checkAlreadyConnectedDevices()) even though our own
+    // state has already moved on, which previously caused every retry
+    // after the first successful connection to silently fail.
+    await _device?.disconnect();
     for (final cmd in _cmdQueue) {
       if (!cmd.completer.isCompleted) {
         cmd.completer.completeError(StateError('Device disconnected'));
@@ -121,13 +127,13 @@ class UrpBleStrategy extends ConnectionStrategy {
     }
 
     if (device.connected) {
-      urpLogger.d("Device was already connected");
+      urpLogger.d("Device was already connected, reconnecting cleanly");
       await device.bleDevice.disconnect();
       await disconnectDevice();
     } else {
       await disconnectDevice();
-      await _connectToDevice(device.bleDevice);
     }
+    await _connectToDevice(device.bleDevice);
 
     if (status == ConnectionStatus.connected) {
       return true;
@@ -232,13 +238,31 @@ class UrpBleStrategy extends ConnectionStrategy {
 
     _deviceSubscription?.cancel();
 
-    var state = await device.connectionState.first;
-
-    if (state == BluetoothConnectionState.connected) {
-      return;
-    }
-
     try {
+      final state = await device.connectionState.first;
+
+      if (state == BluetoothConnectionState.connected) {
+        // Already connected at the platform level (e.g. a stale/lingering
+        // connection) -- still need to (re)discover characteristics, since
+        // disconnectDevice() always clears _characteristic. The reported
+        // state can itself be stale/racy though (the device may have
+        // actually disconnected by the time discoverServices() runs, e.g.
+        // "device is disconnected" PlatformExceptions) -- if that happens,
+        // fall through to a real connect() below instead of failing
+        // outright.
+        try {
+          _deviceSubscription = device.connectionState.listen(
+            _deviceStateChanged,
+          );
+          await _discoverCharacteristic(device);
+          return;
+        } catch (e) {
+          urpLogger.w(
+            "Device reported connected but service discovery failed ($e), reconnecting from scratch",
+          );
+        }
+      }
+
       urpLogger.d("Trying to connect to device...");
 
       await device.connect(
