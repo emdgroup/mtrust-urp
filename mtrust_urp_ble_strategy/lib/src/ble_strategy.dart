@@ -46,7 +46,7 @@ class UrpBleStrategy extends ConnectionStrategy {
 
   Timer? _queueTimer;
 
-  List<Uint8List> _cmdQueue = [];
+  List<_QueuedBleCommand> _cmdQueue = [];
 
   Set<BluetoothDevice> foundDevices = {};
 
@@ -67,7 +67,18 @@ class UrpBleStrategy extends ConnectionStrategy {
     _batteryCharacteristicSubscription?.cancel();
     _characteristic = null;
 
-    _device?.disconnect();
+    // Await the actual platform disconnect instead of firing-and-forgetting
+    // it. Otherwise a subsequent findAndConnectDevice() can race this: it
+    // may see the device as still connected at the OS/GATT level (or find
+    // it that way via _checkAlreadyConnectedDevices()) even though our own
+    // state has already moved on, which previously caused every retry
+    // after the first successful connection to silently fail.
+    await _device?.disconnect();
+    for (final cmd in _cmdQueue) {
+      if (!cmd.completer.isCompleted) {
+        cmd.completer.completeError(StateError('Device disconnected'));
+      }
+    }
     _cmdQueue = [];
     _device = null;
     setStatus(ConnectionStatus.idle);
@@ -116,13 +127,13 @@ class UrpBleStrategy extends ConnectionStrategy {
     }
 
     if (device.connected) {
-      urpLogger.d("Device was already connected");
+      urpLogger.d("Device was already connected, reconnecting cleanly");
       await device.bleDevice.disconnect();
       await disconnectDevice();
     } else {
       await disconnectDevice();
-      await _connectToDevice(device.bleDevice);
     }
+    await _connectToDevice(device.bleDevice);
 
     if (status == ConnectionStatus.connected) {
       return true;
@@ -144,7 +155,10 @@ class UrpBleStrategy extends ConnectionStrategy {
 
   @override
   void output(Uint8List bytes) {
-    writeValue(bytes);
+    writeValue(bytes).catchError((e) {
+      urpLogger.e("output() write ultimately failed: $e");
+      return false;
+    });
   }
 
   UrpDeviceType readerTypeFromServiceId(String serviceId) {
@@ -154,10 +168,11 @@ class UrpBleStrategy extends ConnectionStrategy {
   }
 
   Future<bool> writeValue(Uint8List value) async {
-    _cmdQueue.add(value);
+    final completer = Completer<bool>();
+    _cmdQueue.add(_QueuedBleCommand(value: value, completer: completer));
     _queueNextCmd();
 
-    return true;
+    return completer.future;
   }
 
   void _applyIds(Set<UrpDeviceType> readerTypes) {
@@ -223,13 +238,31 @@ class UrpBleStrategy extends ConnectionStrategy {
 
     _deviceSubscription?.cancel();
 
-    var state = await device.connectionState.first;
-
-    if (state == BluetoothConnectionState.connected) {
-      return;
-    }
-
     try {
+      final state = await device.connectionState.first;
+
+      if (state == BluetoothConnectionState.connected) {
+        // Already connected at the platform level (e.g. a stale/lingering
+        // connection) -- still need to (re)discover characteristics, since
+        // disconnectDevice() always clears _characteristic. The reported
+        // state can itself be stale/racy though (the device may have
+        // actually disconnected by the time discoverServices() runs, e.g.
+        // "device is disconnected" PlatformExceptions) -- if that happens,
+        // fall through to a real connect() below instead of failing
+        // outright.
+        try {
+          _deviceSubscription = device.connectionState.listen(
+            _deviceStateChanged,
+          );
+          await _discoverCharacteristic(device);
+          return;
+        } catch (e) {
+          urpLogger.w(
+            "Device reported connected but service discovery failed ($e), reconnecting from scratch",
+          );
+        }
+      }
+
       urpLogger.d("Trying to connect to device...");
 
       await device.connect(
@@ -315,20 +348,43 @@ class UrpBleStrategy extends ConnectionStrategy {
     onData(Uint8List.fromList(data));
   }
 
+  static const int _maxWriteAttempts = 3;
+
   void _queueNextCmd() async {
     if (_cmdQueue.isNotEmpty && _characteristic != null && device != null) {
-      final value = _cmdQueue[0];
+      final cmd = _cmdQueue[0];
       _cmdQueue.removeAt(0);
       try {
-        // Chunk the data into 512 byte chunks.
-        final chunkSize = 512;
-        for (var i = 0; i < value.length; i += chunkSize) {
-          final chunk = value.sublist(i, min(i + chunkSize, value.length));
+        // Chunk the data to fit within the actually negotiated MTU (ATT
+        // payload = MTU - 3 byte header). Do not assume the requested MTU
+        // was granted in full; some peripherals negotiate a smaller value.
+        final negotiatedMtu = device!.mtuNow;
+        final chunkSize = (negotiatedMtu - 3).clamp(20, 512);
+        for (var i = 0; i < cmd.value.length; i += chunkSize) {
+          final chunk = cmd.value.sublist(
+            i,
+            min(i + chunkSize, cmd.value.length),
+          );
           await _characteristic?.write(chunk).timeout(Duration(seconds: 5));
         }
+        if (!cmd.completer.isCompleted) {
+          cmd.completer.complete(true);
+        }
       } catch (e) {
-        urpLogger.e("Write to characteristic failed: $e");
-        _cmdQueue.insert(0, value);
+        cmd.attempts++;
+        if (cmd.attempts >= _maxWriteAttempts) {
+          urpLogger.e(
+            "Write to characteristic failed after ${cmd.attempts} attempts, giving up: $e",
+          );
+          if (!cmd.completer.isCompleted) {
+            cmd.completer.completeError(e);
+          }
+        } else {
+          urpLogger.e(
+            "Write to characteristic failed (attempt ${cmd.attempts}/$_maxWriteAttempts), retrying: $e",
+          );
+          _cmdQueue.insert(0, cmd);
+        }
       }
     }
     if (_cmdQueue.isNotEmpty) {
@@ -510,4 +566,16 @@ class UrpBleStrategy extends ConnectionStrategy {
 
     await characteristic.setNotifyValue(false);
   }
+}
+
+/// A single queued BLE characteristic write, with its own completer so
+/// callers can await (and properly observe failures of) a specific write,
+/// and an attempt counter so failing writes eventually give up instead of
+/// retrying silently forever.
+class _QueuedBleCommand {
+  _QueuedBleCommand({required this.value, required this.completer});
+
+  final Uint8List value;
+  final Completer<bool> completer;
+  int attempts = 0;
 }

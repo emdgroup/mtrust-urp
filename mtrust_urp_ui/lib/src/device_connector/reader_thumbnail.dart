@@ -82,7 +82,15 @@ class ReaderThumbnail extends StatelessWidget {
                                   ),
                                 (UrpDeviceType.urpImp) =>
                                   IMPReaderVisualization.waitingForConnection(),
-                                _ => throw UnimplementedError(),
+                                // Device types without a bespoke
+                                // visualization (urpImz, urpPsu, urpTsc, ...)
+                                // fall back to a generic placeholder. This
+                                // used to `throw UnimplementedError()`, which
+                                // surfaced as Flutter's red error box in the
+                                // reader carousel.
+                                _ => _GenericReaderVisualization(
+                                  theme: theme,
+                                ),
                               },
                             ),
                           );
@@ -95,6 +103,53 @@ class ReaderThumbnail extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+/// Neutral stand-in artwork for reader types that don't (yet) have their own
+/// visualization widget, so the carousel can still render them.
+///
+/// Deliberately generic: a rounded "device" body with a small indicator dot,
+/// tinted from the active [LdTheme] so it sits alongside the real reader
+/// visualizations without looking broken.
+class _GenericReaderVisualization extends StatelessWidget {
+  const _GenericReaderVisualization({required this.theme});
+
+  final LdTheme theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AspectRatio(
+        aspectRatio: 0.62,
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.neutralShade(2),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: theme.neutralShade(5), width: 2),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.sensors,
+                size: 48,
+                color: theme.neutralShade(8),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: theme.neutralShade(6),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -49,3 +49,28 @@ class ApiException extends Error {
     return errorMessage;
   }
 }
+
+/// Thrown when the backend rejects a device config due to a guardrail
+/// violation (HTTP 422 from `POST /device/config/sign`).
+///
+/// Mirrors the Python SDK's `ConfigValidationError` — carries the backend's
+/// stable machine-readable [code] (e.g. `CFG_ERR_SCAN_TIMEOUT_RANGE`) so
+/// callers can branch on it without parsing [message].
+class ConfigValidationException extends Error {
+  /// Creates a new instance of [ConfigValidationException]
+  ConfigValidationException({
+    required this.code,
+    required this.message,
+  });
+
+  /// Stable machine-readable error code returned by the backend.
+  final String code;
+
+  /// Human-readable error message returned by the backend.
+  final String message;
+
+  @override
+  String toString() {
+    return '$code: $message';
+  }
+}
